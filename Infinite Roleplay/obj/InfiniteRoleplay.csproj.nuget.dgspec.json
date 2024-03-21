@@ -1,0 +1,155 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\Preac\\Holder\\infinite-roleplay-plugin\\Infinite Roleplay\\InfiniteRoleplay.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\Preac\\Holder\\infinite-roleplay-plugin\\Infinite Roleplay\\InfiniteRoleplay.csproj": {
+      "version": "0.0.0.1",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Preac\\Holder\\infinite-roleplay-plugin\\Infinite Roleplay\\InfiniteRoleplay.csproj",
+        "projectName": "InfiniteRoleplay",
+        "projectPath": "C:\\Users\\Preac\\Holder\\infinite-roleplay-plugin\\Infinite Roleplay\\InfiniteRoleplay.csproj",
+        "packagesPath": "C:\\Users\\Preac\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Preac\\Holder\\infinite-roleplay-plugin\\Infinite Roleplay\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Users\\Preac\\AppData\\Roaming\\Godot\\mono\\GodotNuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Preac\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Preac\\AppData\\Roaming\\NuGet\\config\\Godot.Offline.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0-windows8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0-windows8.0": {
+            "targetAlias": "net8.0-windows8.0",
+            "projectReferences": {
+              "C:\\Users\\Preac\\Holder\\infinite-roleplay-plugin\\OtterGui\\OtterGui.csproj": {
+                "projectPath": "C:\\Users\\Preac\\Holder\\infinite-roleplay-plugin\\OtterGui\\OtterGui.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreLockProperties": {
+          "restorePackagesWithLockFile": "true"
+        }
+      },
+      "frameworks": {
+        "net8.0-windows8.0": {
+          "targetAlias": "net8.0-windows8.0",
+          "dependencies": {
+            "Aspose.Imaging": {
+              "target": "Package",
+              "version": "[24.3.0, )"
+            },
+            "Dalamud.ContextMenu": {
+              "target": "Package",
+              "version": "[1.3.1, )"
+            },
+            "DalamudPackager": {
+              "target": "Package",
+              "version": "[2.1.12, )"
+            },
+            "StbImageSharp": {
+              "target": "Package",
+              "version": "[2.27.13, )"
+            },
+            "System.Drawing.Common": {
+              "target": "Package",
+              "version": "[8.0.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Preac\\Holder\\infinite-roleplay-plugin\\OtterGui\\OtterGui.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Preac\\Holder\\infinite-roleplay-plugin\\OtterGui\\OtterGui.csproj",
+        "projectName": "OtterGui",
+        "projectPath": "C:\\Users\\Preac\\Holder\\infinite-roleplay-plugin\\OtterGui\\OtterGui.csproj",
+        "packagesPath": "C:\\Users\\Preac\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Preac\\Holder\\infinite-roleplay-plugin\\OtterGui\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Users\\Preac\\AppData\\Roaming\\Godot\\mono\\GodotNuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Preac\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Preac\\AppData\\Roaming\\NuGet\\config\\Godot.Offline.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0-windows8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0-windows8.0": {
+            "targetAlias": "net8.0-windows8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net8.0-windows8.0": {
+          "targetAlias": "net8.0-windows8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

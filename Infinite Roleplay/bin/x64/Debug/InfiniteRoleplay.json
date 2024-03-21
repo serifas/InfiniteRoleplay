@@ -1,0 +1,20 @@
+{
+  "Author": "Omie",
+  "Name": "Infinite Roleplay",
+  "InternalName": "InfiniteRoleplay",
+  "AssemblyVersion": "0.0.0.1",
+  "Description": "Use /infinite or the settings button to open.",
+  "ApplicableVersion": "any",
+  "Tags": [
+    "Infinite",
+    "Roleplay",
+    "RP"
+  ],
+  "DalamudApiLevel": 9,
+  "LoadRequiredState": 0,
+  "LoadSync": false,
+  "CanUnloadAsync": false,
+  "LoadPriority": 0,
+  "Punchline": "A plugin for creating profiles and sharing them, with more to come!",
+  "AcceptsFeedback": true
+}
