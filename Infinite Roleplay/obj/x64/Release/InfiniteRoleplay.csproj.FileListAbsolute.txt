@@ -147,7 +147,6 @@ C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\bin\x64\Release\StbImag
 C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\bin\x64\Release\System.Drawing.Common.dll
 C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\bin\x64\Release\runtimes\win\lib\net8.0\Microsoft.Win32.SystemEvents.dll
 C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\bin\x64\Release\OtterGui.dll
-C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\bin\x64\Release\OtterGui.pdb
 C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\obj\x64\Release\InfiniteRoleplay.csproj.AssemblyReference.cache
 C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\obj\x64\Release\InfiniteRoleplay.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\obj\x64\Release\InfiniteRoleplay.AssemblyInfoInputs.cache
@@ -156,6 +155,4 @@ C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\obj\x64\Release\Infinit
 C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\obj\x64\Release\InfiniteRoleplay.sourcelink.json
 C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\obj\x64\Release\InfiniteRoleplay.dll
 C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\obj\x64\Release\InfiniteRoleplay.pdb
-C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\bin\x64\Release\Microsoft.Extensions.DependencyInjection.dll
-C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\bin\x64\Release\Microsoft.Extensions.DependencyInjection.Abstractions.dll
 C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\obj\x64\Release\Infinite.C7FC50FA.Up2Date

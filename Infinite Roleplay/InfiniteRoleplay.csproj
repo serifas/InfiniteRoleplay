@@ -6,7 +6,7 @@
         <Version>0.0.0.1</Version>
         <Description>An all around Roleplay Plugin.</Description>
         <Copyright></Copyright>
-        <PackageProjectUrl>https://github.com/serifas/infinite-roleplay-plugin</PackageProjectUrl>
+        <PackageProjectUrl>https://github.com/serifas/InfiniteRoleplay</PackageProjectUrl>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     </PropertyGroup>
 
@@ -215,7 +215,6 @@
         <PackageReference Include="StbImageSharp" Version="2.27.13" />
         <PackageReference Include="System.Drawing.Common" Version="8.0.3" />
         <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
-        <ProjectReference Include="..\OtterGui\OtterGui.csproj" />
         <Reference Include="FFXIVClientStructs">
             <HintPath>$(DalamudLibPath)FFXIVClientStructs.dll</HintPath>
             <Private>false</Private>
@@ -243,6 +242,9 @@
         <Reference Include="Lumina.Excel">
             <HintPath>$(DalamudLibPath)Lumina.Excel.dll</HintPath>
             <Private>false</Private>
+        </Reference>
+        <Reference Include="OtterGui">
+          <HintPath>Deps\OtterGui.dll</HintPath>
         </Reference>
     </ItemGroup>
 

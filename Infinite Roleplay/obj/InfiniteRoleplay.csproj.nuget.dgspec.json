@@ -31,11 +31,7 @@
         "frameworks": {
           "net8.0-windows7.0": {
             "targetAlias": "net8.0-windows",
-            "projectReferences": {
-              "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\OtterGui\\OtterGui.csproj": {
-                "projectPath": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\OtterGui\\OtterGui.csproj"
-              }
-            }
+            "projectReferences": {}
           }
         },
         "warningProperties": {
@@ -77,76 +73,6 @@
               "version": "[8.0.3, )"
             },
             "System.Text.Encoding.CodePages": {
-              "target": "Package",
-              "version": "[8.0.0, )"
-            }
-          },
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48",
-            "net481"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.203/PortableRuntimeIdentifierGraph.json"
-        }
-      }
-    },
-    "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\OtterGui\\OtterGui.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\OtterGui\\OtterGui.csproj",
-        "projectName": "OtterGui",
-        "projectPath": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\OtterGui\\OtterGui.csproj",
-        "packagesPath": "C:\\Users\\Preac\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\OtterGui\\obj\\",
-        "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Users\\Preac\\AppData\\Roaming\\Godot\\mono\\GodotNuGetFallbackFolder"
-        ],
-        "configFilePaths": [
-          "C:\\Users\\Preac\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Users\\Preac\\AppData\\Roaming\\NuGet\\config\\Godot.Offline.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
-        ],
-        "originalTargetFrameworks": [
-          "net8.0-windows"
-        ],
-        "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
-        },
-        "frameworks": {
-          "net8.0-windows7.0": {
-            "targetAlias": "net8.0-windows",
-            "projectReferences": {}
-          }
-        },
-        "warningProperties": {
-          "warnAsError": [
-            "NU1605"
-          ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
-        }
-      },
-      "frameworks": {
-        "net8.0-windows7.0": {
-          "targetAlias": "net8.0-windows",
-          "dependencies": {
-            "Microsoft.Extensions.DependencyInjection": {
               "target": "Package",
               "version": "[8.0.0, )"
             }
