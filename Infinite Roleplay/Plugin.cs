@@ -31,7 +31,6 @@ using InfiniteRoleplay.Helpers;
 using Dalamud.Plugin.Services;
 using Dalamud.Interface.Internal.Windows;
 using Dalamud.Interface.Internal;
-using Aspose.Imaging.MemoryManagement;
 using System.Threading;
 using System;
 using OtterGui.Log;

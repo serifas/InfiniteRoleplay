@@ -53,8 +53,6 @@ using InfiniteRoleplay.Helpers;
 using OtterGui.Table;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
-using Aspose.Imaging;
-using Aspose.Imaging.ImageFilters.FilterOptions;
 using System.Timers;
 using Dalamud.Interface.Internal;
 using Dalamud.Plugin.Services;

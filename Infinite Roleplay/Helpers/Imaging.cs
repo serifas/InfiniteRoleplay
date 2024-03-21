@@ -1,4 +1,3 @@
-using Aspose.Imaging;
 using Dalamud.Interface.Internal;
 using Dalamud.IoC;
 using Dalamud.Plugin;

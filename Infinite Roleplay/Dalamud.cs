@@ -1,4 +1,3 @@
-using Dalamud.ContextMenu;
 using Dalamud.Data;
 using Dalamud.Game;
 using Dalamud.Game.ClientState;
@@ -26,7 +25,6 @@ public class Dalamud
 
     // @formatter:off
     [PluginService][RequiredVersion("1.0")] public static DalamudPluginInterface PluginInterface { get; private set; } = null!;
-    [PluginService][RequiredVersion("1.0")] public static DalamudContextMenu ContextMenu { get; private set; } = null!;
     [PluginService][RequiredVersion("1.0")] public static ICommandManager Commands { get; private set; } = null!;
     [PluginService][RequiredVersion("1.0")] public static IDataManager GameData { get; private set; } = null!;
     [PluginService][RequiredVersion("1.0")] public static IClientState ClientState { get; private set; } = null!;

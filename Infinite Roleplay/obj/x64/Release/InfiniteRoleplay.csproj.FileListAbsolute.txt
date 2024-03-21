@@ -141,8 +141,6 @@ C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\bin\x64\Release\UI\pers
 C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\bin\x64\Release\InfiniteRoleplay.deps.json
 C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\bin\x64\Release\InfiniteRoleplay.dll
 C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\bin\x64\Release\InfiniteRoleplay.pdb
-C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\bin\x64\Release\Aspose.Imaging.dll
-C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\bin\x64\Release\Dalamud.ContextMenu.dll
 C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\bin\x64\Release\Microsoft.Win32.SystemEvents.dll
 C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\bin\x64\Release\Newtonsoft.Json.dll
 C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\bin\x64\Release\StbImageSharp.dll
@@ -156,8 +154,8 @@ C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\obj\x64\Release\Infinit
 C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\obj\x64\Release\InfiniteRoleplay.AssemblyInfo.cs
 C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\obj\x64\Release\InfiniteRoleplay.csproj.CoreCompileInputs.cache
 C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\obj\x64\Release\InfiniteRoleplay.sourcelink.json
-C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\obj\x64\Release\InfiniteRoleplay.csproj.CopyComplete
 C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\obj\x64\Release\InfiniteRoleplay.dll
 C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\obj\x64\Release\InfiniteRoleplay.pdb
 C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\bin\x64\Release\Microsoft.Extensions.DependencyInjection.dll
 C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\bin\x64\Release\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\obj\x64\Release\Infinite.C7FC50FA.Up2Date

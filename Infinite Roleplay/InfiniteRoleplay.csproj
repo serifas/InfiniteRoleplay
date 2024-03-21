@@ -12,7 +12,7 @@
 
     <PropertyGroup>
 		<RuntimeFrameworkVersion>8.0.0</RuntimeFrameworkVersion>
-        <TargetFramework>net8.0-windows8.0</TargetFramework>
+        <TargetFramework>net8.0-windows</TargetFramework>
         <Platforms>x64</Platforms>
         <Nullable>enable</Nullable>
         <LangVersion>latest</LangVersion>
@@ -209,11 +209,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Aspose.Imaging" Version="24.3.0" />
-        <PackageReference Include="Dalamud.ContextMenu" Version="1.3.1" />
         <PackageReference Include="DalamudPackager" Version="2.1.12" />
+        <PackageReference Include="Microsoft.Win32.SystemEvents" Version="8.0.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="StbImageSharp" Version="2.27.13" />
         <PackageReference Include="System.Drawing.Common" Version="8.0.3" />
+        <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
         <ProjectReference Include="..\OtterGui\OtterGui.csproj" />
         <Reference Include="FFXIVClientStructs">
             <HintPath>$(DalamudLibPath)FFXIVClientStructs.dll</HintPath>
