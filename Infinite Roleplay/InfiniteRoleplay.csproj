@@ -115,55 +115,28 @@
         <None Update="UI\alignments\lawful_good.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\alignments\lawful_good_bar.png">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
         <None Update="UI\alignments\neutral_good.png">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="UI\alignments\neutral_good_bar.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="UI\alignments\chaotic_good.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\alignments\chaotic_good_bar.png">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
         <None Update="UI\alignments\lawful_neutral.png">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="UI\alignments\lawful_neutral_bar.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="UI\alignments\true_neutral.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\alignments\true_neutral_bar.png">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
         <None Update="UI\alignments\chaotic_neutral.png">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="UI\alignments\chaotic_neutral_bar.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="UI\alignments\lawful_evil.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\alignments\lawful_evil_bar.png">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
         <None Update="UI\alignments\neutral_evil.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\alignments\neutral_evil_bar.png">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
         <None Update="UI\alignments\chaotic_evil.png">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="UI\alignments\chaotic_evil_bar.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="UI\common\friends.png">
