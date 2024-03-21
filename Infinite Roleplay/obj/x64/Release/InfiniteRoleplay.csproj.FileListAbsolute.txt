@@ -168,3 +168,5 @@ C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\obj\x64\Release\Infinit
 C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\obj\x64\Release\InfiniteRoleplay.csproj.CopyComplete
 C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\obj\x64\Release\InfiniteRoleplay.dll
 C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\obj\x64\Release\InfiniteRoleplay.pdb
+C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\bin\x64\Release\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\bin\x64\Release\Microsoft.Extensions.DependencyInjection.Abstractions.dll

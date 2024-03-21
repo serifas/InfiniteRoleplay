@@ -61,6 +61,18 @@ public static partial class ImGuiUtil
         }
     }
 
+    /// <summary> InputInt for ulong. </summary>
+    public static unsafe bool InputUlong(string label, ref ulong value, string format = "%llu",
+        ImGuiInputTextFlags flags = ImGuiInputTextFlags.None)
+    {
+        var v = value;
+        if (!ImGui.InputScalar(label, ImGuiDataType.U64, (nint)(&v), nint.Zero, nint.Zero, format, flags) || v == value)
+            return false;
+
+        value = v;
+        return true;
+    }
+
     // Print unformatted text wrapped.
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static void TextWrapped(string text)
@@ -420,6 +432,9 @@ public static partial class ImGuiUtil
     }
 
     public static void HoverIconTooltip(IDalamudTextureWrap icon, Vector2 iconSize)
+        => HoverIconTooltip(icon, iconSize, string.Empty);
+
+    public static void HoverIconTooltip(IDalamudTextureWrap icon, Vector2 iconSize, string text)
     {
         var size = new Vector2(icon.Width, icon.Height);
         if (iconSize.X > size.X || iconSize.Y > size.Y || !ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
@@ -428,6 +443,8 @@ public static partial class ImGuiUtil
         using var enable = ImRaii.Enabled();
         ImGui.BeginTooltip();
         ImGui.Image(icon.ImGuiHandle, size);
+        if (text.Length > 0)
+            ImGui.TextUnformatted(text);
         ImGui.EndTooltip();
     }
 
@@ -517,20 +534,59 @@ public static partial class ImGuiUtil
         }
     }
 
-    /// <summary>
-    /// Computes the intensity of a RGB color without taking into consideration alpha values.
-    /// </summary>
+    /// <inheritdoc cref="ColorIntensity(Vector4)"/>
     public static float ColorIntensity(uint color)
-    {
-        var vec       = ColorHelpers.RgbaUintToVector4(color);
-        return 2 * vec.X * vec.X + 7 * vec.Y * vec.Y + vec.Z * vec.Z;
-    }
+        => ColorIntensity(ColorHelpers.RgbaUintToVector4(color));
+
+    /// <inheritdoc cref="ColorIntensity(Vector4)"/>
+    public static float ColorIntensity(Vector3 color)
+        => ColorIntensity(new Vector4(color, 0));
+
+    /// <summary> Computes the intensity of an RGB color without taking into consideration alpha values. </summary>
+    public static float ColorIntensity(Vector4 color)
+        => 2 * color.X * color.X + 7 * color.Y * color.Y + color.Z * color.Z;
 
     /// <summary> Obtain the better choice of black and white regarding contrast for a color. </summary>
-    public static uint ContrastColorBW(uint color)
+    public static uint ContrastColorBw(uint color)
         => ColorIntensity(color) >= 4 ? 0xFF000000 : 0xFFFFFFFF;
+
+    /// <summary> Obtain the better choice of black and white regarding contrast for a color. </summary>
+    public static Vector3 ContrastColorBw(Vector3 color)
+        => ColorIntensity(color) >= 4 ? Vector3.Zero : Vector3.One;
+
+    /// <summary> Obtain the better choice of black and white regarding contrast for a color. </summary>
+    public static Vector4 ContrastColorBw(Vector4 color)
+        => ColorIntensity(color) >= 4 ? new Vector4(0, 0, 0, color.W) : new Vector4(1, 1, 1, color.W);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static unsafe bool IsDropping(string name)
         => ImGui.AcceptDragDropPayload(name).NativePtr != null;
+
+    /// <summary> Make a single-button color picker with a contrasted letter centered on it. </summary>
+    public static bool ColorPicker(string label, string tooltip, Vector3 input, Action<Vector3> setter, string letter = "")
+    {
+        var ret = false;
+        if (ImGui.ColorEdit3(label, ref input,
+                ImGuiColorEditFlags.NoInputs
+              | ImGuiColorEditFlags.DisplayRGB
+              | ImGuiColorEditFlags.InputRGB
+              | ImGuiColorEditFlags.NoTooltip
+              | ImGuiColorEditFlags.HDR))
+        {
+            setter(input);
+            ret = true;
+        }
+
+        if (letter.Length > 0 && ImGui.IsItemVisible())
+        {
+            var textSize  = ImGui.CalcTextSize(letter);
+            var center    = ImGui.GetItemRectMin() + (ImGui.GetItemRectSize() - textSize) / 2;
+            var textColor = ContrastColorBw(new Vector4(input, 0.7f));
+            ImGui.GetWindowDrawList().AddText(center, ImGui.ColorConvertFloat4ToU32(textColor), letter);
+        }
+
+        HoverTooltip(tooltip);
+
+        return ret;
+    }
 }

@@ -44,7 +44,7 @@ public sealed class Changelog : Window
     public bool ForceOpen   { get; set; } = false;
 
     public Changelog(string label, Func<(int, ChangeLogDisplayType)> getConfig, Action<int, ChangeLogDisplayType> setConfig)
-        : base(label, ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoResize, true)
+        : base(label, ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize, true)
     {
         _headerName         = label.Split().FirstOrDefault(string.Empty);
         _getConfig          = getConfig;
@@ -116,6 +116,9 @@ public sealed class Changelog : Window
         var i = 0;
         foreach (var ((name, list, hasHighlight), idx) in _entries.WithIndex().Reverse())
         {
+            if (name.Length == 0)
+                continue;
+
             using var id    = ImRaii.PushId(i++);
             using var color = ImRaii.PushColor(ImGuiCol.Text, HeaderColor);
             var       flags = ImGuiTreeNodeFlags.NoTreePushOnOpen;

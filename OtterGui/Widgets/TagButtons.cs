@@ -23,9 +23,10 @@ public class TagButtons
     /// <param name="editedTag">If the return value is greater or equal to 0, the user input for the tag given by the index.</param>
     /// <param name="editable">Controls if the buttons can be used to edit their tags and if new tags can be added, also controls the background color.</param>
     /// <param name="xOffset">An optional offset that is added after the tag as the text wrap point.</param>
+    /// <param name="rightEndOffset">An optional offset that is used to limit how far from the right-edge of the screen the final button can be placed.</param>
     /// <returns>-1 if no change took place yet, the index of an edited tag (or the count of <paramref name="tags"/> for an added one) if an edit was finalized.</returns>
     public int Draw(string label, string description, IReadOnlyCollection<string> tags, out string editedTag, bool editable = true,
-        float xOffset = 0)
+        float xOffset = 0, float rightEndOffset = 0)
     {
         using var id  = ImRaii.PushId(label);
         var       ret = -1;
@@ -48,6 +49,7 @@ public class TagButtons
         using var c = ImRaii.PushColor(ImGuiCol.ButtonHovered, color, !editable)
             .Push(ImGuiCol.ButtonActive, color, !editable)
             .Push(ImGuiCol.Button,       color);
+        rightEndOffset += 4 * ImGuiHelpers.GlobalScale;
         foreach (var (tag, idx) in tags.WithIndex())
         {
             using var id2 = ImRaii.PushId(idx);
@@ -59,7 +61,7 @@ public class TagButtons
             }
             else
             {
-                SetPosButton(tag, x);
+                SetPosButton(tag, x, rightEndOffset);
                 Button(tag, idx, editable);
 
                 if (editable)
@@ -88,7 +90,7 @@ public class TagButtons
         }
         else
         {
-            SetPos(ImGui.GetFrameHeight(), x);
+            SetPos(ImGui.GetFrameHeight(), x, rightEndOffset);
             if (!ImGuiUtil.DrawDisabledButton(FontAwesomeIcon.Plus.ToIconString(), new Vector2(ImGui.GetFrameHeight()), "Add Tag...",
                     false, true))
                 return ret;
@@ -110,9 +112,9 @@ public class TagButtons
         _setFocus = false;
     }
 
-    private static float SetPos(float width, float x)
+    private static float SetPos(float width, float x, float rightEndOffset = 0)
     {
-        if (width + ImGui.GetStyle().ItemSpacing.X >= ImGui.GetContentRegionAvail().X)
+        if (width + ImGui.GetStyle().ItemSpacing.X >= ImGui.GetContentRegionAvail().X - rightEndOffset)
         {
             ImGui.NewLine();
             ImGui.SetCursorPosX(x);
@@ -121,8 +123,8 @@ public class TagButtons
         return width;
     }
 
-    private static float SetPosButton(string tag, float x)
-        => SetPos(ImGui.CalcTextSize(tag).X + ImGui.GetStyle().FramePadding.X * 2, x);
+    private static float SetPosButton(string tag, float x, float rightEndOffset = 0)
+        => SetPos(ImGui.CalcTextSize(tag).X + ImGui.GetStyle().FramePadding.X * 2, x, rightEndOffset);
 
     private static float SetPosText(string tag, float x)
         => SetPos(ImGui.CalcTextSize(tag).X + ImGui.GetStyle().FramePadding.X * 2 + 15 * ImGuiHelpers.GlobalScale, x);
@@ -159,10 +161,12 @@ public class TagButtons
         if (tooltip.Length == 0)
             return;
 
-        ImGui.AlignTextToFramePadding();
         using (var font = ImRaii.PushFont(UiBuilder.IconFont))
         {
             using var style = ImRaii.PushStyle(ImGuiStyleVar.ItemSpacing, ImGui.GetStyle().ItemInnerSpacing);
+            ImGui.AlignTextToFramePadding();
+            // The symbol is cut off on the left side for some reason otherwise.
+            ImGui.SetCursorPosX(ImGui.GetCursorPosX() + ImGuiHelpers.GlobalScale);
             ImGui.TextDisabled(FontAwesomeIcon.InfoCircle.ToIconString());
         }
 
