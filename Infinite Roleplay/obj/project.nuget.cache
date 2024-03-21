@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "tOS+QwcTsbBIMApqyr4S8W08in0Na5YV83lpNQJNnaco79HyG3Fh9VachVIns0XbVvv9oMD6FTj0DcOrEgLt/w==",
+  "dgSpecHash": "+D7p98a2o4eMFhEu7PKqgtFDo8911cttylDcVbu7qMWwER72FG9qp47jjOIjdL5Ze5Xqlm4yXXg06Darsl23cQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Preac\\Holder\\infinite-roleplay-plugin\\Infinite Roleplay\\InfiniteRoleplay.csproj",
+  "projectFilePath": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\InfiniteRoleplay.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Preac\\.nuget\\packages\\aspose.imaging\\24.3.0\\aspose.imaging.24.3.0.nupkg.sha512",
     "C:\\Users\\Preac\\.nuget\\packages\\dalamud.contextmenu\\1.3.1\\dalamud.contextmenu.1.3.1.nupkg.sha512",
