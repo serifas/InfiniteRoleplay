@@ -11,6 +11,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
+		<RuntimeFrameworkVersion>8.0.0</RuntimeFrameworkVersion>
         <TargetFramework>net8.0-windows8.0</TargetFramework>
         <Platforms>x64</Platforms>
         <Nullable>enable</Nullable>
