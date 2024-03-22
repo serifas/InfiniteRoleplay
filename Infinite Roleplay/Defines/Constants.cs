@@ -138,6 +138,10 @@ namespace InfiniteRoleplay.Scripts.Misc
             targetBookmark = 18,
             targetGroupInvite = 19,
             targetViewProfile = 20,
+            //gallery nsfw and triggers
+            NSFW = 21,
+            TRIGGER = 22,
+            NSFWTRIGGER = 23,
 
         }
         public static IDalamudTextureWrap UICommonImage(DalamudPluginInterface pluginInterface, CommonImageTypes imageType)
@@ -148,7 +152,9 @@ namespace InfiniteRoleplay.Scripts.Misc
             if (imageType == CommonImageTypes.discordBtn) { commonImage = pluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/common/disc_btn.png")); }
             if (imageType == CommonImageTypes.kofiBtn) { commonImage = pluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/common/kofi_btn.png")); }
             if (imageType == CommonImageTypes.blankPictureTab) { commonImage = pluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/common/profiles/galleries/picturetab.png")); }
-            if (imageType == CommonImageTypes.blankPictureTab) { commonImage = pluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/common/profiles/galleries/picturetab.png")); }
+            if (imageType == CommonImageTypes.NSFW) { commonImage = pluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/common/profiles/galleries/nsfw.png")); }
+            if (imageType == CommonImageTypes.NSFWTRIGGER) { commonImage = pluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/common/profiles/galleries/nsfw_trigger.png")); }
+            if (imageType == CommonImageTypes.TRIGGER) { commonImage = pluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/common/profiles/galleries/trigger.png")); }
             if (imageType == CommonImageTypes.avatarHolder) { commonImage = pluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/common/profiles/avatar_holder.png")); }
             if (imageType == CommonImageTypes.profileSection) { commonImage = pluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/common/section_profiles.png")); }
             if (imageType == CommonImageTypes.systemsSection) { commonImage = pluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/common/section_systems.png")); }
@@ -249,47 +255,47 @@ namespace InfiniteRoleplay.Scripts.Misc
         public static IDalamudTextureWrap AlignementIcon(DalamudPluginInterface pluginInterface, int id)
         {
             IDalamudTextureWrap alignmentIcon = null;
-            if(id == (int)Alignments.LawfulGood) { alignmentIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/alignments/lawful_good.png")); }
-            if (id == (int)Alignments.NeutralGood) { alignmentIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/alignments/neutral_good.png")); }
-            if (id == (int)Alignments.ChaoticGood) { alignmentIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/alignments/chaotic_good.png")); }
-            if (id == (int)Alignments.LawfulNeutral) { alignmentIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/alignments/lawful_neutral.png")); }
-            if (id == (int)Alignments.TrueNeutral) { alignmentIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/alignments/true_neutral.png")); }
-            if (id == (int)Alignments.ChaoticNeutral) { alignmentIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/alignments/chaotic_neutral.png")); }
-            if (id == (int)Alignments.LawfulEvil) { alignmentIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/alignments/lawful_evil.png")); }
-            if (id == (int)Alignments.NeutralEvil) { alignmentIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/alignments/neutral_evil.png")); }
-            if (id == (int)Alignments.ChaoticEvil) { alignmentIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/alignments/chaotic_evil.png")); }
-            if (id == (int)Alignments.None) { alignmentIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/personalities/none.png")); }
+            if(id == (int)Alignments.LawfulGood) { alignmentIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/alignments/lawful_good.png")); }
+            if (id == (int)Alignments.NeutralGood) { alignmentIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/alignments/neutral_good.png")); }
+            if (id == (int)Alignments.ChaoticGood) { alignmentIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/alignments/chaotic_good.png")); }
+            if (id == (int)Alignments.LawfulNeutral) { alignmentIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/alignments/lawful_neutral.png")); }
+            if (id == (int)Alignments.TrueNeutral) { alignmentIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/alignments/true_neutral.png")); }
+            if (id == (int)Alignments.ChaoticNeutral) { alignmentIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/alignments/chaotic_neutral.png")); }
+            if (id == (int)Alignments.LawfulEvil) { alignmentIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/alignments/lawful_evil.png")); }
+            if (id == (int)Alignments.NeutralEvil) { alignmentIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/alignments/neutral_evil.png")); }
+            if (id == (int)Alignments.ChaoticEvil) { alignmentIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/alignments/chaotic_evil.png")); }
+            if (id == (int)Alignments.None) { alignmentIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/personalities/none.png")); }
             return alignmentIcon;
         }
         public static IDalamudTextureWrap PersonalityIcon(DalamudPluginInterface pluginInterface, int id)
         {
             IDalamudTextureWrap personalityIcon = null;
-            if (id == (int)Personalities.Abrasive) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/personalities/abrasive.png")); }
-            if (id == (int)Personalities.AbsentMinded) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/personalities/absentminded.png")); }
-            if (id == (int)Personalities.Artistic) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/personalities/artistic.png")); }
-            if (id == (int)Personalities.Cautious) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/personalities/cuatious.png")); }
-            if (id == (int)Personalities.Charming) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/personalities/charming.png")); }
-            if (id == (int)Personalities.Compassionate) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/personalities/compassionate.png")); }
-            if (id == (int)Personalities.Daredevil) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/personalities/daredevil.png")); }
-            if (id == (int)Personalities.Dishonest) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/personalities/dishonest.png")); }
-            if (id == (int)Personalities.Dutiful) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/personalities/dutiful.png")); }
-            if (id == (int)Personalities.Easygoing) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/personalities/easygoing.png")); }
-            if (id == (int)Personalities.Eccentric) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/personalities/eccentric.png")); }
-            if (id == (int)Personalities.Honest) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/personalities/honest.png")); }
-            if (id == (int)Personalities.Knowledgable) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/personalities/knowledgable.png")); }
-            if (id == (int)Personalities.Optimistic) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/personalities/optimistic.png")); }
-            if (id == (int)Personalities.Polite) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/personalities/polite.png")); }
-            if (id == (int)Personalities.Relentless) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/personalities/relentless.png")); }
-            if (id == (int)Personalities.Resentful) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/personalities/resentful.png")); }
-            if (id == (int)Personalities.Reserved) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/personalities/reserved.png")); }
-            if (id == (int)Personalities.Romantic) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/personalities/romantic.png")); }
-            if (id == (int)Personalities.Spiritual) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/personalities/spiritual.png")); }
-            if (id == (int)Personalities.Superior) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/personalities/superior.png")); }
-            if (id == (int)Personalities.Tormented) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/personalities/tormented.png")); }
-            if (id == (int)Personalities.Tough) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/personalities/tough.png")); }
-            if (id == (int)Personalities.Wild) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/personalities/wild.png")); }
-            if (id == (int)Personalities.Worldly) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/personalities/worldly.png")); }
-            if (id == (int)Personalities.None) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/personalities/none.png")); }
+            if (id == (int)Personalities.Abrasive) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/personalities/abrasive.png")); }
+            if (id == (int)Personalities.AbsentMinded) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/personalities/absentminded.png")); }
+            if (id == (int)Personalities.Artistic) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/personalities/artistic.png")); }
+            if (id == (int)Personalities.Cautious) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/personalities/cuatious.png")); }
+            if (id == (int)Personalities.Charming) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/personalities/charming.png")); }
+            if (id == (int)Personalities.Compassionate) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/personalities/compassionate.png")); }
+            if (id == (int)Personalities.Daredevil) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/personalities/daredevil.png")); }
+            if (id == (int)Personalities.Dishonest) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/personalities/dishonest.png")); }
+            if (id == (int)Personalities.Dutiful) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/personalities/dutiful.png")); }
+            if (id == (int)Personalities.Easygoing) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/personalities/easygoing.png")); }
+            if (id == (int)Personalities.Eccentric) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/personalities/eccentric.png")); }
+            if (id == (int)Personalities.Honest) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/personalities/honest.png")); }
+            if (id == (int)Personalities.Knowledgable) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/personalities/knowledgable.png")); }
+            if (id == (int)Personalities.Optimistic) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/personalities/optimistic.png")); }
+            if (id == (int)Personalities.Polite) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/personalities/polite.png")); }
+            if (id == (int)Personalities.Relentless) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/personalities/relentless.png")); }
+            if (id == (int)Personalities.Resentful) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/personalities/resentful.png")); }
+            if (id == (int)Personalities.Reserved) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/personalities/reserved.png")); }
+            if (id == (int)Personalities.Romantic) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/personalities/romantic.png")); }
+            if (id == (int)Personalities.Spiritual) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/personalities/spiritual.png")); }
+            if (id == (int)Personalities.Superior) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/personalities/superior.png")); }
+            if (id == (int)Personalities.Tormented) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/personalities/tormented.png")); }
+            if (id == (int)Personalities.Tough) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/personalities/tough.png")); }
+            if (id == (int)Personalities.Wild) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/personalities/wild.png")); }
+            if (id == (int)Personalities.Worldly) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/personalities/worldly.png")); }
+            if (id == (int)Personalities.None) { personalityIcon = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles/personalities/none.png")); }
             return personalityIcon;
         }
 

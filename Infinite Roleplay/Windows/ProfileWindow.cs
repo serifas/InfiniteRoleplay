@@ -97,8 +97,7 @@ namespace InfiniteRoleplay.Windows
             this.pg = plugin.PluginInterfacePub;
             this.configuration = plugin.Configuration;
             this._fileDialogManager = new FileDialogManager();
-            string avatarPath = Path.Combine(pg.AssemblyLocation.Directory?.FullName!, @"UI/common/profiles/avatar_holder.png");
-            avatarHolder = plugin.PluginInterfacePub.UiBuilder.LoadImage(File.ReadAllBytes(avatarPath));
+            avatarHolder = Constants.UICommonImage(Interface, Constants.CommonImageTypes.avatarHolder); 
             pictureTab = Constants.UICommonImage(Interface, Constants.CommonImageTypes.blankPictureTab);
             this.persistAvatarHolder = avatarHolder;
             this.configuration = configuration;
@@ -124,312 +123,316 @@ namespace InfiniteRoleplay.Windows
                 bioFieldsArr[b] = string.Empty;
             }
            
-            this.avatarBytes = File.ReadAllBytes(avatarPath) ;
+            this.avatarBytes = new byte[0];
          }
       
 
         public override void Draw()
         {
-            if (AllLoaded == true)
+            if (playerCharacter != null)
             {
-                _fileDialogManager.Draw();
+                
+                if (AllLoaded == true)
+                {
+                    _fileDialogManager.Draw();
 
                
-                if (this.ExistingProfile == true)
-                {
-                    if (ImGui.Button("Edit Profile", new Vector2(100, 20))) { editProfile = true; }
-                }
-                if (this.ExistingProfile == false)
-                {
-                    if (ImGui.Button("Add Profile", new Vector2(100, 20))) { addProfile = true; DataSender.CreateProfile(configuration.username, playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString()); }
-                }
+                    if (this.ExistingProfile == true)
+                    {
+                        if (ImGui.Button("Edit Profile", new Vector2(100, 20))) { editProfile = true; }
+                    }
+                    if (this.ExistingProfile == false)
+                    {
+                        if (ImGui.Button("Add Profile", new Vector2(100, 20))) { addProfile = true; DataSender.CreateProfile(configuration.username, playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString()); }
+                    }
 
                 
-                if (editProfile == true)
-                {
-                    addProfile = false;
-                    ImGui.Spacing();
-                    if (this.ExistingBio == true) { if (ImGui.Button("Edit Bio", new Vector2(100, 20))) { ClearUI(); editBio = true; } if (ImGui.IsItemHovered()) { ImGui.SetTooltip("Edit your bio."); } } else { if (ImGui.Button("Add Bio", new Vector2(100, 20))) { ClearUI(); editBio = true; } }
-                    ImGui.SameLine();
-                    if (this.ExistingHooks == true) { if (ImGui.Button("Edit Hooks", new Vector2(100, 20))) { ClearUI(); editHooks = true; } if (ImGui.IsItemHovered()) { ImGui.SetTooltip("Edit your Hooks."); } } else { if (ImGui.Button("Add Hooks", new Vector2(100, 20))) { ClearUI(); editHooks = true; } }
-                    ImGui.SameLine();
-                    if (this.ExistingStory == true) { if (ImGui.Button("Edit Story", new Vector2(100, 20))) { ClearUI(); editStory = true; } if (ImGui.IsItemHovered()) { ImGui.SetTooltip("Edit your Story."); } } else { if (ImGui.Button("Add Story", new Vector2(100, 20))) { ClearUI(); editStory = true; } }
-                    ImGui.SameLine();
-                    if (this.ExistingOOC == true) { if (ImGui.Button("Edit OOC Info", new Vector2(100, 20))) { ClearUI(); addOOC = true; } if (ImGui.IsItemHovered()) { ImGui.SetTooltip("Edit your OOC Info."); } } else { if (ImGui.Button("Add OOC Info", new Vector2(100, 20))) { ClearUI(); addOOC = true; } }
-                    ImGui.SameLine();
-                    if (this.ExistingGallery == true) { if (ImGui.Button("Edit Gallery", new Vector2(100, 20))) { ClearUI(); addGallery = true; } if (ImGui.IsItemHovered()) { ImGui.SetTooltip("Edit your Gallery."); } } else { if (ImGui.Button("Add Gallery", new Vector2(100, 20))) { ClearUI(); addGallery = true; } }
-
-                }
-                bool warning = false;
-                bool success = false;
-                if (ImGui.BeginChild("PROFILE"))
-                {
-                    #region BIO
-                    if (editBio == true)
+                    if (editProfile == true)
                     {
-
-                        ImGui.Image(currentAvatarImg.ImGuiHandle, new Vector2(100, 100));
-
-                        if (ImGui.Button("Edit Avatar"))
-                        {
-                            editAvatar = true;
-                        }
+                        addProfile = false;
                         ImGui.Spacing();
-                        for (int i = 0; i < Constants.BioFieldVals.Length; i++)
+                        if (this.ExistingBio == true) { if (ImGui.Button("Edit Bio", new Vector2(100, 20))) { ClearUI(); editBio = true; } if (ImGui.IsItemHovered()) { ImGui.SetTooltip("Edit your bio."); } } else { if (ImGui.Button("Add Bio", new Vector2(100, 20))) { ClearUI(); editBio = true; } }
+                        ImGui.SameLine();
+                        if (this.ExistingHooks == true) { if (ImGui.Button("Edit Hooks", new Vector2(100, 20))) { ClearUI(); editHooks = true; } if (ImGui.IsItemHovered()) { ImGui.SetTooltip("Edit your Hooks."); } } else { if (ImGui.Button("Add Hooks", new Vector2(100, 20))) { ClearUI(); editHooks = true; } }
+                        ImGui.SameLine();
+                        if (this.ExistingStory == true) { if (ImGui.Button("Edit Story", new Vector2(100, 20))) { ClearUI(); editStory = true; } if (ImGui.IsItemHovered()) { ImGui.SetTooltip("Edit your Story."); } } else { if (ImGui.Button("Add Story", new Vector2(100, 20))) { ClearUI(); editStory = true; } }
+                        ImGui.SameLine();
+                        if (this.ExistingOOC == true) { if (ImGui.Button("Edit OOC Info", new Vector2(100, 20))) { ClearUI(); addOOC = true; } if (ImGui.IsItemHovered()) { ImGui.SetTooltip("Edit your OOC Info."); } } else { if (ImGui.Button("Add OOC Info", new Vector2(100, 20))) { ClearUI(); addOOC = true; } }
+                        ImGui.SameLine();
+                        if (this.ExistingGallery == true) { if (ImGui.Button("Edit Gallery", new Vector2(100, 20))) { ClearUI(); addGallery = true; } if (ImGui.IsItemHovered()) { ImGui.SetTooltip("Edit your Gallery."); } } else { if (ImGui.Button("Add Gallery", new Vector2(100, 20))) { ClearUI(); addGallery = true; } }
+
+                    }
+                    bool warning = false;
+                    bool success = false;
+                    if (ImGui.BeginChild("PROFILE"))
+                    {
+                        #region BIO
+                        if (editBio == true)
                         {
-                            var BioField = Constants.BioFieldVals[i];
-                            if (BioField.Item4 == Constants.InputTypes.single)
+
+                            ImGui.Image(currentAvatarImg.ImGuiHandle, new Vector2(100, 100));
+
+                            if (ImGui.Button("Edit Avatar"))
                             {
-                                ImGui.Text(BioField.Item1);
-                                if(BioField.Item1 != "AT FIRST GLANCE:")
+                                editAvatar = true;
+                            }
+                            ImGui.Spacing();
+                            for (int i = 0; i < Constants.BioFieldVals.Length; i++)
+                            {
+                                var BioField = Constants.BioFieldVals[i];
+                                if (BioField.Item4 == Constants.InputTypes.single)
                                 {
-                                    ImGui.SameLine();
-                                }                                
-                                ImGui.InputTextWithHint(BioField.Item2, BioField.Item3, ref bioFieldsArr[i], 100);
+                                    ImGui.Text(BioField.Item1);
+                                    if(BioField.Item1 != "AT FIRST GLANCE:")
+                                    {
+                                        ImGui.SameLine();
+                                    }                                
+                                    ImGui.InputTextWithHint(BioField.Item2, BioField.Item3, ref bioFieldsArr[i], 100);
+                                }
+                                else
+                                {
+                                    ImGui.Text(BioField.Item1);
+                                    ImGui.InputTextMultiline(BioField.Item2, ref bioFieldsArr[i], 3000, new Vector2(500, 150));
+                                }
+                            }
+                            ImGui.Spacing();
+                            ImGui.Spacing();
+                            ImGui.TextColored(new Vector4(1, 1, 1, 1), "ALIGNMENT:");
+                            ImGui.SameLine();
+                            ImGui.Checkbox("Hidden", ref alignmentHidden);
+                            if(alignmentHidden == true)
+                            {
+                                currentAlignment = 9;
                             }
                             else
                             {
-                                ImGui.Text(BioField.Item1);
-                                ImGui.InputTextMultiline(BioField.Item2, ref bioFieldsArr[i], 3000, new Vector2(500, 150));
+                                AddAlignmentSelection();
                             }
-                        }
-                        ImGui.Spacing();
-                        ImGui.Spacing();
-                        ImGui.TextColored(new Vector4(1, 1, 1, 1), "ALIGNMENT:");
-                        ImGui.SameLine();
-                        ImGui.Checkbox("Hidden", ref alignmentHidden);
-                        if(alignmentHidden == true)
-                        {
-                            currentAlignment = 9;
-                        }
-                        else
-                        {
-                            AddAlignmentSelection();
-                        }
                        
-                        ImGui.Spacing();
+                            ImGui.Spacing();
 
-                        ImGui.TextColored(new Vector4(1, 1, 1, 1), "PERSONALITY TRAITS:");
-                        ImGui.SameLine();
-                        ImGui.Checkbox("Hidded", ref personalityHidden);
-                        if(personalityHidden == true)
-                        {
-                            currentPersonality_1 = 26;
-                            currentPersonality_2 = 26;
-                            currentPersonality_3 = 26;
-                        }
-                        else
-                        { 
-                            AddPersonalitySelection_1();
-                            AddPersonalitySelection_2();
-                            AddPersonalitySelection_3();
-                        }
-                        if (ImGui.Button("Save Bio"))
-                        {
-                            DataSender.SubmitProfileBio(playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString(),
-                                                    avatarBytes,
-                                                    bioFieldsArr[(int)Constants.BioFieldTypes.name].Replace("'", "''"),
-                                                    bioFieldsArr[(int)Constants.BioFieldTypes.race].Replace("'", "''"),
-                                                    bioFieldsArr[(int)Constants.BioFieldTypes.gender].Replace("'", "''"),
-                                                    bioFieldsArr[(int)Constants.BioFieldTypes.age].Replace("'", "''"),
-                                                    bioFieldsArr[(int)Constants.BioFieldTypes.height].Replace("'", "''"),
-                                                    bioFieldsArr[(int)Constants.BioFieldTypes.weight].Replace("'", "''"),
-                                                    bioFieldsArr[(int)Constants.BioFieldTypes.afg].Replace("'", "''"),
-                                                    currentAlignment, currentPersonality_1, currentPersonality_2, currentPersonality_3);
-
-                        }
-                    }
-                    #endregion
-                    #region HOOKS
-                    if (editHooks == true)
-                    {
-                        if (resetHooks == true)
-                        {
-                            hookCount = 0;
-                            resetHooks = false;
-                        }
-                        string hookMsg = "";
-                        if (ImGui.Button("+##addhook", new Vector2(30, 30)))
-                        {
-                            hookCount++;
-                        }
-                        ImGui.SameLine();
-                        if (ImGui.Button("-##removehook", new Vector2(30, 30)))
-                        {
-                            reduceHooks = true;
-                            if (hookCount > 0)
+                            ImGui.TextColored(new Vector4(1, 1, 1, 1), "PERSONALITY TRAITS:");
+                            ImGui.SameLine();
+                            ImGui.Checkbox("Hidded", ref personalityHidden);
+                            if(personalityHidden == true)
                             {
-                                hookCount--;
-                                reduceHooks = false;
+                                currentPersonality_1 = 26;
+                                currentPersonality_2 = 26;
+                                currentPersonality_3 = 26;
                             }
-                            if (hookCount == 0 && reduceHooks == true)
+                            else
+                            { 
+                                AddPersonalitySelection_1();
+                                AddPersonalitySelection_2();
+                                AddPersonalitySelection_3();
+                            }
+                            if (ImGui.Button("Save Bio"))
                             {
-                                if (hookEditCount > 0)
+                                DataSender.SubmitProfileBio(playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString(),
+                                                        avatarBytes,
+                                                        bioFieldsArr[(int)Constants.BioFieldTypes.name].Replace("'", "''"),
+                                                        bioFieldsArr[(int)Constants.BioFieldTypes.race].Replace("'", "''"),
+                                                        bioFieldsArr[(int)Constants.BioFieldTypes.gender].Replace("'", "''"),
+                                                        bioFieldsArr[(int)Constants.BioFieldTypes.age].Replace("'", "''"),
+                                                        bioFieldsArr[(int)Constants.BioFieldTypes.height].Replace("'", "''"),
+                                                        bioFieldsArr[(int)Constants.BioFieldTypes.weight].Replace("'", "''"),
+                                                        bioFieldsArr[(int)Constants.BioFieldTypes.afg].Replace("'", "''"),
+                                                        currentAlignment, currentPersonality_1, currentPersonality_2, currentPersonality_3);
+
+                            }
+                        }
+                        #endregion
+                        #region HOOKS
+                        if (editHooks == true)
+                        {
+                            if (resetHooks == true)
+                            {
+                                hookCount = 0;
+                                resetHooks = false;
+                            }
+                            string hookMsg = "";
+                            if (ImGui.Button("+##addhook", new Vector2(30, 30)))
+                            {
+                                hookCount++;
+                            }
+                            ImGui.SameLine();
+                            if (ImGui.Button("-##removehook", new Vector2(30, 30)))
+                            {
+                                reduceHooks = true;
+                                if (hookCount > 0)
                                 {
-                                    hookEditCount--;
+                                    hookCount--;
+                                    reduceHooks = false;
+                                }
+                                if (hookCount == 0 && reduceHooks == true)
+                                {
+                                    if (hookEditCount > 0)
+                                    {
+                                        hookEditCount--;
+                                    }
                                 }
                             }
-                        }
-                        for (int i = 0; i < hookCount; i++)
-                        {
-                            int index = hookCount + hookEditCount;
-                            hookMsg += "<hook>" + HookContent[i].Replace("\n", "---===---") + "</hook>|||";
-                            ImGui.InputTextMultiline("##hook" + i, ref HookContent[i], 3000, new Vector2(450, 100));
-                        }
-                        for (int h = 0; h < hookEditCount; h++)
-                        {
-                            int index = hookCount + hookEditCount;
-                            ImGui.InputTextMultiline("##hookedit" + h, ref HookEditContent[h], 3000, new Vector2(450, 100));
-                            hookMsg += "<hook>" + HookEditContent[h].Replace("\n", "---===---") + "</hook>|||";
-                        }
-                        if (ImGui.Button("Submit Hooks"))
-                        {
-                            DataSender.SendHooks(playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString(), hookMsg);
-                        }
-                    }
-                    #endregion
-                    #region STORY
-                    if (editStory == true)
-                    {
-                        if (resetStory == true)
-                        {
-                            chapterCount = 0;
-                            resetStory = false;
-                        }
-                        ImGui.Text("Story Title:");
-                        ImGui.SameLine();
-                        ImGui.InputText("##story_edit_title", ref storyEditTitle, 100);
-                        string chapterMsg = "";
-                        string ChapterEdit = "";
-                        if (ImGui.Button("Add Chapter"))
-                        {
-                            chapterCount++;
-                        }
-                        ImGui.SameLine();
-                        if (ImGui.Button("Remove Chapter"))
-                        {
-                            reduceChapters = true;
-                            if (chapterCount > 0)
+                            for (int i = 0; i < hookCount; i++)
                             {
-                                chapterCount--;
-                                reduceChapters = false;
+                                int index = hookCount + hookEditCount;
+                                hookMsg += "<hook>" + HookContent[i].Replace("\n", "---===---") + "</hook>|||";
+                                ImGui.InputTextMultiline("##hook" + i, ref HookContent[i], 3000, new Vector2(450, 100));
                             }
-                            if (chapterCount == 0 && reduceChapters == true)
+                            for (int h = 0; h < hookEditCount; h++)
                             {
-                                if (chapterEditCount > 0)
+                                int index = hookCount + hookEditCount;
+                                ImGui.InputTextMultiline("##hookedit" + h, ref HookEditContent[h], 3000, new Vector2(450, 100));
+                                hookMsg += "<hook>" + HookEditContent[h].Replace("\n", "---===---") + "</hook>|||";
+                            }
+                            if (ImGui.Button("Submit Hooks"))
+                            {
+                                DataSender.SendHooks(playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString(), hookMsg);
+                            }
+                        }
+                        #endregion
+                        #region STORY
+                        if (editStory == true)
+                        {
+                            if (resetStory == true)
+                            {
+                                chapterCount = 0;
+                                resetStory = false;
+                            }
+                            ImGui.Text("Story Title:");
+                            ImGui.SameLine();
+                            ImGui.InputText("##story_edit_title", ref storyEditTitle, 100);
+                            string chapterMsg = "";
+                            string ChapterEdit = "";
+                            if (ImGui.Button("Add Chapter"))
+                            {
+                                chapterCount++;
+                            }
+                            ImGui.SameLine();
+                            if (ImGui.Button("Remove Chapter"))
+                            {
+                                reduceChapters = true;
+                                if (chapterCount > 0)
                                 {
-                                    chapterEditCount--;
+                                    chapterCount--;
+                                    reduceChapters = false;
+                                }
+                                if (chapterCount == 0 && reduceChapters == true)
+                                {
+                                    if (chapterEditCount > 0)
+                                    {
+                                        chapterEditCount--;
+                                    }
                                 }
                             }
-                        }
-                        for (int h = 0; h < chapterEditCount; h++)
-                        {
-                            ImGui.Text("Chapter Title:");
-                            ImGui.SameLine();
-                            ImGui.InputText("##editchaptertitle" + h, ref ChapterEditTitle[h], 100);
-
-                            ImGui.Text("Chapter:");
-                            ImGui.SameLine();
-                            ImGui.InputTextMultiline("##chapteredit" + h, ref ChapterEditContent[h], 3000, new Vector2(450, 100));
-                            ChapterEdit += "<chapter><chapterTitle>" + ChapterEditTitle[h] + "</chapterTitle><chapterContent>" + ChapterEditContent[h].Replace("\n", "---===---") + "</chapterContent></chapter>|||";
-                        }
-                        for (int i = 0; i < chapterCount; i++)
-                        {
-                            ImGui.Text("Chapter Title:");
-                            ImGui.SameLine();
-                            ImGui.InputText("##chaptertitle" + i, ref ChapterTitle[i], 100);
-                            chapterMsg += "<chapter><chapterTitle>" + ChapterTitle[i] + "</chapterTitle><chapterContent>" + ChapterContent[i].Replace("\n", "---===---") + "</chapterContent></chapter>|||";
-                            ImGui.Text("Chapter:");
-                            ImGui.SameLine();
-                            ImGui.InputTextMultiline("##chapter" + i, ref ChapterContent[i], 3000, new Vector2(450, 100));
-                        }
-                        string chapterMessage = ChapterEdit + chapterMsg;
-                        if (ImGui.Button("Update Story"))
-                        {
-                            DataSender.SendStory(playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString(), storyEditTitle, chapterMessage);
-                        }
-                    }
-                    #endregion
-                    #region GALLERY
-
-                    if (addGallery == true)
-                    {
-                        if (ImGui.Button("Add Image"))
-                        {
-                            if (imageIndex < 29)
+                            for (int h = 0; h < chapterEditCount; h++)
                             {
-                                imageIndex++;
+                                ImGui.Text("Chapter Title:");
+                                ImGui.SameLine();
+                                ImGui.InputText("##editchaptertitle" + h, ref ChapterEditTitle[h], 100);
+
+                                ImGui.Text("Chapter:");
+                                ImGui.SameLine();
+                                ImGui.InputTextMultiline("##chapteredit" + h, ref ChapterEditContent[h], 3000, new Vector2(450, 100));
+                                ChapterEdit += "<chapter><chapterTitle>" + ChapterEditTitle[h] + "</chapterTitle><chapterContent>" + ChapterEditContent[h].Replace("\n", "---===---") + "</chapterContent></chapter>|||";
+                            }
+                            for (int i = 0; i < chapterCount; i++)
+                            {
+                                ImGui.Text("Chapter Title:");
+                                ImGui.SameLine();
+                                ImGui.InputText("##chaptertitle" + i, ref ChapterTitle[i], 100);
+                                chapterMsg += "<chapter><chapterTitle>" + ChapterTitle[i] + "</chapterTitle><chapterContent>" + ChapterContent[i].Replace("\n", "---===---") + "</chapterContent></chapter>|||";
+                                ImGui.Text("Chapter:");
+                                ImGui.SameLine();
+                                ImGui.InputTextMultiline("##chapter" + i, ref ChapterContent[i], 3000, new Vector2(450, 100));
+                            }
+                            string chapterMessage = ChapterEdit + chapterMsg;
+                            if (ImGui.Button("Update Story"))
+                            {
+                                DataSender.SendStory(playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString(), storyEditTitle, chapterMessage);
                             }
                         }
-                        ImGui.SameLine();
-                        if(ImGui.Button("Submit Gallery"))
+                        #endregion
+                        #region GALLERY
+
+                        if (addGallery == true)
                         {
-                            for(int i = 0; i < imageIndex; i++)
+                            if (ImGui.Button("Add Image"))
                             {
-                                DataSender.SendGalleryImage(configuration.username, playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString(),
-                                                  NSFW[i], TRIGGER[i], imageURLs[i], i);
-                            }   
+                                if (imageIndex < 29)
+                                {
+                                    imageIndex++;
+                                }
+                            }
+                            ImGui.SameLine();
+                            if(ImGui.Button("Submit Gallery"))
+                            {
+                                for(int i = 0; i < imageIndex; i++)
+                                {
+                                    DataSender.SendGalleryImage(configuration.username, playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString(),
+                                                      NSFW[i], TRIGGER[i], imageURLs[i], i);
+                                }   
                             
+                            }
+                            ImGui.NewLine();
+                            addGalleryImageGUI = true;
+                            ImageExists[imageIndex] = true;
                         }
-                        ImGui.NewLine();
-                        addGalleryImageGUI = true;
-                        ImageExists[imageIndex] = true;
-                    }
-                    #endregion
-                    #region OOC
+                        #endregion
+                        #region OOC
 
-                    if (addOOC)
-                    {
-                        ImGui.InputTextMultiline("##OOC", ref oocInfo, 50000, new Vector2(500, 600));  
-                        if(ImGui.Button("Submit OOC"))
+                        if (addOOC)
                         {
-                            DataSender.SendOOCInfo(configuration.username, configuration.password, oocInfo);
-                        }
-                    }
-                    #endregion
-                                     
-                    if (addGalleryImageGUI == true)
-                    {
-                        AddImageToGallery(plugin, imageIndex);
-                    }
-
-
-                    if (editAvatar == true)
-                    {
-                        editAvatar = false;
-                        EditImage(true, 0);
-                    }
-                    
-                    if (Reorder == true)
-                    {
-                        Reorder = false;
-                        bool nextExists = ImageExists[NextAvailableImageIndex() + 1];
-                        int firstOpen = NextAvailableImageIndex();
-                        ImageExists[firstOpen] = true;
-                        if (nextExists)
-                        {
-                            for (int i = firstOpen; i < imageIndex; i++)
+                            ImGui.InputTextMultiline("##OOC", ref oocInfo, 50000, new Vector2(500, 600));  
+                            if(ImGui.Button("Submit OOC"))
                             {
-                                galleryImages[i] = galleryImages[i + 1];
-                                galleryThumbs[i] = galleryThumbs[i + 1];
-                                imageURLs[i] = imageURLs[i + 1];
-                               
+                                DataSender.SendOOCInfo(configuration.username, configuration.password, oocInfo);
                             }
                         }
+                        #endregion
+                                     
+                        if (addGalleryImageGUI == true)
+                        {
+                            AddImageToGallery(plugin, imageIndex);
+                        }
 
-                        imageIndex--;
-                        galleryImages[imageIndex] = pictureTab;
-                        galleryThumbs[imageIndex] = pictureTab;
-                        ImageExists[imageIndex] = false;
 
-                    }
+                        if (editAvatar == true)
+                        {
+                            editAvatar = false;
+                            EditImage(true, 0);
+                        }
+                    
+                        if (Reorder == true)
+                        {
+                            Reorder = false;
+                            bool nextExists = ImageExists[NextAvailableImageIndex() + 1];
+                            int firstOpen = NextAvailableImageIndex();
+                            ImageExists[firstOpen] = true;
+                            if (nextExists)
+                            {
+                                for (int i = firstOpen; i < imageIndex; i++)
+                                {
+                                    galleryImages[i] = galleryImages[i + 1];
+                                    galleryThumbs[i] = galleryThumbs[i + 1];
+                                    imageURLs[i] = imageURLs[i + 1];
+                               
+                                }
+                            }
+
+                            imageIndex--;
+                            galleryImages[imageIndex] = pictureTab;
+                            galleryThumbs[imageIndex] = pictureTab;
+                            ImageExists[imageIndex] = false;
+
+                        }
                    
 
+                    }
                 }
-            }
-            else
-            {
-                Misc.StartLoader(loaderInd, percentage, loading);
+                else
+                {
+                    Misc.StartLoader(loaderInd, percentage, loading);
+                }
             }
         }
 
@@ -569,9 +572,6 @@ namespace InfiniteRoleplay.Windows
         }
         public void ResetBio(Plugin plugin)
         {
-            System.Drawing.Image image1 = System.Drawing.Image.FromFile(Path.Combine(plugin.PluginInterfacePub.AssemblyLocation.Directory?.FullName!, "UI/common/avatar_holder.png"));
-            this.avatarBytes = Imaging.ImageToByteArray(image1);
-            DataReceiver.currentAvatar = avatarBytes;
             currentAvatarImg = this.persistAvatarHolder;
         }
         public void ResetHooks()

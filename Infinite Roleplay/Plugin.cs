@@ -86,13 +86,13 @@ namespace InfiniteRoleplay
             {
                 HelpMessage = "to open the target menu"
             });
+            ReloadClient();
             this.pluginInterface.UiBuilder.Draw += DrawUI;
             this.pluginInterface.UiBuilder.OpenConfigUi += LoadOptions;
             this.pluginInterface.UiBuilder.OpenMainUi += DrawLoginUI;
             
             DataReceiver.plugin = this;
             this.framework.Update += Update;
-
         }
         public async void ReloadClient()
         {
@@ -111,7 +111,6 @@ namespace InfiniteRoleplay
         }
         public void LoadOptions()
         {           
-            LoadUI();
             optionsWindow.IsOpen= true;
         }
         public void ReloadProfile()
@@ -133,15 +132,6 @@ namespace InfiniteRoleplay
         {
             if (uiLoaded == false)
             {
-               
-                
-
-
-
-
-
-
-
                 targetWindow = new TargetWindow(this, this.pluginInterface);
                 targetMenu = new TargetMenu(this, this.pluginInterface, targetManager);
 
@@ -181,7 +171,6 @@ namespace InfiniteRoleplay
                 this.WindowSystem.AddWindow(restorationWindow);
                 this.WindowSystem.AddWindow(termsWindow);
                 uiLoaded = true;
-
             }
         }
         public void Dispose()
@@ -289,9 +278,7 @@ namespace InfiniteRoleplay
             ClientHandleData.InitializePackets(false);
         }
         public void DrawLoginUI()
-        {
-            LoadUI();            
-            ReloadClient();
+        {           
             if (loggedIn == true)
             {
                 panelWindow.IsOpen = true;

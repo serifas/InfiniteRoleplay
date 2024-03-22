@@ -1,4 +1,5 @@
 using Dalamud.Interface.Internal;
+using InfiniteRoleplay.Scripts.Misc;
 using InfiniteRoleplay.Windows;
 using System;
 using System.Drawing;
@@ -30,10 +31,10 @@ namespace InfiniteRoleplay.Helpers
 
 
                 IDalamudTextureWrap galleryImage = plugin.PluginInterfacePub.UiBuilder.LoadImage(scaledImagePath);
-                IDalamudTextureWrap nsfwThumb = plugin.PluginInterfacePub.UiBuilder.LoadImage(Path.Combine(plugin.PluginInterfacePub.AssemblyLocation.Directory?.FullName!, "UI/common/nsfw.png"));
-                IDalamudTextureWrap triggerThumb = plugin.PluginInterfacePub.UiBuilder.LoadImage(Path.Combine(plugin.PluginInterfacePub.AssemblyLocation.Directory?.FullName!, "UI/common/trigger.png"));
-                IDalamudTextureWrap nsfwTriggerThumb = plugin.PluginInterfacePub.UiBuilder.LoadImage(Path.Combine(plugin.PluginInterfacePub.AssemblyLocation.Directory?.FullName!, "UI/common/nsfw_trigger.png"));
-                
+                IDalamudTextureWrap nsfwThumb = Constants.UICommonImage(plugin.PluginInterfacePub, Constants.CommonImageTypes.NSFW);
+                IDalamudTextureWrap triggerThumb = Constants.UICommonImage(plugin.PluginInterfacePub, Constants.CommonImageTypes.TRIGGER);
+                IDalamudTextureWrap nsfwTriggerThumb = Constants.UICommonImage(plugin.PluginInterfacePub, Constants.CommonImageTypes.NSFWTRIGGER);
+
                 if (self == true)
                 {
                     ProfileWindow.galleryImages[index] = galleryImage;

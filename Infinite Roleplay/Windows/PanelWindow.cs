@@ -171,11 +171,15 @@ namespace InfiniteRoleplay.Windows
                 plugin.CloseAllWindows(false);
                 plugin.loginWindow.IsOpen = true;
             }
-            if (ImGui.Button("Back"))
+            if(viewProfile == true || viewSystems  == true || viewEvents == true || viewConnections == true)
             {
-                switchUI();
-                viewMainWindow = true;
+                if (ImGui.Button("Back"))
+                {
+                    switchUI();
+                    viewMainWindow = true;
+                }
             }
+            ImGui.SameLine();
             ImGui.TextColored(statusCol, status);
 
         }

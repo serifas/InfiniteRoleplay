@@ -334,9 +334,7 @@ namespace Networking
             var packetID = buffer.ReadInt();
             buffer.Dispose();
             ProfileWindow.ClearUI();
-            string avatarPath = Path.Combine(plugin.PluginInterfacePub.AssemblyLocation.Directory?.FullName!, @"UI/common/profiles/avatar_holder.png");
-
-            plugin.profileWindow.avatarBytes = File.ReadAllBytes(avatarPath);
+            ProfileWindow.currentAvatarImg = Constants.UICommonImage(plugin.PluginInterfacePub, Constants.CommonImageTypes.avatarHolder);
             ProfileWindow.bioFieldsArr[(int)Constants.BioFieldTypes.name] = "";
             ProfileWindow.bioFieldsArr[(int)Constants.BioFieldTypes.race] = "";
             ProfileWindow.bioFieldsArr[(int)Constants.BioFieldTypes.gender] = "";
@@ -644,7 +642,6 @@ namespace Networking
             ProfileWindow.currentPersonality_2 = personality_2;
             ProfileWindow.currentPersonality_3 = personality_3;
             buffer.Dispose();
-            plugin.profileWindow.avatarBytes = avatarBytes;
             
             BioLoadStatus = 1;
         }
