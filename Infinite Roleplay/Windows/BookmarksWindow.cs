@@ -71,10 +71,12 @@ namespace InfiniteRoleplay.Windows
                     }
                     if (ImGui.Button(profiles.Keys[i] + " @ " + profiles.Values[i]))
                     {
+                        TargetWindow.ClearUI();
                         ReportWindow.reportCharacterName = profiles.Keys[i];
                         ReportWindow.reportCharacterWorld = profiles.Values[i];
                         TargetWindow.characterNameVal = profiles.Keys[i];
                         TargetWindow.characterWorldVal = profiles.Values[i];
+
                         plugin.ReloadTarget();
                         LoginWindow.loginRequest = true;
                         DisableBookmarkSelection = true;

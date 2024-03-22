@@ -98,8 +98,10 @@ namespace InfiniteRoleplay.Windows
                 var targetPlayer = targetManager.Target as PlayerCharacter;
                 if (targetPlayer != null)
                 {
+                    TargetWindow.ClearUI();
                     TargetWindow.characterNameVal = targetPlayer.Name.ToString();
                     TargetWindow.characterWorldVal = targetPlayer.HomeWorld.GameData.Name.ToString();
+                   
                     DataSender.RequestTargetProfile(targetPlayer.Name.ToString(), targetPlayer.HomeWorld.GameData.Name.ToString(), configuration.username);
                 }
 

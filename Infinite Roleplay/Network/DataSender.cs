@@ -463,31 +463,17 @@ namespace Networking
             buffer.Dispose();
         }
 
-        internal static async void SendOOCInfo(string username, string password, string OOC)
+        internal static async void SendOOCInfo(string charactername, string characterworld, string OOC)
         {
             var buffer = new ByteBuffer();
             buffer.WriteInteger((int)ClientPackets.SSendOOC);
-            buffer.WriteString(username);
-            buffer.WriteString(password);
+            buffer.WriteString(charactername);
+            buffer.WriteString(characterworld);
             buffer.WriteString(OOC);
             await ClientTCP.SendData(buffer.ToArray());
             buffer.Dispose();
         }
 
-        /*
-         * PACKET STRUCTURE
-         * 
-        public static void EXAMPLE_PACKET_FUNCTION()
-        {
-            ByteBuffer buffer = new ByteBuffer();
-            buffer.WriteInteger((int)ClientPackets.PACKETNAME_REFERENCED_IN_CLIENTPACKETS); 
-            //buffer.WriteBool(true);
-            //buffer.WriteString("Sup");
-            //buffer.WriteInteger(1);
-            await ClientTCP.SendData(buffer.ToArray());
-            buffer.Dispose();
-        }
-
-        */
+      
     }
 }

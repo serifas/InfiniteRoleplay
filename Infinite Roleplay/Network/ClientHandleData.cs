@@ -56,6 +56,7 @@ namespace Networking
                 packets.Add((int)ServerPackets.SSendNoOOCInfo, DataReceiver.ReceiveNoOOCInfo);
                 packets.Add((int)ServerPackets.SSendOOC, DataReceiver.ReceiveProfileOOC);
                 packets.Add((int)ServerPackets.SSendTargetOOC, DataReceiver.ReceiveTargetOOCInfo);
+                packets.Add((int)ServerPackets.SSendNoTargetOOCInfo, DataReceiver.ReceiveNoTargetOOCInfo);
             }
             else
             {

@@ -71,6 +71,7 @@ namespace Networking
         SSendOOC = 51,
         SSendTargetOOC = 52,
         SSendNoOOCInfo = 53,
+        SSendNoTargetOOCInfo = 54,
     }
     class DataReceiver
     {
@@ -238,7 +239,6 @@ namespace Networking
             buffer.Dispose();
             TargetWindow.ExistingProfile = true;
             plugin.targetWindow.IsOpen = true;
-            TargetWindow.ClearUI();
             ReportWindow.reportStatus = "";
         }
         public static void RecProfileReportedSuccessfully(byte[] data)
@@ -282,20 +282,12 @@ namespace Networking
             var packetID = buffer.ReadInt();
             buffer.Dispose();
             loggedIn = true;
-            TargetWindow.ExistingProfile = false;
-            TargetWindow.ExistingBio = false;
-            TargetWindow.ExistingHooks = false;
-            TargetWindow.ExistingStory = false;
-            TargetWindow.ExistingOOC = false;
-            TargetWindow.ExistingGallery = false;
-            plugin.targetWindow.IsOpen = true;
+
             TargetBioLoadStatus = 0;
             TargetHooksLoadStatus = 0;
             TargetStoryLoadStatus = 0;
             TargetOOCLoadStatus = 0;
             TargetGalleryLoadStatus = 0;
-            TargetNotesLoadStatus = 0;
-            TargetWindow.ClearUI();
             TargetMenu.DisableInput = false;
             BookmarksWindow.DisableBookmarkSelection = false;
             ReportWindow.reportStatus = "";
@@ -851,6 +843,15 @@ namespace Networking
             string ooc = buffer.ReadString();
             TargetWindow.oocInfo = ooc;
             TargetWindow.ExistingOOC = true;
+            buffer.Dispose();
+        }
+        public static void ReceiveNoTargetOOCInfo(byte[] data)
+        {
+            var buffer = new ByteBuffer();
+            buffer.WriteBytes(data);
+            var packetID = buffer.ReadInt();
+            TargetWindow.oocInfo = string.Empty;
+            TargetWindow.ExistingOOC = false;
             buffer.Dispose();
         }
 

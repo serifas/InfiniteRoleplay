@@ -229,7 +229,7 @@ namespace InfiniteRoleplay.Windows
                 {
 
 
-                    if (ExistingBio == false && ExistingHooks == false && ExistingStory == false && ExistingOOC == false && ExistingOOC == false && ExistingGallery == false)
+                    if (ExistingBio == false && ExistingHooks == false && ExistingStory == false && ExistingOOC == false  && ExistingGallery == false)
                     {
                         ImGui.Text("No Profile Data Available");
                     }
@@ -428,12 +428,13 @@ namespace InfiniteRoleplay.Windows
         public static void ClearUI()
         {
             viewBio = false;
-            viewHooks = false; 
+            viewHooks = false;
             viewStory = false;
-            viewOOC= false;
+            viewOOC = false;
             viewGallery = false;
             addNotes = false;
         }
+      
         public void Dispose()
         {
             WindowOpen = false;
