@@ -6,13 +6,12 @@
         <Version>0.0.0.1</Version>
         <Description>An all around Roleplay Plugin.</Description>
         <Copyright></Copyright>
-        <PackageProjectUrl>https://github.com/serifas/InfiniteRoleplay</PackageProjectUrl>
+        <PackageProjectUrl>https://github.com/serifas/infinite-roleplay-plugin</PackageProjectUrl>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     </PropertyGroup>
 
     <PropertyGroup>
-		<RuntimeFrameworkVersion>8.0.0</RuntimeFrameworkVersion>
-        <TargetFramework>net8.0-windows</TargetFramework>
+        <TargetFramework>net8.0-windows8.0</TargetFramework>
         <Platforms>x64</Platforms>
         <Nullable>enable</Nullable>
         <LangVersion>latest</LangVersion>
@@ -28,173 +27,180 @@
             <Visible>false</Visible>
         </Content>
 
-        <None Update="UI\common\kofi_btn.png">
+        <!--Common-->
+        <None Update="UI\common\blank.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="UI\common\disc_btn.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\personalities\none.png">
+        <None Update="UI\common\kofi_btn.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None> 
+        <None Update="UI\common\section_connections.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\personalities\abrasive.png">
+        <None Update="UI\common\section_events.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\personalities\absentminded.png">
+        <None Update="UI\common\section_profiles.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-
-        <None Update="UI\personalities\artistic.png">
+        <None Update="UI\common\section_systems.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\personalities\cautious.png">
+        <None Update="UI\common\spacer.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\personalities\charming.png">
+        <!--Profiles-->
+        <None Update="UI\common\profiles\avatar_holder.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\personalities\compassionate.png">
+        <None Update="UI\common\profiles\npc_bookmarks.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\personalities\daredevil.png">
+        <None Update="UI\common\profiles\npc_create.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\personalities\dishonest.png">
+        <None Update="UI\common\profiles\profile_bookmarks.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\personalities\dutiful.png">
+        <None Update="UI\common\profiles\profile_create.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\personalities\easygoing.png">
+        <None Update="UI\common\profiles\alignments\lawful_good.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\personalities\eccentric.png">
+        <None Update="UI\common\profiles\alignments\lawful_neutral.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\personalities\honest.png">
+        <None Update="UI\common\profiles\alignments\lawful_good.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\personalities\knowledgable.png">
+        <None Update="UI\common\profiles\alignments\neutral_good.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\personalities\optimistic.png">
+        <None Update="UI\common\profiles\alignments\true_neutral.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\personalities\polite.png">
+        <None Update="UI\common\profiles\alignments\neutral_evil.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\personalities\relentless.png">
+        <None Update="UI\common\profiles\alignments\chaotic_good.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\personalities\resentful.png">
+        <None Update="UI\common\profiles\alignments\chaotic_neutral.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\personalities\reserved.png">
+        <None Update="UI\common\profiles\alignments\chaotic_evil.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\personalities\romantic.png">
+        <None Update="UI\common\profiles\galleries\nsfw.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\personalities\spiritual.png">
+        <None Update="UI\common\profiles\galleries\nsfw_trigger.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\personalities\superior.png">
+        <None Update="UI\common\profiles\galleries\picturetab.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\personalities\tormented.png">
+        <None Update="UI\common\profiles\galleries\trigger.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\personalities\tough.png">
+        <None Update="UI\common\profiles\personalities\abrasive.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\personalities\wild.png">
+        <None Update="UI\common\profiles\personalities\absentminded.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\personalities\worldly.png">
+        <None Update="UI\common\profiles\personalities\agressive.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\alignments\lawful_good.png">
+        <None Update="UI\common\profiles\personalities\artistic.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\alignments\neutral_good.png">
+        <None Update="UI\common\profiles\personalities\cautious.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\alignments\chaotic_good.png">
+        <None Update="UI\common\profiles\personalities\charming.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\alignments\lawful_neutral.png">
+        <None Update="UI\common\profiles\personalities\compassionate.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\alignments\true_neutral.png">
+        <None Update="UI\common\profiles\personalities\daredevil.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\alignments\chaotic_neutral.png">
+        <None Update="UI\common\profiles\personalities\dishonest.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\alignments\lawful_evil.png">
+        <None Update="UI\common\profiles\personalities\dutiful.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\alignments\neutral_evil.png">
+        <None Update="UI\common\profiles\personalities\easygoing.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\alignments\chaotic_evil.png">
+        <None Update="UI\common\profiles\personalities\eccentric.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\common\friends.png">
+        <None Update="UI\common\profiles\personalities\honest.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\common\friend_request.png">
+        <None Update="UI\common\profiles\personalities\knowledgable.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\common\groups.png">
+        <None Update="UI\common\profiles\personalities\optimistic.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\common\group_invite.png">
+        <None Update="UI\common\profiles\personalities\polite.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\common\profiles.png">
+        <None Update="UI\common\profiles\personalities\relentless.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\common\profiles_NoWIP.png">
+        <None Update="UI\common\profiles\personalities\resentful.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\common\profile_view.png">
+        <None Update="UI\common\profiles\personalities\reserved.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\common\systems.png">
+        <None Update="UI\common\profiles\personalities\romantic.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\common\avatar_holder.png">
+        <None Update="UI\common\profiles\personalities\spiritual.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\common\picturetab.png">
+        <None Update="UI\common\profiles\personalities\superior.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\common\bookmark.png">
+        <None Update="UI\common\profiles\personalities\tormented.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\common\bookmarks.png">
+        <None Update="UI\common\profiles\personalities\tough.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\common\bookmarks_NoWIP.png">
+        <None Update="UI\common\profiles\personalities\wild.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\common\bookmarks_NoWIP.png">
+        <None Update="UI\common\profiles\personalities\worldly.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\common\nsfw.png">
+        <None Update="UI\common\systems\systems_combat.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\common\trigger.png">
+        <None Update="UI\common\systems\systems_stats.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\common\nsfw_trigger.png">
+        <None Update="UI\common\targets\assign_connection.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\common\remove_bookmark.png">
+        <None Update="UI\common\targets\bookmark.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="UI\common\blank.png">
+        <None Update="UI\common\targets\group_invite.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="UI\common\targets\profile_view.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>
@@ -209,12 +215,11 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Dalamud.ContextMenu" Version="1.3.1" />
         <PackageReference Include="DalamudPackager" Version="2.1.12" />
-        <PackageReference Include="Microsoft.Win32.SystemEvents" Version="8.0.0" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="StbImageSharp" Version="2.27.13" />
         <PackageReference Include="System.Drawing.Common" Version="8.0.3" />
-        <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
+        <ProjectReference Include="..\OtterGui\OtterGui.csproj" />
         <Reference Include="FFXIVClientStructs">
             <HintPath>$(DalamudLibPath)FFXIVClientStructs.dll</HintPath>
             <Private>false</Private>
@@ -243,9 +248,10 @@
             <HintPath>$(DalamudLibPath)Lumina.Excel.dll</HintPath>
             <Private>false</Private>
         </Reference>
-        <Reference Include="OtterGui">
-          <HintPath>Deps\OtterGui.dll</HintPath>
-        </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="UI\common\connections\" />
     </ItemGroup>
 
 </Project>

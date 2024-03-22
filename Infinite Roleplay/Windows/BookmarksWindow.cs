@@ -23,6 +23,7 @@ using System.Text.RegularExpressions;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Interface.Utility;
+using InfiniteRoleplay.Helpers;
 
 namespace InfiniteRoleplay.Windows
 {
@@ -46,18 +47,12 @@ namespace InfiniteRoleplay.Windows
             };
             this.plugin = plugin;
             this.pg = Interface;
-            this._nameFont = pg.UiBuilder.GetGameFontHandle(new GameFontStyle(GameFontFamilyAndSize.Jupiter23));
-            this._infoFont = pg.UiBuilder.GetGameFontHandle(new GameFontStyle(GameFontFamilyAndSize.Jupiter16));
             this.TargetWindow = targetWindow;
         }
         public override void Draw()
         {
 
-            using var col = ImRaii.PushColor(ImGuiCol.Border, ImGuiColors.DalamudViolet);
-            using var style = ImRaii.PushStyle(ImGuiStyleVar.FrameBorderSize, 2 * ImGuiHelpers.GlobalScale);
-            var _nameFont = plugin.PluginInterfacePub.UiBuilder.GetGameFontHandle(new GameFontStyle(GameFontFamilyAndSize.Jupiter23));
-            using var font = ImRaii.PushFont(_nameFont.ImFont, _nameFont.Available);
-            ImGuiUtil.DrawTextButton("Profiles", Vector2.Zero, 0);
+            Misc.SetTitle(plugin, false, "Profiles");
             using var defInfFontDen = ImRaii.DefaultFont();
             using var DefaultColor = ImRaii.DefaultColors();
 
@@ -71,12 +66,10 @@ namespace InfiniteRoleplay.Windows
                     }
                     if (ImGui.Button(profiles.Keys[i] + " @ " + profiles.Values[i]))
                     {
-                        TargetWindow.ClearUI();
                         ReportWindow.reportCharacterName = profiles.Keys[i];
                         ReportWindow.reportCharacterWorld = profiles.Values[i];
                         TargetWindow.characterNameVal = profiles.Keys[i];
                         TargetWindow.characterWorldVal = profiles.Values[i];
-
                         plugin.ReloadTarget();
                         LoginWindow.loginRequest = true;
                         DisableBookmarkSelection = true;

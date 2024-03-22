@@ -1,32 +1,13 @@
-using Dalamud.Interface.ImGuiFileDialog;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
 using ImGuiNET;
-using ImGuiScene;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net.NetworkInformation;
 using System.Numerics;
-using System.Runtime.Intrinsics.Arm;
-using System.Text;
-using static Dalamud.Interface.Windowing.Window;
-using Dalamud.Interface;
-using Dalamud.Interface.Colors;
-using Dalamud.Interface.GameFonts;
-using Dalamud.Interface.ImGuiFileDialog;
-using ImGuiNET;
-using ImGuiScene;
-using static Lumina.Data.Files.ScdFile;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.ClientState.Objects;
-using Dalamud.Game.Gui;
-using Dalamud.Game.ClientState;
 using Networking;
 using Dalamud.Interface.Internal;
-using Dalamud.Plugin.Services;
-using Lumina.Excel.GeneratedSheets;
+using InfiniteRoleplay.Scripts.Misc;
 
 namespace InfiniteRoleplay.Windows
 {
@@ -34,25 +15,17 @@ namespace InfiniteRoleplay.Windows
     {
 
         private Plugin plugin;
-        private string profileViewImagePath;
         private IDalamudTextureWrap profileViewImage;
-        private string requestFriendImagePath;
-        private IDalamudTextureWrap requestFriendImage;
-        private string addBookmarkImagePath;
-        private IDalamudTextureWrap addBookmarkImage;
-        private string removeBookmarkImagePath;
-        private IDalamudTextureWrap removeBookmarkImage;
-        private string groupInviteImagePath;
         private IDalamudTextureWrap groupInviteImage;
+        private IDalamudTextureWrap bookmarkImage;
+        private IDalamudTextureWrap assignConnectionImage;
         public static bool isAdmin;
         public Configuration configuration;
         public static bool WindowOpen;
         public string msg;
         private ITargetManager targetManager;
         public static PlayerCharacter playerCharacter;
-        private IChatGui ChatGUI;
         public static PlayerCharacter lastTarget;
-        private bool _showFileDialogError = false;
         public bool openedProfile = false;
         public bool openedTargetProfile = false;
         public static bool DisableInput = false;
@@ -66,16 +39,10 @@ namespace InfiniteRoleplay.Windows
             };
             this.plugin = plugin;
             this.configuration = plugin.Configuration;
-            this.profileViewImagePath = Path.Combine(Interface.AssemblyLocation.Directory?.FullName!, "UI/common/profile_view.png");
-            this.profileViewImage = Interface.UiBuilder.LoadImage(profileViewImagePath);
-            this.requestFriendImagePath = Path.Combine(Interface.AssemblyLocation.Directory?.FullName!, "UI/common/friend_request.png");
-            this.requestFriendImage = Interface.UiBuilder.LoadImage(requestFriendImagePath);
-            this.addBookmarkImagePath = Path.Combine(Interface.AssemblyLocation.Directory?.FullName!, "UI/common/bookmark.png");
-            this.addBookmarkImage = Interface.UiBuilder.LoadImage(addBookmarkImagePath);
-            this.removeBookmarkImagePath = Path.Combine(Interface.AssemblyLocation.Directory?.FullName!, "UI/common/remove_bookmark.png");
-            this.removeBookmarkImage = Interface.UiBuilder.LoadImage(removeBookmarkImagePath);
-            this.groupInviteImagePath = Path.Combine(Interface.AssemblyLocation.Directory?.FullName!, "UI/common/group_invite.png");
-            this.groupInviteImage = Interface.UiBuilder.LoadImage(groupInviteImagePath);
+            this.profileViewImage = Constants.UICommonImage(Interface, Constants.CommonImageTypes.targetViewProfile);
+            this.groupInviteImage = Constants.UICommonImage(Interface, Constants.CommonImageTypes.targetGroupInvite);
+            this.bookmarkImage = Constants.UICommonImage(Interface, Constants.CommonImageTypes.targetBookmark);
+            this.assignConnectionImage = Constants.UICommonImage(Interface, Constants.CommonImageTypes.targetConnections);
             this.targetManager = targetManager;
         }
         public override void OnClose()
@@ -98,10 +65,8 @@ namespace InfiniteRoleplay.Windows
                 var targetPlayer = targetManager.Target as PlayerCharacter;
                 if (targetPlayer != null)
                 {
-                    TargetWindow.ClearUI();
                     TargetWindow.characterNameVal = targetPlayer.Name.ToString();
                     TargetWindow.characterWorldVal = targetPlayer.HomeWorld.GameData.Name.ToString();
-                   
                     DataSender.RequestTargetProfile(targetPlayer.Name.ToString(), targetPlayer.HomeWorld.GameData.Name.ToString(), configuration.username);
                 }
 
@@ -115,14 +80,14 @@ namespace InfiniteRoleplay.Windows
 
             ImGui.SameLine();
 
-            if (ImGui.ImageButton(this.requestFriendImage.ImGuiHandle, new Vector2(50, 50)))
+            if (ImGui.ImageButton(this.assignConnectionImage.ImGuiHandle, new Vector2(50, 50)))
             {
                 //plugin.WindowSystem.GetWindow("SHINE RULEBOOK").IsOpen = true;
 
             }
             if (ImGui.IsItemHovered())
             {
-                ImGui.SetTooltip("Specify Relationships (Coming soon)");
+                ImGui.SetTooltip("Specify Relationships (Coming Soon)");
             }
 
 
@@ -140,7 +105,7 @@ namespace InfiniteRoleplay.Windows
 
             ImGui.SameLine();
 
-            if (ImGui.ImageButton(this.addBookmarkImage.ImGuiHandle, new Vector2(50, 50)))
+            if (ImGui.ImageButton(this.bookmarkImage.ImGuiHandle, new Vector2(50, 50)))
             {
                 var targetPlayer = targetManager.Target as PlayerCharacter;
                 if (targetPlayer != null)

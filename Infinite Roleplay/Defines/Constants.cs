@@ -111,6 +111,63 @@ namespace InfiniteRoleplay.Scripts.Misc
             Overwheight = 7,
             Obese = 8,
         }
+        public enum CommonImageTypes
+        {
+            discordBtn = 1,
+            kofiBtn = 2,
+            blankPictureTab = 3,
+            avatarHolder = 4,
+            profileSection = 5,
+            eventsSection = 6,
+            systemsSection = 7,
+            connectionsSection = 8,
+            //profiles
+            profileCreateProfile = 9, 
+            profileCreateNPC = 10, 
+            profileBookmarkProfile = 11,
+            profileBookmarkNPC = 12,
+            //events and venues
+            eventEvents = 13,
+            eventBookmarkEvent = 14,
+            //systems
+            systemsCombatSystem = 15,
+            systemSheetSystem = 16,
+            //connections
+            //targets
+            targetConnections = 17,
+            targetBookmark = 18,
+            targetGroupInvite = 19,
+            targetViewProfile = 20,
+
+        }
+        public static IDalamudTextureWrap UICommonImage(DalamudPluginInterface pluginInterface, CommonImageTypes imageType)
+        {
+            IDalamudTextureWrap commonImage = null;
+            string path = pluginInterface.AssemblyLocation.Directory?.FullName!;
+
+            if (imageType == CommonImageTypes.discordBtn) { commonImage = pluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/common/disc_btn.png")); }
+            if (imageType == CommonImageTypes.kofiBtn) { commonImage = pluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/common/kofi_btn.png")); }
+            if (imageType == CommonImageTypes.blankPictureTab) { commonImage = pluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/common/profiles/galleries/picturetab.png")); }
+            if (imageType == CommonImageTypes.blankPictureTab) { commonImage = pluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/common/profiles/galleries/picturetab.png")); }
+            if (imageType == CommonImageTypes.avatarHolder) { commonImage = pluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/common/profiles/avatar_holder.png")); }
+            if (imageType == CommonImageTypes.profileSection) { commonImage = pluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/common/section_profiles.png")); }
+            if (imageType == CommonImageTypes.systemsSection) { commonImage = pluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/common/section_systems.png")); }
+            if (imageType == CommonImageTypes.eventsSection) { commonImage = pluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/common/section_events.png")); }
+            if (imageType == CommonImageTypes.connectionsSection) { commonImage = pluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/common/section_connections.png")); }
+            //profiles
+            if (imageType == CommonImageTypes.profileCreateProfile) { commonImage = pluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/common/profiles/profile_create.png")); }
+            if (imageType == CommonImageTypes.profileCreateNPC) { commonImage = pluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/common/profiles/npc_create.png")); }
+            if (imageType == CommonImageTypes.profileBookmarkProfile) { commonImage = pluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/common/profiles/profile_bookmarks.png")); }
+            if (imageType == CommonImageTypes.profileBookmarkNPC) { commonImage = pluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/common/profiles/npc_bookmarks.png")); }
+            //target images
+            if (imageType == CommonImageTypes.targetConnections) { commonImage = pluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/common/targets/assign_connection.png")); }
+            if (imageType == CommonImageTypes.targetBookmark) { commonImage = pluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/common/targets/bookmark.png")); }
+            if (imageType == CommonImageTypes.targetGroupInvite) { commonImage = pluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/common/targets/group_invite.png")); }
+            if (imageType == CommonImageTypes.targetViewProfile) { commonImage = pluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/common/targets/profile_view.png")); }
+            return commonImage;
+        }
+
+
         public static string AlignmentName(int alignment)
         {
             string alignmentName = string.Empty;

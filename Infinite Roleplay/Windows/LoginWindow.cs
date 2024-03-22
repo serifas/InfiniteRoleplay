@@ -1,18 +1,13 @@
 using System;
 using System.Numerics;
-using Dalamud.Interface;
-using System.Security.Cryptography;
 using Dalamud.Interface.Windowing;
 using ImGuiNET;
 using Dalamud.Interface.ImGuiFileDialog;
 using Networking;
 using Dalamud.Game.ClientState.Objects.SubKinds;
-using FFXIVClientStructs.FFXIV.Client.Graphics.Kernel;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
 using Dalamud.Interface.Internal;
-using Dalamud.Logging;
 using Dalamud.Utility;
+using InfiniteRoleplay.Scripts.Misc;
 
 namespace InfiniteRoleplay.Windows;
 
@@ -27,7 +22,6 @@ public class LoginWindow : Window, IDisposable
     public string email = string.Empty;
     public string restorationEmail = string.Empty;
     public bool attemptedLogin = false;
-    public bool updateWindow = false;
     public bool login = true;
     public bool forgot = false;
     public static bool loginRequest = false;
@@ -51,27 +45,20 @@ public class LoginWindow : Window, IDisposable
         this.username = this.Configuration.username;
         this.password = this.Configuration.password;
 
-        string kofiImg = Path.Combine(plugin.PluginInterfacePub.AssemblyLocation.Directory?.FullName!, "UI/common/kofi_btn.png");
-        kofiBtnImg = plugin.PluginInterfacePub.UiBuilder.LoadImage(kofiImg);
+        kofiBtnImg = Constants.UICommonImage(plugin.PluginInterfacePub, Constants.CommonImageTypes.kofiBtn);
+        discoBtn = Constants.UICommonImage(plugin.PluginInterfacePub, Constants.CommonImageTypes.discordBtn);
 
-        string discordBtn = Path.Combine(plugin.PluginInterfacePub.AssemblyLocation.Directory?.FullName!, "UI/common/disc_btn.png");
-        discoBtn = plugin.PluginInterfacePub.UiBuilder.LoadImage(discordBtn);
         this.playerCharacter = playerCharacter;
     }
 
     public void Dispose()
     {
-        updateWindow = false;
     }
 
     public override void Draw()
     {
 
-        updateWindow = true;
         // can't ref a property, so use a local copy
-        var connectionValue = this.Configuration.StayOnline;
-        var usernamevalue = this.Configuration.username;
-        var passwordvalue = this.Configuration.password;
         if (login == true)
         {
             if(ClientTCP.clientSocket.Connected == true)

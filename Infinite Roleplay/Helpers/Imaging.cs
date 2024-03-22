@@ -1,18 +1,9 @@
 using Dalamud.Interface.Internal;
-using Dalamud.IoC;
-using Dalamud.Plugin;
 using InfiniteRoleplay.Windows;
-using Lumina.Data.Parsing;
-using Lumina.Excel.GeneratedSheets;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
 
 namespace InfiniteRoleplay.Helpers
 {

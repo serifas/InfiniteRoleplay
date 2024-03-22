@@ -1,39 +1,13 @@
 using Dalamud.Game.Command;
 using Dalamud.IoC;
 using Dalamud.Plugin;
-using System.IO;
-using System.Reflection;
 using Dalamud.Interface.Windowing;
 using InfiniteRoleplay.Windows;
-using System.Net.Http;
-using System.Net.NetworkInformation;
-using System.Net.Sockets;
-using System.Collections.Generic;
-using System.Numerics;
-using InfiniteRoleplay;
-using Dalamud.Interface.ImGuiFileDialog;
-using Dalamud.Interface;
-using Dalamud.Interface.Windowing;
-using ImGuiNET;
-using ImGuiScene;
-using Dalamud.Game.ClientState;
-using Dalamud.Game.Gui;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Game.ClientState.Objects.SubKinds;
-using FFXIVClientStructs.FFXIV.Client.Graphics.Scene;
-using Dalamud.Game;
-using System.Runtime;
-using Dalamud.Game.DutyState;
-using FFXIVClientStructs.FFXIV.Client.Game.Event;
-using Lumina.Excel.GeneratedSheets;
 using Networking;
 using InfiniteRoleplay.Helpers;
 using Dalamud.Plugin.Services;
-using Dalamud.Interface.Internal.Windows;
-using Dalamud.Interface.Internal;
-using System.Threading;
-using System;
-using OtterGui.Log;
 
 namespace InfiniteRoleplay
 {
@@ -57,21 +31,9 @@ namespace InfiniteRoleplay
         public LoginWindow loginWindow;
         public ProfileWindow profileWindow;
         public OptionsWindow optionsWindow;
-        public AdminWindow adminWindow;
         public ReportWindow reportWindow;
         public VerificationWindow verificationWindow;
         public RestorationWindow restorationWindow;
-        public IDalamudTextureWrap AvatarHolder;
-        //Icons
-        public IDalamudTextureWrap lawfulGood;
-        public IDalamudTextureWrap neutralGood;
-        public IDalamudTextureWrap chaoticGood;
-        public IDalamudTextureWrap lawfulNeutral;
-        public IDalamudTextureWrap trueNeutral;
-        public IDalamudTextureWrap chaoticNeutral;
-        public IDalamudTextureWrap lawfulEvil;
-        public IDalamudTextureWrap neutralEvil;
-        public IDalamudTextureWrap chaoticEvil;
         public TOS termsWindow;
         public static Misc misc = new Misc();
         public string Name => "Infinite Roleplay";
@@ -171,17 +133,8 @@ namespace InfiniteRoleplay
         {
             if (uiLoaded == false)
             {
-                AvatarHolder = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/common/avatar_holder.png"));
+               
                 
-                lawfulGood = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/alignments/lawful_good.png"));
-                neutralGood = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/alignments/neutral_good.png"));
-                chaoticGood = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/alignments/chaotic_good.png"));
-                lawfulNeutral = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/alignments/lawful_neutral.png"));
-                trueNeutral = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/alignments/true_neutral.png"));
-                chaoticNeutral = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/alignments/chaotic_neutral.png"));
-                lawfulEvil = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/alignments/lawful_evil.png"));
-                neutralEvil = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/alignments/neutral_evil.png"));
-                chaoticEvil = pluginInterface.UiBuilder.LoadImage(Path.Combine(pluginInterface.AssemblyLocation.Directory?.FullName!, "UI/alignments/chaotic_evil.png"));
 
 
 
@@ -189,7 +142,7 @@ namespace InfiniteRoleplay
 
 
 
-                targetWindow = new TargetWindow(this, this.pluginInterface, AvatarHolder,  lawfulGood, neutralGood, chaoticGood, lawfulNeutral, trueNeutral, chaoticNeutral, lawfulEvil, neutralEvil, chaoticEvil);
+                targetWindow = new TargetWindow(this, this.pluginInterface);
                 targetMenu = new TargetMenu(this, this.pluginInterface, targetManager);
 
                 imagePreview = new ImagePreview(this, this.pluginInterface, targetManager);
@@ -200,7 +153,6 @@ namespace InfiniteRoleplay
 
                 reportWindow = new ReportWindow(this, this.pluginInterface);
 
-                adminWindow = new AdminWindow(this, this.pluginInterface);
 
                 panelWindow = new PanelWindow(this, this.pluginInterface, targetManager);
 
@@ -245,49 +197,6 @@ namespace InfiniteRoleplay
             if(ClientHandleData.packets.Count > 0)
             {
                 ClientHandleData.InitializePackets(false);
-            }
-            if (ClientTCP.IsConnectedToServer(ClientTCP.clientSocket) == true)
-            {
-                DisconnectFromServer();
-            }
-            if(AvatarHolder!= null) { AvatarHolder.Dispose(); }
-
-
-            if (lawfulGood != null)
-            {
-                lawfulGood.Dispose();
-            }
-            if (neutralGood != null)
-            {
-                neutralGood.Dispose();
-            }
-            if (chaoticGood != null)
-            {
-                chaoticGood.Dispose();
-            }
-            if (lawfulNeutral != null)
-            {
-                lawfulNeutral.Dispose();
-            }
-            if (trueNeutral != null)
-            {
-                trueNeutral.Dispose();
-            }
-            if (chaoticNeutral != null)
-            {
-                chaoticNeutral.Dispose();
-            }
-            if (lawfulEvil != null)
-            {
-                lawfulEvil.Dispose();
-            }
-            if (neutralEvil != null)
-            {
-                neutralEvil.Dispose();
-            }
-            if (chaoticEvil != null)
-            {
-                chaoticEvil.Dispose();
             }
             Imaging.RemoveAllImages(this);
 
@@ -373,7 +282,7 @@ namespace InfiniteRoleplay
 
         public async void DisconnectFromServer()
         {
-            await ClientTCP.InitializingNetworking(false);
+            ClientTCP.InitializingNetworking(false);
         }
         public static void ClearPackets()
         {

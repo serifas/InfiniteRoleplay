@@ -1,9 +1,3 @@
-C:\Users\Preac\Holder\infinite-roleplay-plugin\Infinite Roleplay\obj\x64\Debug\InfiniteRoleplay.csproj.AssemblyReference.cache
-C:\Users\Preac\Holder\infinite-roleplay-plugin\Infinite Roleplay\obj\x64\Debug\InfiniteRoleplay.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\Preac\Holder\infinite-roleplay-plugin\Infinite Roleplay\obj\x64\Debug\InfiniteRoleplay.AssemblyInfoInputs.cache
-C:\Users\Preac\Holder\infinite-roleplay-plugin\Infinite Roleplay\obj\x64\Debug\InfiniteRoleplay.AssemblyInfo.cs
-C:\Users\Preac\Holder\infinite-roleplay-plugin\Infinite Roleplay\obj\x64\Debug\InfiniteRoleplay.csproj.CoreCompileInputs.cache
-C:\Users\Preac\Holder\infinite-roleplay-plugin\Infinite Roleplay\obj\x64\Debug\InfiniteRoleplay.sourcelink.json
 C:\Users\Preac\Holder\infinite-roleplay-plugin\Infinite Roleplay\bin\x64\Debug\irp.png
 C:\Users\Preac\Holder\infinite-roleplay-plugin\Infinite Roleplay\bin\x64\Debug\UI\alignments\chaotic_evil.png
 C:\Users\Preac\Holder\infinite-roleplay-plugin\Infinite Roleplay\bin\x64\Debug\UI\alignments\chaotic_evil_bar.png
@@ -80,6 +74,12 @@ C:\Users\Preac\Holder\infinite-roleplay-plugin\Infinite Roleplay\bin\x64\Debug\S
 C:\Users\Preac\Holder\infinite-roleplay-plugin\Infinite Roleplay\bin\x64\Debug\runtimes\win\lib\net8.0\Microsoft.Win32.SystemEvents.dll
 C:\Users\Preac\Holder\infinite-roleplay-plugin\Infinite Roleplay\bin\x64\Debug\OtterGui.dll
 C:\Users\Preac\Holder\infinite-roleplay-plugin\Infinite Roleplay\bin\x64\Debug\OtterGui.pdb
+C:\Users\Preac\Holder\infinite-roleplay-plugin\Infinite Roleplay\obj\x64\Debug\InfiniteRoleplay.csproj.AssemblyReference.cache
+C:\Users\Preac\Holder\infinite-roleplay-plugin\Infinite Roleplay\obj\x64\Debug\InfiniteRoleplay.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Preac\Holder\infinite-roleplay-plugin\Infinite Roleplay\obj\x64\Debug\InfiniteRoleplay.AssemblyInfoInputs.cache
+C:\Users\Preac\Holder\infinite-roleplay-plugin\Infinite Roleplay\obj\x64\Debug\InfiniteRoleplay.AssemblyInfo.cs
+C:\Users\Preac\Holder\infinite-roleplay-plugin\Infinite Roleplay\obj\x64\Debug\InfiniteRoleplay.csproj.CoreCompileInputs.cache
+C:\Users\Preac\Holder\infinite-roleplay-plugin\Infinite Roleplay\obj\x64\Debug\InfiniteRoleplay.sourcelink.json
 C:\Users\Preac\Holder\infinite-roleplay-plugin\Infinite Roleplay\obj\x64\Debug\InfiniteRoleplay.csproj.CopyComplete
 C:\Users\Preac\Holder\infinite-roleplay-plugin\Infinite Roleplay\obj\x64\Debug\InfiniteRoleplay.dll
 C:\Users\Preac\Holder\infinite-roleplay-plugin\Infinite Roleplay\obj\x64\Debug\InfiniteRoleplay.pdb

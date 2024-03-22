@@ -1,66 +1,27 @@
-using Dalamud.Interface.ImGuiFileDialog;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
 using ImGuiNET;
-using ImGuiScene;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net.NetworkInformation;
 using System.Numerics;
-using System.Runtime.Intrinsics.Arm;
-using System.Text;
-using static Dalamud.Interface.Windowing.Window;
-using Dalamud.Interface;
-using Dalamud.Interface.Colors;
 using Dalamud.Interface.GameFonts;
-using Dalamud.Interface.ImGuiFileDialog;
-using ImGuiNET;
-using ImGuiScene;
-using static Lumina.Data.Files.ScdFile;
-using Lumina.Excel.GeneratedSheets;
-using FFXIVClientStructs.FFXIV.Client.Graphics.Render;
-using System.Collections.Concurrent;
-using Dalamud.Utility;
-using System.Reflection;
-using System.Security.Policy;
 using OtterGui.Raii;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Data;
-using System.Windows.Markup;
-using FFXIVClientStructs.FFXIV.Client.Game.UI;
-using System.Threading.Channels;
-using FFXIVClientStructs.FFXIV.Client.Game.Character;
-using Dalamud.Game.ClientState.Objects.SubKinds;
-using System.Drawing;
-using Dalamud.Game;
-using Dalamud.Game.Gui;
-using System.Xml.Linq;
-using Dalamud.Game.ClientState.Objects;
-using OtterGui;
 using Networking;
 using Dalamud.Plugin.Services;
 using Dalamud.Interface.Internal;
-using Dalamud.Interface.Utility;
-using System.Timers;
-using InfiniteRoleplay.Helpers;
-using Dalamud.Plugin.Internal;
+using InfiniteRoleplay.Helpers; 
 using InfiniteRoleplay.Scripts.Misc;
 
 namespace InfiniteRoleplay.Windows
 {
     public class TargetWindow : Window, IDisposable
     {
-        private readonly ConcurrentDictionary<string, string> _startPaths = new();
         private Plugin plugin;
         public static string loading;
-        private float _modVersionWidth;
-        private PlayerCharacter playerCharacter;
         private IChatGui chatGui;
         private DalamudPluginInterface pg;
-        public Configuration configuration;
-        public static bool WindowOpen;
+        public GameFontHandle nameFont;
         public static float currentInd, max;
         public static string characterNameVal, characterWorldVal;
         public static string[] StoryContent = new string[30];
@@ -69,62 +30,42 @@ namespace InfiniteRoleplay.Windows
         public static string[] HookContent = new string[30];
         public static string[] HookEditContent = new string[30];
         public static int chapterCount;
-        public static int chapterEditCount;
-        public static bool viewBio, viewHooks, viewStory, viewOOC, viewGallery, reportProfile, resetStory, addNotes = false;
-        public static bool[] galleryExists = new bool[30];
+        public static bool viewBio, viewHooks, viewStory, viewOOC, viewGallery, addNotes = false;
         public static bool ExistingBio;
         public static bool ExistingHooks;
-        public static int hookCount;
-        public static bool sizeReset = false;
         public static int hookEditCount, existingGalleryImageCount;
-        private GameFontHandle _nameFont;
-        private GameFontHandle _secionFont;
-        public static Misc misc = new Misc();
         public static bool showAlignment, showPersonality;
-        public static int loaderIndex;
-        public static string[] hooks;
         public static bool ExistingStory;
         public static bool ExistingOOC;
         public static bool ExistingGallery;
         public static bool ExistingProfile;
-        public static bool loadSize = false;
         public static string storyTitle = "";
-        public static string alignmentTooltip, personality1Tooltip, personality2Tooltip, personality3Tooltip, oocInfo = "";
-        public static int[] alignmentVals, alignmentEditVals = new int[] { };
-        private string[] alignmentNames = new string[]{};
-        public byte[] avatarBytes, existingAvatarBytes;
-        public int availablePercentage = 50;
-        //Font Vars
-        private GameFontHandle _Font;
+        public byte[] existingAvatarBytes;
         //BIO VARS
         public static IDalamudTextureWrap alignmentImg, personalityImg1, personalityImg2, personalityImg3;
         public static IDalamudTextureWrap[] galleryImages, galleryThumbs = new IDalamudTextureWrap[30];
         public static List<IDalamudTextureWrap> galleryThumbsList = new List<IDalamudTextureWrap>();
         public static List<IDalamudTextureWrap> galleryImagesList = new List<IDalamudTextureWrap>();
        
-        public static IDalamudTextureWrap avatarImg, currentAvatarImg, pictureTab;
-        public static string    characterEditName = "",
-                                characterEditRace = "",
-                                characterEditGender = "",
-                                characterEditAge = "",
-                                characterEditAfg = "",
-                                characterEditHeight = "",
-                                characterEditWeight = "";
-        public static string fileName, reportInfo, profileNotes = "";
-        private readonly FileDialogManager _manager;
-        private bool _isOpen, AllLoaded;
-        private IDalamudTextureWrap[] otherImages;
-        private List<IDalamudTextureWrap> OtherImages;
-        private bool _showFileDialogError = false;
-       
-        public bool addProfileNote = false;
+        public static IDalamudTextureWrap currentAvatarImg, pictureTab;
+        public static string    characterEditName,
+                                characterEditRace,
+                                characterEditGender,
+                                characterEditAge,
+                                characterEditAfg,
+                                characterEditHeight,
+                                characterEditWeight,
+                                fileName, 
+                                reportInfo, 
+                                profileNotes,
+                                alignmentTooltip, 
+                                personality1Tooltip, 
+                                personality2Tooltip, 
+                                personality3Tooltip, 
+                                oocInfo = string.Empty;
+        private bool AllLoaded;
 
-        public TargetWindow(Plugin plugin, DalamudPluginInterface Interface, IDalamudTextureWrap avatarHolder,
-                             //alignment icon
-                             IDalamudTextureWrap lawfulgood, IDalamudTextureWrap neutralgood, IDalamudTextureWrap chaoticgood,
-                             IDalamudTextureWrap lawfulneutral, IDalamudTextureWrap trueneutral, IDalamudTextureWrap chaoticneutral,
-                             IDalamudTextureWrap lawfulevil, IDalamudTextureWrap neutralevil, IDalamudTextureWrap chaoticevil
-                            ) : base(
+        public TargetWindow(Plugin plugin, DalamudPluginInterface Interface) : base(
        "TARGET", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)
         {
             this.SizeConstraints = new WindowSizeConstraints
@@ -134,14 +75,9 @@ namespace InfiniteRoleplay.Windows
             };
             this.plugin = plugin;
             this.pg = plugin.PluginInterfacePub;
-            this.configuration = plugin.Configuration;
-            avatarImg = avatarHolder;
 
-            this._nameFont = pg.UiBuilder.GetGameFontHandle(new GameFontStyle(GameFontFamilyAndSize.Jupiter23));
-            System.Drawing.Image image1 = System.Drawing.Image.FromFile(Path.Combine(Interface.AssemblyLocation.Directory?.FullName!, "UI/common/avatar_holder.png"));
-            string pictureTabPath = Path.Combine(pg.AssemblyLocation.Directory?.FullName!, @"UI/common/picturetab.png");
-            pictureTab = plugin.PluginInterfacePub.UiBuilder.LoadImage(File.ReadAllBytes(pictureTabPath));
-            this.avatarBytes = ImageToByteArray(image1);
+            this.nameFont = pg.UiBuilder.GetGameFontHandle(new GameFontStyle(GameFontFamilyAndSize.Jupiter23));
+            pictureTab = Constants.UICommonImage(Interface, Constants.CommonImageTypes.blankPictureTab);
             //alignment icons
              this.chatGui = chatGui;
             for (int i =0; i < 30; i++)
@@ -149,7 +85,6 @@ namespace InfiniteRoleplay.Windows
                 StoryContent[i] = string.Empty;
                 ChapterContent[i] = string.Empty;
                 ChapterTitle[i] = string.Empty;
-                HookContent[i] = string.Empty;
                 HookEditContent[i] = string.Empty;
                 galleryImagesList.Add(pictureTab);
                 galleryThumbsList.Add(pictureTab);
@@ -157,9 +92,6 @@ namespace InfiniteRoleplay.Windows
             }       
             galleryImages = galleryImagesList.ToArray();
             galleryThumbs = galleryThumbsList.ToArray();
-            //bars
-             this._Font = pg.UiBuilder.GetGameFontHandle(new GameFontStyle(GameFontFamilyAndSize.Jupiter23));
-             this.alignmentNames = new string[9] { "lawfulgood", "neutralgood", "chaoticgood", "lawfulneutral", "trueneutral", "chaoticneutral", "lawfulevil", "neutralevil", "chaoticevil" };
         }
         public byte[] ImageToByteArray(System.Drawing.Image imageIn)
         {
@@ -169,12 +101,11 @@ namespace InfiniteRoleplay.Windows
                 return ms.ToArray();
             }
         }
+        
         public override void Draw()
         {
             if (AllLoaded == true)
             {
-                //LoadFileSelection();
-                //Vector2 addProfileBtnScale = new Vector2(playerCharacter.Name.ToString().Length * 20, 20);
                 if (ExistingProfile == true)
                 {
                     if (ExistingBio == true)
@@ -223,13 +154,11 @@ namespace InfiniteRoleplay.Windows
 
 
 
-                bool warning = false;
-                bool success = false;
                 if (ImGui.BeginChild("PROFILE"))
                 {
 
 
-                    if (ExistingBio == false && ExistingHooks == false && ExistingStory == false && ExistingOOC == false  && ExistingGallery == false)
+                    if (ExistingBio == false && ExistingHooks == false && ExistingStory == false && ExistingOOC == false && ExistingOOC == false && ExistingGallery == false)
                     {
                         ImGui.Text("No Profile Data Available");
                     }
@@ -237,7 +166,7 @@ namespace InfiniteRoleplay.Windows
                     {
                         if (viewBio == true)
                         {
-                            Misc.SetTitle(plugin, characterEditName);
+                            Misc.SetTitle(plugin, true, characterEditName);
                             ImGui.Image(currentAvatarImg.ImGuiHandle, new Vector2(100, 100));
 
 
@@ -305,7 +234,7 @@ namespace InfiniteRoleplay.Windows
 
                     if (viewHooks == true)
                     {
-                        Misc.SetTitle(plugin, "Hooks");
+                        Misc.SetTitle(plugin, true, "Hooks");
                         for (int h = 0; h < hookEditCount; h++)
                         {
                             ImGui.Text(HookEditContent[h].Replace("---===---", "\n").Replace("''", "'"));
@@ -315,7 +244,7 @@ namespace InfiniteRoleplay.Windows
 
                     if (viewStory == true)
                     {
-                        Misc.SetTitle(plugin, storyTitle);
+                        Misc.SetTitle(plugin, true, storyTitle);
                         string chapterMsg = "";
 
 
@@ -332,13 +261,13 @@ namespace InfiniteRoleplay.Windows
                     }
                     if(viewOOC == true)
                     {
-                        Misc.SetTitle(plugin, "OOC Information");
+                        Misc.SetTitle(plugin, true, "OOC Information");
                         ImGui.Text(oocInfo);
                     }
                     if (viewGallery == true)
                     {
 
-                        Misc.SetTitle(plugin, "Gallery");
+                        Misc.SetTitle(plugin, true, "Gallery");
                         if (ImGui.BeginTable("##GalleryTargetTable", 4))
                         {
                             for (int i = 0; i < existingGalleryImageCount; i++)
@@ -395,7 +324,7 @@ namespace InfiniteRoleplay.Windows
                     if(addNotes == true)
                     {
 
-                        Misc.SetTitle(plugin, "Personal Notes");
+                        Misc.SetTitle(plugin, true, "Personal Notes");
 
                         ImGui.Text("Here you can add personal notes about this player or profile");
                         ImGui.InputTextMultiline("##info", ref profileNotes, 500, new Vector2(400, 100));
@@ -428,16 +357,14 @@ namespace InfiniteRoleplay.Windows
         public static void ClearUI()
         {
             viewBio = false;
-            viewHooks = false;
+            viewHooks = false; 
             viewStory = false;
-            viewOOC = false;
+            viewOOC= false;
             viewGallery = false;
             addNotes = false;
         }
-      
         public void Dispose()
         {
-            WindowOpen = false;
             currentAvatarImg.Dispose();
             pictureTab.Dispose();
             alignmentImg.Dispose();
@@ -452,14 +379,8 @@ namespace InfiniteRoleplay.Windows
             {
                 galleryImagesList[gi].Dispose();
             }
-            for (int o = 0; o < otherImages.Length; o++)
-            {                
-                otherImages[o].Dispose();
-                Array.Clear(otherImages);
-            }
             for(int i = 0; i < galleryImages.Length; i++)
             {
-                galleryExists[i] = false;
                 galleryImages[i].Dispose();
                 Array.Clear(galleryImages);
             }

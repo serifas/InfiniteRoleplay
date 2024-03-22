@@ -1,20 +1,11 @@
-using Dalamud.Interface.Colors;
 using Dalamud.Interface.GameFonts;
-using Dalamud.Interface.Utility;
-using Dalamud.Interface.Utility.Raii;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
-using FFXIVClientStructs.Havok;
 using ImGuiNET;
-using Networking;
-using OtterGui;
+using InfiniteRoleplay.Helpers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Numerics;
-using System.Text;
-using static Dalamud.Interface.Windowing.Window;
 
 namespace InfiniteRoleplay.Windows
 {
@@ -37,7 +28,6 @@ namespace InfiniteRoleplay.Windows
                 MaximumSize = new Vector2(1200, 1000)
             };
             pg = plugin;
-            this._nameFont = plugin.PluginInterfacePub.UiBuilder.GetGameFontHandle(new GameFontStyle(GameFontFamilyAndSize.Jupiter23));
 
             load = true;
             ToS1 = ReadTOS("https://raw.githubusercontent.com/serifas/infinite-roleplay-plugin/main/TOS1.txt");
@@ -47,26 +37,12 @@ namespace InfiniteRoleplay.Windows
         }
         public override async void Draw()
         {
-           
-            using var colTOS = ImRaii.PushColor(ImGuiCol.Border, ImGuiColors.DalamudViolet);
-            using var styleTOS = ImRaii.PushStyle(ImGuiStyleVar.FrameBorderSize, 2 * ImGuiHelpers.GlobalScale);
-            using var fontTOS = ImRaii.PushFont(_nameFont.ImFont, _nameFont.Available);
-            ImGuiUtil.DrawTextButton("Terms of Service", Vector2.Zero, 0);
-            //set everything back
-            using var defCol = ImRaii.DefaultColors();
-            using var defStyle = ImRaii.DefaultStyle();
-            using var defFont = ImRaii.DefaultFont();
+
+            Misc.SetTitle(pg, true, "Terms of Service");
         //okay that's done.
             ImGui.Text(ToS1);
-            ImGui.Text(ToS2); 
-            using var colRules = ImRaii.PushColor(ImGuiCol.Border, ImGuiColors.DalamudViolet);
-            using var stylelRules = ImRaii.PushStyle(ImGuiStyleVar.FrameBorderSize, 2 * ImGuiHelpers.GlobalScale);
-            using var fontlRules = ImRaii.PushFont(_nameFont.ImFont, _nameFont.Available);
-            ImGuiUtil.DrawTextButton("Rules", Vector2.Zero, 0);
-            //set everything back
-            using var defColRules = ImRaii.DefaultColors();
-            using var defStyleRules = ImRaii.DefaultStyle();
-            using var defFontRules = ImRaii.DefaultFont();
+            ImGui.Text(ToS2);
+            Misc.SetTitle(pg, true, "Rules");
             //now for some simple toggles
             ImGui.Text(Rules1);
             ImGui.Text(Rules2);

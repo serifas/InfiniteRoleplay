@@ -1,32 +1,14 @@
-using Dalamud.Interface.ImGuiFileDialog;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
 using ImGuiNET;
-using ImGuiScene;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net.NetworkInformation;
 using System.Numerics;
-using System.Runtime.Intrinsics.Arm;
-using System.Text;
-using static Dalamud.Interface.Windowing.Window;
-using Dalamud.Interface;
-using Dalamud.Interface.Colors;
-using Dalamud.Interface.GameFonts;
-using Dalamud.Interface.ImGuiFileDialog;
-using ImGuiNET;
-using ImGuiScene;
-using static Lumina.Data.Files.ScdFile;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.ClientState.Objects;
-using Dalamud.Game.Gui;
-using Dalamud.Game.ClientState;
 using Networking;
-using Dalamud.Game.Config;
 using Dalamud.Interface.Internal;
 using Dalamud.Plugin.Services;
+using InfiniteRoleplay.Scripts.Misc;
 
 namespace InfiniteRoleplay.Windows
 {
@@ -34,19 +16,22 @@ namespace InfiniteRoleplay.Windows
     {
 
         private Plugin plugin;
-        private string profilesImagePath;
-        private string profilesNoWIPImagePath;
-        private IDalamudTextureWrap profilesImage;
-        private IDalamudTextureWrap profilesNoWIPImage;
-        private string documentImagePath;
-        private IDalamudTextureWrap documentImage;
-        private string systemsImagePath;
-        private IDalamudTextureWrap systemsImage;
-        private string systemsNoWIPImagePath;
-        private IDalamudTextureWrap systemsNoWIPImage;
-        private string groupsImagePath;
-        private IDalamudTextureWrap groupsImage;
-        public static bool isAdmin;
+        private bool viewProfile, viewSystems, viewEvents, viewConnections;
+        private IDalamudTextureWrap profileSectionImage, eventsSectionImage, systemsSectionImage, connectionsSectionImage,
+                                    //profiles
+                                    profileImage, npcImage, profileBookmarkImage, npcBookmarkImage,
+                                    //events and venues
+                                    venueImage, eventImage, venueBookmarkImage, eventBookmarkImage,
+                                    //systems
+                                    combatImage, statSystemImage; 
+        private string profilesImagePath, eventsImagePath, systemsImagePath, connectionsImagePath,
+                                    //profiles
+                                    profileImagePath, npcImagePath, profileBookmarkImagePath, npcBookmarkImagePath,
+                                    //events and venues
+                                    venueImagePath, eventImagePath, venueBookmarkImagePath, eventBookmarkImagePath,
+                                    //systems
+                                    combatImagePath, statSystemImagePath;
+        public static bool viewMainWindow = true;
         public Configuration configuration;
         public static bool WindowOpen;
         public string msg;
@@ -54,12 +39,9 @@ namespace InfiniteRoleplay.Windows
         public static PlayerCharacter playerCharacter;
         private IChatGui ChatGUI;
         public static PlayerCharacter lastTarget;
-        private bool _showFileDialogError = false;
-        public bool openedProfile = false;
-        public bool openedTargetProfile = false;
         public static string status = "";
-        public static Vector4 statusCol = new Vector4(0,0,0,0);    
-        public static bool DisableInput = false;
+        public static Vector4 statusCol = new Vector4(0,0,0,0);
+
         public PanelWindow(Plugin plugin, DalamudPluginInterface Interface, ITargetManager targetManager) : base(
        "INFINITE PANEL", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)
         {
@@ -71,112 +53,116 @@ namespace InfiniteRoleplay.Windows
             
             this.plugin = plugin;
             this.configuration = plugin.Configuration;
-            this.profilesImagePath = Path.Combine(Interface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles.png");
-            this.profilesImage = Interface.UiBuilder.LoadImage(profilesImagePath);
-            this.profilesNoWIPImagePath = Path.Combine(Interface.AssemblyLocation.Directory?.FullName!, "UI/common/profiles_NoWIP.png");
-            this.profilesNoWIPImage = Interface.UiBuilder.LoadImage(profilesNoWIPImagePath);
-            this.documentImagePath = Path.Combine(Interface.AssemblyLocation.Directory?.FullName!, "UI/common/friends.png");
-            this.documentImage = Interface.UiBuilder.LoadImage(documentImagePath);
-            this.groupsImagePath = Path.Combine(Interface.AssemblyLocation.Directory?.FullName!, "UI/common/groups.png");
-            this.groupsImage = Interface.UiBuilder.LoadImage(groupsImagePath);
-            this.systemsImagePath = Path.Combine(Interface.AssemblyLocation.Directory?.FullName!, "UI/common/bookmarks.png");
-            this.systemsImage = Interface.UiBuilder.LoadImage(systemsImagePath);
-            this.systemsNoWIPImagePath = Path.Combine(Interface.AssemblyLocation.Directory?.FullName!, "UI/common/bookmarks_NoWIP.png");
-            this.systemsNoWIPImage = Interface.UiBuilder.LoadImage(systemsNoWIPImagePath);
-
+            this.profileSectionImage = Constants.UICommonImage(Interface, Constants.CommonImageTypes.profileSection);
+            this.eventsSectionImage = Constants.UICommonImage(Interface, Constants.CommonImageTypes.eventsSection);
+            this.systemsSectionImage = Constants.UICommonImage(Interface, Constants.CommonImageTypes.systemsSection);
+            this.connectionsSectionImage = Constants.UICommonImage(Interface, Constants.CommonImageTypes.connectionsSection);
+            this.profileImage = Constants.UICommonImage(Interface, Constants.CommonImageTypes.profileCreateProfile);
+            this.profileBookmarkImage = Constants.UICommonImage(Interface, Constants.CommonImageTypes.profileBookmarkProfile);
+            this.npcImage = Constants.UICommonImage(Interface, Constants.CommonImageTypes.profileCreateNPC);
+            this.npcBookmarkImage = Constants.UICommonImage(Interface, Constants.CommonImageTypes.profileBookmarkNPC);
+            //profile subsections
 
         }
 
         public override void Draw()
         {
-            if (isAdmin == true)
+            if(viewMainWindow == true)
             {
-                if (ImGui.Button("Administration", new Vector2(225, 25)))
+                    #region PROFILES
+                if (ImGui.ImageButton(this.profileSectionImage.ImGuiHandle, new Vector2(100, 50)))
                 {
-                    plugin.adminWindow.IsOpen = true;
+                    viewProfile = true;
+                    viewMainWindow = false;
                 }
-            }
-            if (configuration.showWIP == true)
-            {
-                if (ImGui.ImageButton(this.profilesImage.ImGuiHandle, new Vector2(100, 50)))
+                if (ImGui.IsItemHovered())
                 {
+                    ImGui.SetTooltip("Profiles");
+                #endregion
+                }
+                ImGui.SameLine();
+                    
+                if (ImGui.ImageButton(this.connectionsSectionImage.ImGuiHandle, new Vector2(100, 50)))
+                {
+                    viewConnections = true;
+                    viewMainWindow = false;
+                }
+                if (ImGui.IsItemHovered())
+                {
+                    ImGui.SetTooltip("Connections");
+                }
+                   
+                if (ImGui.ImageButton(this.eventsSectionImage.ImGuiHandle, new Vector2(100, 50)))
+                {
+                    viewEvents = true;
+                    viewMainWindow = false;
+                }
+                if (ImGui.IsItemHovered())
+                {
+                    ImGui.SetTooltip("Events");
+                }
+                ImGui.SameLine();
+                if (ImGui.ImageButton(this.systemsSectionImage.ImGuiHandle, new Vector2(100, 50)))
+                {
+                    viewSystems = true;
+                    viewMainWindow = false;
+                }
+                if (ImGui.IsItemHovered())
+                {
+                    ImGui.SetTooltip("Systems");
+                }
 
+            }
+            if(viewProfile == true)
+            {
+                if (ImGui.ImageButton(this.profileImage.ImGuiHandle, new Vector2(100, 50)))
+                {
                     LoginWindow.loginRequest = true;
                     plugin.profileWindow.Reset(plugin);
                     plugin.ReloadProfile();
                     plugin.profileWindow.IsOpen = true;
                     if (playerCharacter != null)
                     {
+                        //FETCH USER AND PASS ASEWLL
                         DataSender.FetchProfile(playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString());
                     }
-
                 }
                 if (ImGui.IsItemHovered())
                 {
-                    ImGui.SetTooltip("Profile");
+                    ImGui.SetTooltip("Manage your profile");
                 }
                 ImGui.SameLine();
-                if (ImGui.ImageButton(this.documentImage.ImGuiHandle, new Vector2(100, 50)))
-                {
-                    // plugin.WindowSystem.GetWindow("SHINE RULEBOOK").IsOpen = true;
-
-                }
-                if (ImGui.IsItemHovered())
-                {
-                    ImGui.SetTooltip("Connections - Coming Soon");
-                }
-                if (ImGui.ImageButton(this.systemsImage.ImGuiHandle, new Vector2(100, 50)))
+                if (ImGui.ImageButton(this.profileBookmarkImage.ImGuiHandle, new Vector2(100, 50)))
                 {
                     DataSender.RequestBookmarks(configuration.username);
                 }
                 if (ImGui.IsItemHovered())
                 {
-                    ImGui.SetTooltip("Bookmarks");
+                    ImGui.SetTooltip("View profile bookmarks");
                 }
 
+                if (ImGui.ImageButton(this.npcImage.ImGuiHandle, new Vector2(100, 50)))
+                {
+                    //SEND NPC PROFILE REQUEST
+                }
+                if (ImGui.IsItemHovered())
+                {
+                    ImGui.SetTooltip("Manage your NPCs");
+                }
                 ImGui.SameLine();
-                if (ImGui.ImageButton(this.groupsImage.ImGuiHandle, new Vector2(100, 50)))
+                if (ImGui.ImageButton(this.npcBookmarkImage.ImGuiHandle, new Vector2(100, 50)))
                 {
-
+                    //SEND NPC BOOKMARK REQUEST
                 }
                 if (ImGui.IsItemHovered())
                 {
-                    ImGui.SetTooltip("Events - Coming Soon");
+                    ImGui.SetTooltip("View NPC bookmarks");
                 }
             }
-            else
-            {
-                if (ImGui.ImageButton(this.profilesNoWIPImage.ImGuiHandle, new Vector2(216, 50)))
-                {
 
-                    LoginWindow.loginRequest = true;
-                    plugin.profileWindow.Reset(plugin);
-                    plugin.ReloadProfile();
-                    plugin.profileWindow.IsOpen = true;
-                    if (playerCharacter != null)
-                    {
-                        DataSender.FetchProfile(playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString());
-                    }
-
-                }
-                if (ImGui.IsItemHovered())
-                {
-                    ImGui.SetTooltip("Profile");
-                }
-                
-                if (ImGui.ImageButton(this.systemsNoWIPImage.ImGuiHandle, new Vector2(216, 50)))
-                {
-                    DataSender.RequestBookmarks(configuration.username);
-                }
-                if (ImGui.IsItemHovered())
-                {
-                    ImGui.SetTooltip("Bookmarks");
-                }
-
-            }
             if (ImGui.Button("Options", new Vector2(225, 25)))
             {
-                //plugin.window("ADMINISTRATION").IsOpen = true;
+                
                 plugin.optionsWindow.IsOpen = true;
             }
             if (ImGui.Button("Logout", new Vector2(225, 25)))
@@ -184,23 +170,31 @@ namespace InfiniteRoleplay.Windows
                 plugin.loggedIn = false;
                 plugin.CloseAllWindows(false);
                 plugin.loginWindow.IsOpen = true;
-                           
-                
+            }
+            if (ImGui.Button("Back"))
+            {
+                switchUI();
+                viewMainWindow = true;
             }
             ImGui.TextColored(statusCol, status);
 
         }
-       
+        public void switchWindow(bool viewWindow)
+        {
+
+        }
+        public void switchUI()
+        {
+            viewProfile = false;
+            viewSystems = false;
+            viewEvents = false;
+            viewConnections = false;
+        }
 
         public void Dispose()
         {
             WindowOpen = false;
-            profilesImage.Dispose();
-            profilesNoWIPImage.Dispose();
-            systemsNoWIPImage.Dispose();
-            documentImage.Dispose();
-            groupsImage.Dispose();
-            systemsImage.Dispose();
+            profileSectionImage.Dispose();
         }
         public override void Update()
         {

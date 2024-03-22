@@ -32,19 +32,21 @@ namespace InfiniteRoleplay.Helpers
             // Return the percentage
             return value / 100f * 100f;
         }
-        public static void SetTitle(Plugin plugin, string title)
+        public static void SetTitle(Plugin plugin, bool center, string title)
         {
             _nameFont = plugin.PluginInterfacePub.UiBuilder.GetGameFontHandle(new GameFontStyle(GameFontFamilyAndSize.Jupiter23));
-            int NameWidth = title.Length * 10;
-            var decidingWidth = Math.Max(500, ImGui.GetWindowWidth());
-            var offsetWidth = (decidingWidth - NameWidth) / 2;
-            var offsetVersion = title.Length > 0
-                ? _modVersionWidth + ImGui.GetStyle().ItemSpacing.X + ImGui.GetStyle().WindowPadding.X
-                : 0;
-            var offset = Math.Max(offsetWidth, offsetVersion);
-            if (offset > 0)
-            {
-                ImGui.SetCursorPosX(offset);
+            if(center == true){
+                int NameWidth = title.Length * 10;
+                var decidingWidth = Math.Max(500, ImGui.GetWindowWidth());
+                var offsetWidth = (decidingWidth - NameWidth) / 2;
+                var offsetVersion = title.Length > 0
+                    ? _modVersionWidth + ImGui.GetStyle().ItemSpacing.X + ImGui.GetStyle().WindowPadding.X
+                    : 0;
+                var offset = Math.Max(offsetWidth, offsetVersion);
+                if (offset > 0)
+                {
+                    ImGui.SetCursorPosX(offset);
+                }
             }
 
 

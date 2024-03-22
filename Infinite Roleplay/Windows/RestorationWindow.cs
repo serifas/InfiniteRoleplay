@@ -4,29 +4,18 @@ using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
 using FFXIVClientStructs.FFXIV.Common.Math;
 using ImGuiNET;
-using ImGuiScene;
-using InfiniteRoleplay;
 using OtterGui.Raii;
 using OtterGui;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using Dalamud.Interface.GameFonts;
-using Dalamud.Game.Gui.Dtr;
-using Microsoft.VisualBasic;
 using Networking;
 using Dalamud.Interface.Utility;
-using Dalamud.Interface.Internal;
-using System.Reflection.Metadata;
 
 namespace InfiniteRoleplay.Windows
 {
     public class RestorationWindow : Window, IDisposable
     {
         private GameFontHandle _nameFont;
-        private float _modVersionWidth;
         public static Plugin pg;
         public static string restorationKey = string.Empty;
         public static string restorationPass = string.Empty;

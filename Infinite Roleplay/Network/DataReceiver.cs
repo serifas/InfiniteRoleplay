@@ -71,7 +71,6 @@ namespace Networking
         SSendOOC = 51,
         SSendTargetOOC = 52,
         SSendNoOOCInfo = 53,
-        SSendNoTargetOOCInfo = 54,
     }
     class DataReceiver
     {
@@ -239,6 +238,7 @@ namespace Networking
             buffer.Dispose();
             TargetWindow.ExistingProfile = true;
             plugin.targetWindow.IsOpen = true;
+            TargetWindow.ClearUI();
             ReportWindow.reportStatus = "";
         }
         public static void RecProfileReportedSuccessfully(byte[] data)
@@ -282,12 +282,20 @@ namespace Networking
             var packetID = buffer.ReadInt();
             buffer.Dispose();
             loggedIn = true;
-
+            TargetWindow.ExistingProfile = false;
+            TargetWindow.ExistingBio = false;
+            TargetWindow.ExistingHooks = false;
+            TargetWindow.ExistingStory = false;
+            TargetWindow.ExistingOOC = false;
+            TargetWindow.ExistingGallery = false;
+            plugin.targetWindow.IsOpen = true;
             TargetBioLoadStatus = 0;
             TargetHooksLoadStatus = 0;
             TargetStoryLoadStatus = 0;
             TargetOOCLoadStatus = 0;
             TargetGalleryLoadStatus = 0;
+            TargetNotesLoadStatus = 0;
+            TargetWindow.ClearUI();
             TargetMenu.DisableInput = false;
             BookmarksWindow.DisableBookmarkSelection = false;
             ReportWindow.reportStatus = "";
@@ -326,9 +334,9 @@ namespace Networking
             var packetID = buffer.ReadInt();
             buffer.Dispose();
             ProfileWindow.ClearUI();
-            string avatarPath = Path.Combine(plugin.PluginInterfacePub.AssemblyLocation.Directory?.FullName!, @"UI/common/avatar_holder.png");
+            string avatarPath = Path.Combine(plugin.PluginInterfacePub.AssemblyLocation.Directory?.FullName!, @"UI/common/profiles/avatar_holder.png");
 
-            ProfileWindow.currentAvatarImg = plugin.PluginInterfacePub.UiBuilder.LoadImage(avatarPath);
+            plugin.profileWindow.avatarBytes = File.ReadAllBytes(avatarPath);
             ProfileWindow.bioFieldsArr[(int)Constants.BioFieldTypes.name] = "";
             ProfileWindow.bioFieldsArr[(int)Constants.BioFieldTypes.race] = "";
             ProfileWindow.bioFieldsArr[(int)Constants.BioFieldTypes.gender] = "";
@@ -547,8 +555,7 @@ namespace Networking
             int personality_2 = buffer.ReadInt();
             int personality_3 = buffer.ReadInt();
 
-            TargetWindow.currentAvatarImg = plugin.PluginInterfacePub.UiBuilder.LoadImage(avatarBytes);
-            if (alignment != 9)
+            if(alignment != 9)
             {
                 TargetWindow.showAlignment = true;
             }
@@ -563,7 +570,7 @@ namespace Networking
             {
                 TargetWindow.showPersonality= true;
             }
-
+            TargetWindow.currentAvatarImg = plugin.PluginInterfacePub.UiBuilder.LoadImage(avatarBytes);
             TargetWindow.characterEditName = name.Replace("''", "'"); TargetWindow.characterEditRace = race.Replace("''", "'"); TargetWindow.characterEditGender = gender.Replace("''", "'");
             TargetWindow.characterEditAge = age.Replace("''", "'"); TargetWindow.characterEditHeight = height.Replace("''", "'"); TargetWindow.characterEditWeight = weight.Replace("''", "'");
             TargetWindow.characterEditAfg = atFirstGlance.Replace("''", "'");
@@ -607,9 +614,8 @@ namespace Networking
             int personality_2 = buffer.ReadInt();
             int personality_3 = buffer.ReadInt();
             plugin.profileWindow.ExistingBio = true;
-
             ProfileWindow.currentAvatarImg = plugin.PluginInterfacePub.UiBuilder.LoadImage(avatarBytes);
-            if (alignment == 9)
+            if(alignment == 9)
             {
                 ProfileWindow.alignmentHidden = true;
             }
@@ -638,7 +644,8 @@ namespace Networking
             ProfileWindow.currentPersonality_2 = personality_2;
             ProfileWindow.currentPersonality_3 = personality_3;
             buffer.Dispose();
-            plugin.profileWindow.existingAvatarBytes = avatarBytes;
+            plugin.profileWindow.avatarBytes = avatarBytes;
+            
             BioLoadStatus = 1;
         }
         public static void ExistingProfile(byte[] data)
@@ -717,7 +724,6 @@ namespace Networking
                 string chapterTitle = chapterTitleRx.Match(chapterSplit[i]).Groups[1].Value;
                 string chapterContent = chapterRx.Match(chapterSplit[i]).Groups[1].Value;
                 TargetWindow.chapterCount = i;
-                TargetWindow.resetStory = true;
                 TargetWindow.ChapterTitle[i] = chapterTitle;
                 TargetWindow.ChapterContent[i] = chapterContent;
             }
@@ -843,15 +849,6 @@ namespace Networking
             string ooc = buffer.ReadString();
             TargetWindow.oocInfo = ooc;
             TargetWindow.ExistingOOC = true;
-            buffer.Dispose();
-        }
-        public static void ReceiveNoTargetOOCInfo(byte[] data)
-        {
-            var buffer = new ByteBuffer();
-            buffer.WriteBytes(data);
-            var packetID = buffer.ReadInt();
-            TargetWindow.oocInfo = string.Empty;
-            TargetWindow.ExistingOOC = false;
             buffer.Dispose();
         }
 
