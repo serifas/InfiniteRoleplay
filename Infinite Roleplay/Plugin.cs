@@ -9,8 +9,9 @@ using Networking;
 using InfiniteRoleplay.Helpers;
 using Dalamud.Plugin.Services;
 using Dalamud.Game.Gui.ContextMenu;
-using System;
-using FFXIVClientStructs.FFXIV.Client.UI;
+using Lumina.Excel.GeneratedSheets;
+using System.Drawing;
+using FFXIVClientStructs.FFXIV.Client.Graphics;
 
 namespace InfiniteRoleplay
 {
@@ -27,7 +28,6 @@ namespace InfiniteRoleplay
         public string socketStatus;
         public DalamudPluginInterface PluginInterfacePub;
         public TargetWindow targetWindow;
-        public TargetMenu targetMenu;
         public ImagePreview imagePreview;
         public BookmarksWindow bookmarksWindow;
         public PanelWindow panelWindow;
@@ -84,10 +84,7 @@ namespace InfiniteRoleplay
             {
                 HelpMessage = "to open the plugin panel window"
             });
-            this.CommandManager.AddHandler(TargetWindowCommandName, new CommandInfo(OnViewTarget)
-            {
-                HelpMessage = "to open the target menu"
-            });
+          
             ReloadClient();
             this.pluginInterface.UiBuilder.Draw += DrawUI;
             this.pluginInterface.UiBuilder.OpenConfigUi += LoadOptions;
@@ -97,7 +94,12 @@ namespace InfiniteRoleplay
             DataReceiver.plugin = this;
             this.framework.Update += Update;
         }
-
+        private ushort GetDalamudColor(byte red, byte green, byte blue)
+        {
+            // Calculate the color value using the RGB components
+            ushort color = (ushort)(((red & 0xF8) << 8) | ((green & 0xFC) << 3) | (blue >> 3));
+            return color;
+        }
 
         public void AddContextMenu(MenuOpenedArgs args)
         {
@@ -107,7 +109,11 @@ namespace InfiniteRoleplay
                 MenuItem view = new MenuItem();
                 MenuItem bookmark = new MenuItem();
                 view.Name = "View profile";
+                view.PrefixColor = GetDalamudColor(0, 255, 255);
+                view.PrefixChar = 'I';
                 bookmark.Name = "Bookmark profile";
+                bookmark.PrefixColor = GetDalamudColor(0, 255,255);
+                bookmark.PrefixChar = 'I';
                 view.OnClicked += ViewProfile;
                 bookmark.OnClicked += BookmarkProfile;
                 args.AddMenuItem(view);
@@ -175,7 +181,6 @@ namespace InfiniteRoleplay
             if (uiLoaded == false)
             {
                 targetWindow = new TargetWindow(this, this.pluginInterface);
-                targetMenu = new TargetMenu(this, this.pluginInterface, targetManager);
 
                 imagePreview = new ImagePreview(this, this.pluginInterface, targetManager);
 
@@ -205,7 +210,6 @@ namespace InfiniteRoleplay
                 //   this.WindowSystem.AddWindow(new MessageBox(this));
                 //  this.WindowSystem.AddWindow(new AdminWindow(this, this.pluginInterface));
                 this.WindowSystem.AddWindow(targetWindow);
-                this.WindowSystem.AddWindow(targetMenu);
                 this.WindowSystem.AddWindow(bookmarksWindow);
                 this.WindowSystem.AddWindow(imagePreview);
                 this.WindowSystem.AddWindow(reportWindow);
@@ -241,7 +245,6 @@ namespace InfiniteRoleplay
             profileWindow.IsOpen = false;
             bookmarksWindow.IsOpen = false;
             imagePreview.IsOpen = false;
-            targetMenu.IsOpen = false;
             targetWindow.IsOpen = false;
             panelWindow.IsOpen = false;
             restorationWindow.IsOpen = false;
@@ -252,20 +255,7 @@ namespace InfiniteRoleplay
         public void Update(IFramework framework)
         {
             var targetPlayer = targetManager.Target as PlayerCharacter;
-            if (loggedIn == true)
-            {
-                if (targetPlayer != null && dutyState.IsDutyStarted == false && Configuration.showTargetOptions == true && targeted == true)
-                {
-                    targetMenu.IsOpen = true;
-                }
-                else
-                {
-                    if (targeted == false)
-                    {
-                        targetMenu.IsOpen = false;
-                    }
-                }
-            }
+            
             if (loadPreview == true)
             {
                 imagePreview.IsOpen = true;
@@ -279,18 +269,7 @@ namespace InfiniteRoleplay
             DrawLoginUI();
             // in response to the slash command, just display our main ui          
         }
-        private void OnViewTarget(string command, string args)
-        {
-            var targetPlayer = targetManager.Target as PlayerCharacter;
-            if (loggedIn == true)
-            {
-                if (targetPlayer != null && dutyState.IsDutyStarted == false)
-                {
-                    targeted = true;
-                    this.targetMenu.IsOpen = true;
-                }
-            }
-        }
+       
         private void DrawUI()
         {
             this.WindowSystem.Draw();

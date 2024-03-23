@@ -213,7 +213,7 @@ namespace InfiniteRoleplay.Windows
 
                             ImGui.TextColored(new Vector4(1, 1, 1, 1), "PERSONALITY TRAITS:");
                             ImGui.SameLine();
-                            ImGui.Checkbox("Hidded", ref personalityHidden);
+                            ImGui.Checkbox("Hidden", ref personalityHidden);
                             if(personalityHidden == true)
                             {
                                 currentPersonality_1 = 26;

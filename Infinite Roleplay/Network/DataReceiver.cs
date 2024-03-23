@@ -296,7 +296,6 @@ namespace Networking
             TargetGalleryLoadStatus = 0;
             TargetNotesLoadStatus = 0;
             TargetWindow.ClearUI();
-            TargetMenu.DisableInput = false;
             BookmarksWindow.DisableBookmarkSelection = false;
             ReportWindow.reportStatus = "";
         }
@@ -310,7 +309,6 @@ namespace Networking
             TargetWindow.ExistingGallery = false;
             plugin.targetWindow.IsOpen = true;
             BookmarksWindow.DisableBookmarkSelection = false;
-            TargetMenu.DisableInput = false;
             TargetGalleryLoadStatus = 0;
         }
         public static void NoTargetStory(byte[] data)
@@ -483,7 +481,6 @@ namespace Networking
                 TargetWindow.loading = "Gallery Image" + i;
                 TargetWindow.currentInd = i;
             }
-            TargetMenu.DisableInput = false;
             TargetWindow.existingGalleryImageCount = imageCount;
             TargetWindow.ExistingGallery = true;
             BookmarksWindow.DisableBookmarkSelection = false;
