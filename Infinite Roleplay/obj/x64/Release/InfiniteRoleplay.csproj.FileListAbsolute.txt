@@ -221,7 +221,6 @@ C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\bin\x64\Release\UI\comm
 C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\bin\x64\Release\InfiniteRoleplay.deps.json
 C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\bin\x64\Release\InfiniteRoleplay.dll
 C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\bin\x64\Release\InfiniteRoleplay.pdb
-C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\bin\x64\Release\Dalamud.ContextMenu.dll
 C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\bin\x64\Release\Microsoft.Win32.SystemEvents.dll
 C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\bin\x64\Release\StbImageSharp.dll
 C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\bin\x64\Release\System.Drawing.Common.dll

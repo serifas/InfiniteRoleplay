@@ -1,14 +1,4 @@
-using Dalamud.ContextMenu;
-using Dalamud.Data;
-using Dalamud.Game;
-using Dalamud.Game.ClientState;
-using Dalamud.Game.ClientState.Conditions;
-using Dalamud.Game.ClientState.Keys;
 using Dalamud.Game.ClientState.Objects;
-using Dalamud.Game.Command;
-using Dalamud.Game.DutyState;
-using Dalamud.Game.Gui;
-using Dalamud.Interface;
 using Dalamud.IoC;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
@@ -26,7 +16,6 @@ public class Dalamud
 
     // @formatter:off
     [PluginService][RequiredVersion("1.0")] public static DalamudPluginInterface PluginInterface { get; private set; } = null!;
-    [PluginService][RequiredVersion("1.0")] public static DalamudContextMenu ContextMenu { get; private set; } = null!;
     [PluginService][RequiredVersion("1.0")] public static ICommandManager Commands { get; private set; } = null!;
     [PluginService][RequiredVersion("1.0")] public static IDataManager GameData { get; private set; } = null!;
     [PluginService][RequiredVersion("1.0")] public static IClientState ClientState { get; private set; } = null!;
@@ -39,6 +28,6 @@ public class Dalamud
     [PluginService][RequiredVersion("1.0")] public static IGameGui GameGui { get; private set; } = null!;
     [PluginService][RequiredVersion("1.0")] public static IKeyState KeyState { get; private set; } = null!;
     [PluginService][RequiredVersion("1.0")] public static IDutyState DutyState { get; private set; } = null!;
-    [PluginService][RequiredVersion("1.0")] public static Dalamud dalamud { get; private set; } = null!;
+    [PluginService][RequiredVersion("1.0")] public static IContextMenu ContextMenu { get; private set; } = null!;
     // @formatter:on
 }

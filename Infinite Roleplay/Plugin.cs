@@ -8,6 +8,9 @@ using Dalamud.Game.ClientState.Objects.SubKinds;
 using Networking;
 using InfiniteRoleplay.Helpers;
 using Dalamud.Plugin.Services;
+using Dalamud.Game.Gui.ContextMenu;
+using System;
+using FFXIVClientStructs.FFXIV.Client.UI;
 
 namespace InfiniteRoleplay
 {
@@ -40,13 +43,13 @@ namespace InfiniteRoleplay
         private const string CommandName = "/infinite";
         private const string TargetWindowCommandName = "/inftarget";
         private DalamudPluginInterface pluginInterface { get; init; }
-        public Dalamud dalamud { get; init; }
         public ITargetManager targetManager { get; init; }
         public IClientState clientState { get; init; }
         public static IClientState _clientState;
         private IFramework framework { get; init; }
         public IChatGui chatGUI { get; init; }
         private IDutyState dutyState { get; init; }
+        private IContextMenu ct { get; init; }
         private ICommandManager CommandManager { get; init; }
         public Configuration Configuration { get; init; }
         public WindowSystem WindowSystem = new("InfiniteRoleplay");
@@ -56,29 +59,28 @@ namespace InfiniteRoleplay
                       [RequiredVersion("1.0")] ITargetManager targetManager,
                       [RequiredVersion("1.0")] IDutyState dutyState,
                       [RequiredVersion("1.0")] ICommandManager commandManager,
-                      [RequiredVersion("1.0")] IChatGui chatG)
+                      [RequiredVersion("1.0")] IContextMenu contextMenu,
+                      [RequiredVersion("1.0")] IChatGui chatG
+                        )
         {
             this.pluginInterface = pluginInterface;
-            this.CommandManager = commandManager;
-            this.PluginInterfacePub = pluginInterface;
-            this.clientState = ClientState;
+            CommandManager = commandManager;
+            PluginInterfacePub = pluginInterface;
+            clientState = ClientState;
             _clientState = ClientState;
             this.targetManager = targetManager;
             this.framework = framework;
-            this.chatGUI = chatG;
-            this.dalamud = dalamud;
+            chatGUI = chatG;
+            ct = contextMenu;
             this.dutyState = dutyState;
-            this.Configuration = pluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
-            this.Configuration.Initialize(pluginInterface);
+            Configuration = pluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
+            Configuration.Initialize(pluginInterface);
             DataSender.plugin = this;
             ClientTCP.plugin = this;
             Misc.pg = this;
             string name = "";
 
-
-
-
-            this.CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
+            CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
             {
                 HelpMessage = "to open the plugin panel window"
             });
@@ -90,10 +92,50 @@ namespace InfiniteRoleplay
             this.pluginInterface.UiBuilder.Draw += DrawUI;
             this.pluginInterface.UiBuilder.OpenConfigUi += LoadOptions;
             this.pluginInterface.UiBuilder.OpenMainUi += DrawLoginUI;
-            
+            ct.OnMenuOpened += AddContextMenu;
+
             DataReceiver.plugin = this;
             this.framework.Update += Update;
         }
+
+
+        public void AddContextMenu(MenuOpenedArgs args)
+        {
+            var targetPlayer = targetManager.Target as PlayerCharacter;
+            if(args.AddonPtr == (nint)0 && targetPlayer != null)
+            {
+                MenuItem view = new MenuItem();
+                MenuItem bookmark = new MenuItem();
+                view.Name = "View profile";
+                bookmark.Name = "Bookmark profile";
+                view.OnClicked += ViewProfile;
+                bookmark.OnClicked += BookmarkProfile;
+                args.AddMenuItem(view);
+                args.AddMenuItem(bookmark);
+
+            }
+        }
+
+        private void ViewProfile(MenuItemClickedArgs args)
+        {
+            var targetPlayer = targetManager.Target as PlayerCharacter;
+            if (targetPlayer != null && args.AddonPtr == (nint)0)
+            {
+                LoginWindow.loginRequest = true;
+                ReloadTarget();
+                targetWindow.IsOpen = true;
+                TargetWindow.characterNameVal = targetPlayer.Name.ToString();
+                TargetWindow.characterWorldVal = targetPlayer.HomeWorld.GameData.Name.ToString();
+                DataSender.RequestTargetProfile(targetPlayer.Name.ToString(), targetPlayer.HomeWorld.GameData.Name.ToString(), Configuration.username);
+            }
+           
+        }
+        private void BookmarkProfile(MenuItemClickedArgs args)
+        {
+            var targetPlayer = targetManager.Target as PlayerCharacter;
+            DataSender.BookmarkPlayer(Configuration.username.ToString(), targetPlayer.Name.ToString(), targetPlayer.HomeWorld.GameData.Name.ToString());
+        }
+
         public async void ReloadClient()
         {
             ProfileWindow.playerCharacter = this.clientState.LocalPlayer;
@@ -206,13 +248,13 @@ namespace InfiniteRoleplay
             verificationWindow.IsOpen = false;
         }
 
-
+       
         public void Update(IFramework framework)
         {
             var targetPlayer = targetManager.Target as PlayerCharacter;
             if (loggedIn == true)
             {
-                if (targetPlayer != null && dutyState.IsDutyStarted == false && Configuration.showTargetOptions == true)
+                if (targetPlayer != null && dutyState.IsDutyStarted == false && Configuration.showTargetOptions == true && targeted == true)
                 {
                     targetMenu.IsOpen = true;
                 }
@@ -244,7 +286,6 @@ namespace InfiniteRoleplay
             {
                 if (targetPlayer != null && dutyState.IsDutyStarted == false)
                 {
-
                     targeted = true;
                     this.targetMenu.IsOpen = true;
                 }
