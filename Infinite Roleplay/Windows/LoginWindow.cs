@@ -13,7 +13,6 @@ namespace InfiniteRoleplay.Windows;
 
 public class LoginWindow : Window, IDisposable
 {
-    private Configuration Configuration;
     public string username = string.Empty;
     public string password = string.Empty;
     public string registerUser = string.Empty;
@@ -41,9 +40,8 @@ public class LoginWindow : Window, IDisposable
         this.Size = new Vector2(250, 310);
         this.SizeCondition = ImGuiCond.Always;
         this.plugin = plugin;
-        this.Configuration = plugin.Configuration;
-        this.username = this.Configuration.username;
-        this.password = this.Configuration.password;
+        this.username = plugin.Configuration.username;
+        this.password = plugin.Configuration.password;
 
         kofiBtnImg = Constants.UICommonImage(plugin.PluginInterfacePub, Constants.CommonImageTypes.kofiBtn);
         discoBtn = Constants.UICommonImage(plugin.PluginInterfacePub, Constants.CommonImageTypes.discordBtn);
@@ -63,17 +61,12 @@ public class LoginWindow : Window, IDisposable
         // can't ref a property, so use a local copy
         if (login == true)
         {
-            if(ClientTCP.clientSocket.Connected == true)
-            {
                 ImGui.InputTextWithHint("##username", $"Username", ref this.username, 100);
                 ImGui.InputTextWithHint("##password", $"Password", ref this.password, 100, ImGuiInputTextFlags.Password);
 
                 if (ImGui.Button("Login"))
                 {
-                    this.Configuration.username = this.username;
-                    this.Configuration.password = this.password;
-                    this.Configuration.Save();
-                    DataSender.Login(username, password, playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString());
+                    DataSender.Login(this.username, this.password, playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString());
                 }
                 ImGui.SameLine();
                 if (ImGui.Button("Forgot"))
@@ -87,25 +80,22 @@ public class LoginWindow : Window, IDisposable
                     login = false;
                     register = true;
                 }
-                if (Configuration.showKofi == true)
+                if (plugin.Configuration.showKofi == true)
                 {
                     if (ImGui.ImageButton(kofiBtnImg.ImGuiHandle, new Vector2(172, 27)))
                     {
                         Util.OpenLink("https://ko-fi.com/infiniteroleplay");
                     }
                 }
-                if (Configuration.showDisc == true)
+                if (plugin.Configuration.showDisc == true)
                 {
                     if (ImGui.ImageButton(discoBtn.ImGuiHandle, new Vector2(172, 27)))
                     {
                         Util.OpenLink("https://discord.gg/infinite-roleplay");
                     }
                 }
-            }
-            else
-            {
-                ImGui.Text("Loading...");
-            }
+            
+           
         }
         if(forgot == true)
         {

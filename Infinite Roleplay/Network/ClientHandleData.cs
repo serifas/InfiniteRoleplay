@@ -19,6 +19,7 @@ namespace Networking
             if(start == true)
             {
                 packets.Add((int)ServerPackets.SWelcomeMessage, DataReceiver.HandleWelcomeMessage);
+                packets.Add((int)ServerPackets.SReceiveLoginAuthorized, DataReceiver.ReceiveLoginAuthorized);
                 packets.Add((int)ServerPackets.SRecLoginStatus, DataReceiver.StatusMessage);
                 packets.Add((int)ServerPackets.SRecAccPermissions, DataReceiver.RecPermissions);
                 packets.Add((int)ServerPackets.SRecProfileBio, DataReceiver.ReceiveProfileBio);
@@ -45,7 +46,6 @@ namespace Networking
                 packets.Add((int)ServerPackets.SRecNoTargetStory, DataReceiver.NoTargetStory);
                 packets.Add((int)ServerPackets.SRecTargetStory, DataReceiver.ReceiveTargetStory);
                 packets.Add((int)ServerPackets.SRecProfileGallery, DataReceiver.ReceiveProfileGalleryImage);
-                packets.Add((int)ServerPackets.SRecGalleryImageLoaded, DataReceiver.ImageLoaded);
                 packets.Add((int)ServerPackets.SRecNoTargetGallery, DataReceiver.NoTargetGallery);
                 packets.Add((int)ServerPackets.SRecTargetGallery, DataReceiver.ReceiveTargetGalleryImage);
                 packets.Add((int)ServerPackets.SSendNoAuthorization, DataReceiver.ReceiveNoAuthorization);

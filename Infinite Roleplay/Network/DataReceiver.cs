@@ -37,6 +37,7 @@ namespace Networking
         SRecAccPermissions = 3,
         SRecProfileBio = 4,
         SRecExistingProfile = 5,
+        SReceiveLoginAuthorized = 7,
         SSendProfile = 20,
         SDoneSending = 21,
         SNoProfileBio = 22,
@@ -144,18 +145,6 @@ namespace Networking
                 isAdmin = false;
             }
         }
-        public static void RecRulebook(byte[] data)
-        {
-            var buffer = new ByteBuffer();
-            buffer.WriteBytes(data);
-            var packetID = buffer.ReadInt();
-            int ruleBookPageID = buffer.ReadInt();
-            string ruleBookPageTitle = buffer.ReadString();           
-            
-            pages.Add(ruleBookPageID, ruleBookPageTitle);
-            
-            
-        }
         public static void RecBookmarks(byte[] data)
         {
             var buffer = new ByteBuffer();
@@ -205,23 +194,6 @@ namespace Networking
             ConnectionMsg = msg;
             buffer.Dispose();
           
-        }
-
-        public static void HandleVersionRequest(byte[] data)
-        {
-            var buffer = new ByteBuffer();
-            buffer.WriteBytes(data);
-            var packetID = buffer.ReadInt();
-            buffer.Dispose();
-          
-        }
-        public static void ImageLoaded(byte[] data)
-        {
-            var buffer = new ByteBuffer();
-            buffer.WriteBytes(data);
-            var packetID = buffer.ReadInt();
-            int index = buffer.ReadInt();
-            buffer.Dispose();
         }
         public static void BadLogin(byte[] data)
         {
@@ -392,6 +364,8 @@ namespace Networking
             var buffer = new ByteBuffer();
             buffer.WriteBytes(data);
             var packetID = buffer.ReadInt();
+            string username = buffer.ReadString();
+            string password = buffer.ReadString();            
             int status = buffer.ReadInt();
             buffer.Dispose();
              //account window
@@ -407,12 +381,7 @@ namespace Networking
                 LoginWindow.statusColor = new Vector4(255, 255, 0, 255);
                 LoginWindow.status = "Unverified Account";
             }
-            if (status == (int)Constants.StatusMessages.LOGIN_VERIFIED)
-            {
-                plugin.loggedIn = true;
-                plugin.CloseAllWindows(true);
-                plugin.panelWindow.IsOpen = true;
-            }
+           
             if (status == (int)Constants.StatusMessages.REGISTRATION_DUPLICATE_USERNAME)
             {
                 LoginWindow.statusColor = new Vector4(255, 255, 0, 255);
@@ -463,7 +432,21 @@ namespace Networking
                 VerificationWindow.verificationStatus = "Incorrect verification key.";
             }
         }
-
+        public static void ReceiveLoginAuthorized(byte[] data)
+        {
+            var buffer = new ByteBuffer();
+            buffer.WriteBytes(data);
+            var packetID = buffer.ReadInt();
+            string username = buffer.ReadString();
+            string password = buffer.ReadString();
+            buffer.Dispose();
+            plugin.Configuration.username = username;
+            plugin.Configuration.password = password;
+            plugin.Configuration.Save();
+            plugin.loginWindow.IsOpen = false;
+            plugin.panelWindow.IsOpen = true;
+            plugin.loggedIn = true;
+        }
 
         public static void ReceiveTargetGalleryImage(byte[] data)
         {
@@ -825,7 +808,6 @@ namespace Networking
             string ooc = buffer.ReadString();
             plugin.profileWindow.ExistingOOC = true;
             ProfileWindow.oocInfo = ooc;
-            plugin.chatGUI.Print(ooc);
             buffer.Dispose();
             OOCLoadStatus = 1;
         }
