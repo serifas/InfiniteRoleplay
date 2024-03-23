@@ -9,9 +9,9 @@ using Networking;
 using InfiniteRoleplay.Helpers;
 using Dalamud.Plugin.Services;
 using Dalamud.Game.Gui.ContextMenu;
+using Dalamud.Game.Text;
 using Lumina.Excel.GeneratedSheets;
 using System.Drawing;
-using FFXIVClientStructs.FFXIV.Client.Graphics;
 
 namespace InfiniteRoleplay
 {
@@ -94,12 +94,6 @@ namespace InfiniteRoleplay
             DataReceiver.plugin = this;
             this.framework.Update += Update;
         }
-        private ushort GetDalamudColor(byte red, byte green, byte blue)
-        {
-            // Calculate the color value using the RGB components
-            ushort color = (ushort)(((red & 0xF8) << 8) | ((green & 0xFC) << 3) | (blue >> 3));
-            return color;
-        }
 
         public void AddContextMenu(MenuOpenedArgs args)
         {
@@ -108,12 +102,13 @@ namespace InfiniteRoleplay
             {
                 MenuItem view = new MenuItem();
                 MenuItem bookmark = new MenuItem();
-                view.Name = "View profile";
-                view.PrefixColor = GetDalamudColor(0, 255, 255);
-                view.PrefixChar = 'I';
+                view.Name = "View profile";               
+                view.PrefixColor = 56;
+                view.Prefix = SeIconChar.BoxedQuestionMark;
+                // Convert the ImGui color to a uint color value
                 bookmark.Name = "Bookmark profile";
-                bookmark.PrefixColor = GetDalamudColor(0, 255,255);
-                bookmark.PrefixChar = 'I';
+                bookmark.PrefixColor = 56;
+                bookmark.Prefix = SeIconChar.BoxedPlus;
                 view.OnClicked += ViewProfile;
                 bookmark.OnClicked += BookmarkProfile;
                 args.AddMenuItem(view);
