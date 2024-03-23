@@ -111,7 +111,17 @@ namespace InfiniteRoleplay.Windows
                 {
                     ImGui.SetTooltip("Systems");
                 }
+                if (ImGui.Button("Options", new Vector2(225, 25)))
+                {
 
+                    plugin.optionsWindow.IsOpen = true;
+                }
+                if (ImGui.Button("Logout", new Vector2(225, 25)))
+                {
+                    plugin.loggedIn = false;
+                    plugin.CloseAllWindows(false);
+                    plugin.loginWindow.IsOpen = true;
+                }
             }
             if(viewProfile == true)
             {
@@ -159,18 +169,8 @@ namespace InfiniteRoleplay.Windows
                     ImGui.SetTooltip("View NPC bookmarks");
                 }
             }
-
-            if (ImGui.Button("Options", new Vector2(225, 25)))
-            {
-                
-                plugin.optionsWindow.IsOpen = true;
-            }
-            if (ImGui.Button("Logout", new Vector2(225, 25)))
-            {
-                plugin.loggedIn = false;
-                plugin.CloseAllWindows(false);
-                plugin.loginWindow.IsOpen = true;
-            }
+            
+           
             if(viewProfile == true || viewSystems  == true || viewEvents == true || viewConnections == true)
             {
                 if (ImGui.Button("Back"))

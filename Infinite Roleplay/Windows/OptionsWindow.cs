@@ -38,16 +38,6 @@ namespace InfiniteRoleplay.Windows
             //okay that's done.
             ImGui.Spacing();
             //now for some simple toggles
-            if(ImGui.Checkbox("Show target menu when selecting players.", ref showTargetOptions))
-            {
-                pg.Configuration.showTargetOptions = showTargetOptions;
-                pg.Configuration.Save();
-            }
-            if (ImGui.Checkbox("Show WIP options (Just extra clutter).", ref showWIP))
-            {
-                pg.Configuration.showWIP = showWIP;
-                pg.Configuration.Save();
-            }
             if (ImGui.Checkbox("Show Ko-fi Button", ref showKofi))
             {
                 pg.Configuration.showKofi = showKofi;

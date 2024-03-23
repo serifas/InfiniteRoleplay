@@ -822,9 +822,10 @@ namespace Networking
             buffer.WriteBytes(data);
             var packetID = buffer.ReadInt();
             string ooc = buffer.ReadString();
+            plugin.profileWindow.ExistingOOC = true;
             ProfileWindow.oocInfo = ooc;
             buffer.Dispose();
-            OOCLoadStatus = -1;
+            OOCLoadStatus = 1;
         }
         public static void ReceiveNoOOCInfo(byte[] data)
         {
