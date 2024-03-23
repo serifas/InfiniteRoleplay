@@ -41,7 +41,6 @@ namespace InfiniteRoleplay
         public static Misc misc = new Misc();
         public string Name => "Infinite Roleplay";
         private const string CommandName = "/infinite";
-        private const string TargetWindowCommandName = "/inftarget";
         private DalamudPluginInterface pluginInterface { get; init; }
         public ITargetManager targetManager { get; init; }
         public IClientState clientState { get; init; }
@@ -222,7 +221,6 @@ namespace InfiniteRoleplay
             this.framework.Update -= Update;
 
             this.CommandManager.RemoveHandler(CommandName);
-            this.CommandManager.RemoveHandler(TargetWindowCommandName);
             this.WindowSystem.RemoveAllWindows();
             if(ClientHandleData.packets.Count > 0)
             {

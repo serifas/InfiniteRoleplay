@@ -53,6 +53,8 @@ public class LoginWindow : Window, IDisposable
 
     public void Dispose()
     {
+        kofiBtnImg.Dispose();
+        discoBtn.Dispose();
     }
 
     public override void Draw()
@@ -155,15 +157,6 @@ public class LoginWindow : Window, IDisposable
 
         }
         ImGui.TextColored(statusColor, status);
-    }
-    public static FileDialogManager SetupFileManager()
-    {
-        var fileManager = new FileDialogManager
-        {
-            AddedWindowFlags = ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoDocking,
-        };
-
-        return fileManager;
     }
     public override void Update()
     {

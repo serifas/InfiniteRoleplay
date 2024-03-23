@@ -71,6 +71,7 @@ namespace Networking
         SSendOOC = 51,
         SSendTargetOOC = 52,
         SSendNoOOCInfo = 53,
+        SSendNoTargetOOCInfo = 54,
     }
     class DataReceiver
     {
@@ -824,6 +825,7 @@ namespace Networking
             string ooc = buffer.ReadString();
             plugin.profileWindow.ExistingOOC = true;
             ProfileWindow.oocInfo = ooc;
+            plugin.chatGUI.Print(ooc);
             buffer.Dispose();
             OOCLoadStatus = 1;
         }
@@ -832,18 +834,27 @@ namespace Networking
             var buffer = new ByteBuffer();
             buffer.WriteBytes(data);
             var packetID = buffer.ReadInt();
-            ProfileWindow.oocInfo = "";
+            ProfileWindow.oocInfo = string.Empty;
+            plugin.profileWindow.ExistingOOC = false;
             buffer.Dispose();
         }
         public static void ReceiveTargetOOCInfo(byte[] data)
         {
-
             var buffer = new ByteBuffer();
             buffer.WriteBytes(data);
             var packetID = buffer.ReadInt();
             string ooc = buffer.ReadString();
             TargetWindow.oocInfo = ooc;
             TargetWindow.ExistingOOC = true;
+            buffer.Dispose();
+        }
+        public static void ReceiveNoTargetOOCInfo(byte[] data)
+        {
+            var buffer = new ByteBuffer();
+            buffer.WriteBytes(data);
+            var packetID = buffer.ReadInt();
+            TargetWindow.oocInfo = string.Empty;
+            TargetWindow.ExistingOOC = false;
             buffer.Dispose();
         }
 

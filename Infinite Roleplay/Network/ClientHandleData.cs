@@ -36,7 +36,6 @@ namespace Networking
                 packets.Add((int)ServerPackets.SRecBookmarks, DataReceiver.RecBookmarks);
                 packets.Add((int)ServerPackets.CProfileReportedSuccessfully, DataReceiver.RecProfileReportedSuccessfully);
                 packets.Add((int)ServerPackets.CProfileAlreadyReported, DataReceiver.RecProfileAlreadyReported);
-                //target packets
                 packets.Add((int)ServerPackets.SRecNoTargetProfile, DataReceiver.NoTargetProfile);
                 packets.Add((int)ServerPackets.SRecTargetProfile, DataReceiver.ExistingTargetProfile);
                 packets.Add((int)ServerPackets.SRecNoTargetBio, DataReceiver.NoTargetBio);
@@ -47,7 +46,6 @@ namespace Networking
                 packets.Add((int)ServerPackets.SRecTargetStory, DataReceiver.ReceiveTargetStory);
                 packets.Add((int)ServerPackets.SRecProfileGallery, DataReceiver.ReceiveProfileGalleryImage);
                 packets.Add((int)ServerPackets.SRecGalleryImageLoaded, DataReceiver.ImageLoaded);
-                //packets.Add((int)ServerPackets.SRecImageDeletionStatus, DataReceiver.ReceiveImageDeletionStatus);
                 packets.Add((int)ServerPackets.SRecNoTargetGallery, DataReceiver.NoTargetGallery);
                 packets.Add((int)ServerPackets.SRecTargetGallery, DataReceiver.ReceiveTargetGalleryImage);
                 packets.Add((int)ServerPackets.SSendNoAuthorization, DataReceiver.ReceiveNoAuthorization);
@@ -56,6 +54,7 @@ namespace Networking
                 packets.Add((int)ServerPackets.SSendNoOOCInfo, DataReceiver.ReceiveNoOOCInfo);
                 packets.Add((int)ServerPackets.SSendOOC, DataReceiver.ReceiveProfileOOC);
                 packets.Add((int)ServerPackets.SSendTargetOOC, DataReceiver.ReceiveTargetOOCInfo);
+                packets.Add((int)ServerPackets.SSendNoTargetOOCInfo, DataReceiver.ReceiveNoTargetOOCInfo);
             }
             else
             {

@@ -413,14 +413,14 @@ namespace Networking
             }
 }
 
-        internal static async void SendOOCInfo(string username, string password, string OOC)
+        internal static async void SendOOCInfo(string charactername, string characterworld, string OOC)
         {
             try 
             { 
             var buffer = new ByteBuffer();
             buffer.WriteInteger((int)ClientPackets.SSendOOC);
-            buffer.WriteString(username);
-            buffer.WriteString(password);
+            buffer.WriteString(charactername);
+            buffer.WriteString(characterworld);
             buffer.WriteString(OOC);
             await ClientTCP.SendData(buffer.ToArray());
             buffer.Dispose();
