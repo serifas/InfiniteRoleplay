@@ -19,7 +19,6 @@ namespace Networking
             if(start == true)
             {
                 packets.Add((int)ServerPackets.SWelcomeMessage, DataReceiver.HandleWelcomeMessage);
-                packets.Add((int)ServerPackets.SReceiveLoginAuthorized, DataReceiver.ReceiveLoginAuthorized);
                 packets.Add((int)ServerPackets.SRecLoginStatus, DataReceiver.StatusMessage);
                 packets.Add((int)ServerPackets.SRecAccPermissions, DataReceiver.RecPermissions);
                 packets.Add((int)ServerPackets.SRecProfileBio, DataReceiver.ReceiveProfileBio);

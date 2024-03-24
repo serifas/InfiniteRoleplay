@@ -92,16 +92,20 @@ namespace InfiniteRoleplay.Windows
                 MinimumSize = new Vector2(600, 400),
                 MaximumSize = new Vector2(750, 950)
             };
-          
+
             this.plugin = plugin;
-            this.pg = plugin.PluginInterfacePub;
+            pg = plugin.PluginInterfacePub;
+            string path = pg.AssemblyLocation.Directory?.FullName!;
             this.configuration = plugin.Configuration;
             this._fileDialogManager = new FileDialogManager();
             avatarHolder = Constants.UICommonImage(Interface, Constants.CommonImageTypes.avatarHolder); 
             pictureTab = Constants.UICommonImage(Interface, Constants.CommonImageTypes.blankPictureTab);
             this.persistAvatarHolder = avatarHolder;
             this.configuration = configuration;
-
+            for(int bf = 0; bf < bioFieldsArr.Length; bf++)
+            {
+                bioFieldsArr[bf] = string.Empty;
+            }
             for(int i = 0; i < 30; i++)
             {
                 ChapterTitle[i] = string.Empty;
@@ -122,8 +126,8 @@ namespace InfiniteRoleplay.Windows
             {
                 bioFieldsArr[b] = string.Empty;
             }
-           
-            this.avatarBytes = new byte[0];
+            
+            this.avatarBytes = File.ReadAllBytes(Path.Combine(path, "UI/common/profiles/avatar_holder.png"));
          }
       
 

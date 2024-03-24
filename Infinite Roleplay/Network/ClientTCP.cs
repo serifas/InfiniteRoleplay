@@ -24,7 +24,7 @@ namespace Networking
         private static byte[] recBuffer;
         private static string server = "185.33.84.184";
 
-        private static int port = 5392;
+        private static int port = 25565;
         public static Plugin plugin;
       
        

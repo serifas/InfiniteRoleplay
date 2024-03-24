@@ -61,39 +61,42 @@ public class LoginWindow : Window, IDisposable
         // can't ref a property, so use a local copy
         if (login == true)
         {
-                ImGui.InputTextWithHint("##username", $"Username", ref this.username, 100);
-                ImGui.InputTextWithHint("##password", $"Password", ref this.password, 100, ImGuiInputTextFlags.Password);
+            ImGui.InputTextWithHint("##username", $"Username", ref this.username, 100);
+            ImGui.InputTextWithHint("##password", $"Password", ref this.password, 100, ImGuiInputTextFlags.Password);
 
-                if (ImGui.Button("Login"))
+            if (ImGui.Button("Login"))
+            {
+                plugin.Configuration.username = username;
+                plugin.Configuration.password = password;
+                plugin.Configuration.Save();
+                DataSender.Login(this.username, this.password, playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString());
+            }
+            ImGui.SameLine();
+            if (ImGui.Button("Forgot"))
+            {
+                login = false;
+                register = false;
+                forgot = true;
+            }
+            if (ImGui.Button("Register"))
+            {
+                login = false;
+                register = true;
+            }
+            if (plugin.Configuration.showKofi == true)
+            {
+                if (ImGui.ImageButton(kofiBtnImg.ImGuiHandle, new Vector2(172, 27)))
                 {
-                    DataSender.Login(this.username, this.password, playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString());
+                    Util.OpenLink("https://ko-fi.com/infiniteroleplay");
                 }
-                ImGui.SameLine();
-                if (ImGui.Button("Forgot"))
+            }
+            if (plugin.Configuration.showDisc == true)
+            {
+                if (ImGui.ImageButton(discoBtn.ImGuiHandle, new Vector2(172, 27)))
                 {
-                    login = false;
-                    register = false;
-                    forgot = true;
+                    Util.OpenLink("https://discord.gg/infinite-roleplay");
                 }
-                if (ImGui.Button("Register"))
-                {
-                    login = false;
-                    register = true;
-                }
-                if (plugin.Configuration.showKofi == true)
-                {
-                    if (ImGui.ImageButton(kofiBtnImg.ImGuiHandle, new Vector2(172, 27)))
-                    {
-                        Util.OpenLink("https://ko-fi.com/infiniteroleplay");
-                    }
-                }
-                if (plugin.Configuration.showDisc == true)
-                {
-                    if (ImGui.ImageButton(discoBtn.ImGuiHandle, new Vector2(172, 27)))
-                    {
-                        Util.OpenLink("https://discord.gg/infinite-roleplay");
-                    }
-                }
+            }
             
            
         }

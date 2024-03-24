@@ -37,7 +37,6 @@ namespace Networking
         SRecAccPermissions = 3,
         SRecProfileBio = 4,
         SRecExistingProfile = 5,
-        SReceiveLoginAuthorized = 7,
         SSendProfile = 20,
         SDoneSending = 21,
         SNoProfileBio = 22,
@@ -246,6 +245,7 @@ namespace Networking
             BookmarkLoadStatus = 0;
             ProfileWindow.addProfile = false;
             ProfileWindow.editProfile = false;
+            ProfileWindow.ClearUI();
             plugin.profileWindow.ExistingProfile = false;
         }
         public static void NoTargetProfile(byte[] data)
@@ -363,25 +363,29 @@ namespace Networking
         {
             var buffer = new ByteBuffer();
             buffer.WriteBytes(data);
-            var packetID = buffer.ReadInt();
-            string username = buffer.ReadString();
-            string password = buffer.ReadString();            
+            var packetID = buffer.ReadInt();          
             int status = buffer.ReadInt();
             buffer.Dispose();
              //account window
-             if(status == (int)Constants.StatusMessages.LOGIN_BANNED)
-             {
+            if(status == (int)Constants.StatusMessages.LOGIN_BANNED)
+            {
                 plugin.loggedIn = false;
                 LoginWindow.statusColor = new Vector4(255, 0, 0, 255);
                 LoginWindow.status = "Account Banned";
-             }
-             if(status == (int)Constants.StatusMessages.LOGIN_UNVERIFIED)
-             {
+            }
+            if(status == (int)Constants.StatusMessages.LOGIN_UNVERIFIED)
+            {
                 plugin.loggedIn = false;
                 LoginWindow.statusColor = new Vector4(255, 255, 0, 255);
                 LoginWindow.status = "Unverified Account";
             }
-           
+            if(status == (int)Constants.StatusMessages.LOGIN_VERIFIED)
+            {
+                plugin.loginWindow.IsOpen = false;
+                plugin.panelWindow.IsOpen = true;
+                plugin.loggedIn = true;
+            }
+          
             if (status == (int)Constants.StatusMessages.REGISTRATION_DUPLICATE_USERNAME)
             {
                 LoginWindow.statusColor = new Vector4(255, 255, 0, 255);
@@ -431,21 +435,6 @@ namespace Networking
                 VerificationWindow.verificationCol = new Vector4(255, 0, 0, 255);
                 VerificationWindow.verificationStatus = "Incorrect verification key.";
             }
-        }
-        public static void ReceiveLoginAuthorized(byte[] data)
-        {
-            var buffer = new ByteBuffer();
-            buffer.WriteBytes(data);
-            var packetID = buffer.ReadInt();
-            string username = buffer.ReadString();
-            string password = buffer.ReadString();
-            buffer.Dispose();
-            plugin.Configuration.username = username;
-            plugin.Configuration.password = password;
-            plugin.Configuration.Save();
-            plugin.loginWindow.IsOpen = false;
-            plugin.panelWindow.IsOpen = true;
-            plugin.loggedIn = true;
         }
 
         public static void ReceiveTargetGalleryImage(byte[] data)
@@ -594,6 +583,7 @@ namespace Networking
             int personality_3 = buffer.ReadInt();
             plugin.profileWindow.ExistingBio = true;
             ProfileWindow.currentAvatarImg = plugin.PluginInterfacePub.UiBuilder.LoadImage(avatarBytes);
+            plugin.profileWindow.avatarBytes = avatarBytes;
             if(alignment == 9)
             {
                 ProfileWindow.alignmentHidden = true;
