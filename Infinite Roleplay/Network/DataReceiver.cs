@@ -630,20 +630,20 @@ namespace Networking
             var buffer = new ByteBuffer();
             buffer.WriteBytes(data);
             var packetID = buffer.ReadInt();
-            string hooks = buffer.ReadString();
-            plugin.profileWindow.ExistingHooks = true;
+            int hookCount = buffer.ReadInt();
+            plugin.profileWindow.ExistingHooks = true;          
 
-            Regex hookRx = new Regex(@"<hook>(.*?)</hook>");
-            string[] hookSplit = hooks.Replace("|||", "~").Split('~');
-
-            for (int i = 0; i < hookSplit.Count(); i++)
+            for (int i = 0; i < hookCount; i++)
             {
-                string hookContent = hookRx.Match(hookSplit[i]).Groups[1].Value;
-                ProfileWindow.hookEditCount = i;
-                ProfileWindow.resetHooks = true;
-                ProfileWindow.HookEditContent[i] = hookContent.Replace("---===---", "\n").Replace("''", "'");
+                string hookName = buffer.ReadString();
+                string hookContent = buffer.ReadString();
+                ProfileWindow.hookExists[i] = true;
+                ProfileWindow.HookNames[i] = hookName;
+                ProfileWindow.HookContents[i] = hookContent;
+                plugin.chatGUI.Print(hookName);
 
             }
+            ProfileWindow.hookCount = hookCount;
             buffer.Dispose();
             HooksLoadStatus = 1;
         }
@@ -703,17 +703,16 @@ namespace Networking
             var buffer = new ByteBuffer();
             buffer.WriteBytes(data);
             var packetID = buffer.ReadInt();
-            string hooks = buffer.ReadString();
+            int hookCount = buffer.ReadInt();
             TargetWindow.ExistingHooks = true;
 
-            Regex hookRx = new Regex(@"<hook>(.*?)</hook>");
-            string[] hookSplit = hooks.Replace("|||", "~").Split('~');
-
-            for (int i = 0; i < hookSplit.Count(); i++)
+            TargetWindow.hookEditCount = hookCount;
+            for (int i = 0; i < hookCount; i++)
             {
-                string hookContent = hookRx.Match(hookSplit[i]).Groups[1].Value;
-                TargetWindow.hookEditCount = i;
-                TargetWindow.HookEditContent[i] = hookContent;
+                string hookName = buffer.ReadString();
+                string hookContent = buffer.ReadString();
+                TargetWindow.HookNames[i] = hookName;
+                TargetWindow.HookContents[i] = hookContent;
             }
             buffer.Dispose();
             TargetHooksLoadStatus = 1;
@@ -725,10 +724,13 @@ namespace Networking
             var packetID = buffer.ReadInt();
             plugin.profileWindow.ExistingHooks = false;
             ProfileWindow.hookCount = 0;
-            for(int i = 0; i < ProfileWindow.HookContent.Length; i++)
+            for(int i = 0; i < ProfileWindow.HookContents.Length; i++)
             {
-                ProfileWindow.HookContent[i] = string.Empty;
-                ProfileWindow.HookEditContent[i] = string.Empty;
+                ProfileWindow.HookContents[i] = string.Empty;
+            }
+            for(int f = 0; f < ProfileWindow.HookNames.Length; f++)
+            {
+                ProfileWindow.HookNames[f] = string.Empty;
             }
             buffer.Dispose();
             HooksLoadStatus = 0;

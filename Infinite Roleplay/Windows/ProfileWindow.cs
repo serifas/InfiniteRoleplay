@@ -40,8 +40,8 @@ namespace InfiniteRoleplay.Windows
         public static int imageIndex = 0;
         public static bool resetStory;
         public static IDalamudTextureWrap pictureTab;
-        public static string[] HookContent = new string[30];
-        public static string[] HookEditContent = new string[30];
+        public static string[] HookNames = new string[30];
+        public static string[] HookContents = new string[30];
         public static string[] ChapterContent = new string[30];
         public static string[] ChapterEditContent = new string[30];
         public static string[] ChapterTitle = new string[30];
@@ -56,12 +56,12 @@ namespace InfiniteRoleplay.Windows
         public static int chapterCount = 0;
         public static int chapterEditCount;
         public static string oocInfo = string.Empty;
-        public static int imageIndexVal = 0;
         public bool ExistingProfile;
         public bool ExistingStory;
         public bool ExistingOOC;
         public bool ExistingGallery;
         public bool ExistingBio;
+        public bool ReorderHooks;
         public bool ExistingHooks;
         public static string storyEditTitle = string.Empty;
         public static int currentAlignment, currentPersonality_1, currentPersonality_2, currentPersonality_3 = 0;
@@ -79,6 +79,9 @@ namespace InfiniteRoleplay.Windows
         public static System.Drawing.Image bl;
         private IDalamudTextureWrap persistAvatarHolder;
         private IDalamudTextureWrap[] otherImages;
+        public static bool[] hookExists = new bool[30];
+
+        public bool AddHooks { get; private set; }
 
         public ProfileWindow(Plugin plugin,
                              DalamudPluginInterface Interface,
@@ -112,10 +115,12 @@ namespace InfiniteRoleplay.Windows
                 ChapterEditTitle[i] = string.Empty;
                 ChapterContent[i] = string.Empty;
                 ChapterEditContent[i] = string.Empty;
-                HookContent[i] = string.Empty;
-                HookEditContent[i] = string.Empty;
+                HookNames[i] = string.Empty;
+                HookContents[i] = string.Empty;
+                hookExists[i] = false;
                 NSFW[i] = false;
                 TRIGGER[i] = false;
+                ImageExists[i] = false;
                 galleryImagesList.Add(pictureTab);
                 galleryThumbsList.Add(pictureTab);
                 imageURLs[i] = string.Empty;
@@ -249,49 +254,25 @@ namespace InfiniteRoleplay.Windows
                         #region HOOKS
                         if (editHooks == true)
                         {
-                            if (resetHooks == true)
+                            if (ImGui.Button("Add Hook"))
                             {
-                                hookCount = 0;
-                                resetHooks = false;
-                            }
-                            string hookMsg = "";
-                            if (ImGui.Button("+##addhook", new Vector2(30, 30)))
-                            {
-                                hookCount++;
+                                if (hookCount < 29)
+                                {
+                                    hookCount++;
+                                }
                             }
                             ImGui.SameLine();
-                            if (ImGui.Button("-##removehook", new Vector2(30, 30)))
-                            {
-                                reduceHooks = true;
-                                if (hookCount > 0)
-                                {
-                                    hookCount--;
-                                    reduceHooks = false;
-                                }
-                                if (hookCount == 0 && reduceHooks == true)
-                                {
-                                    if (hookEditCount > 0)
-                                    {
-                                        hookEditCount--;
-                                    }
-                                }
-                            }
-                            for (int i = 0; i < hookCount; i++)
-                            {
-                                int index = hookCount + hookEditCount;
-                                hookMsg += "<hook>" + HookContent[i].Replace("\n", "---===---") + "</hook>|||";
-                                ImGui.InputTextMultiline("##hook" + i, ref HookContent[i], 3000, new Vector2(450, 100));
-                            }
-                            for (int h = 0; h < hookEditCount; h++)
-                            {
-                                int index = hookCount + hookEditCount;
-                                ImGui.InputTextMultiline("##hookedit" + h, ref HookEditContent[h], 3000, new Vector2(450, 100));
-                                hookMsg += "<hook>" + HookEditContent[h].Replace("\n", "---===---") + "</hook>|||";
-                            }
                             if (ImGui.Button("Submit Hooks"))
                             {
-                                DataSender.SendHooks(playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString(), hookMsg);
+                                for (int i = 0; i < hookCount; i++)
+                                {
+                                    DataSender.SendHooks(playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString(), HookNames[i].ToString(), HookContents[i].ToString(), i);
+                                }
+
                             }
+                            ImGui.NewLine();
+                            AddHooks = true;
+                            hookExists[hookCount] = true;
                         }
                         #endregion
                         #region STORY
@@ -398,14 +379,16 @@ namespace InfiniteRoleplay.Windows
                         {
                             AddImageToGallery(plugin, imageIndex);
                         }
-
-
+                        if(AddHooks == true)
+                        {
+                            DrawHooksUI(plugin, hookCount);
+                        }
                         if (editAvatar == true)
                         {
                             editAvatar = false;
                             EditImage(true, 0);
                         }
-                    
+
                         if (Reorder == true)
                         {
                             Reorder = false;
@@ -419,7 +402,7 @@ namespace InfiniteRoleplay.Windows
                                     galleryImages[i] = galleryImages[i + 1];
                                     galleryThumbs[i] = galleryThumbs[i + 1];
                                     imageURLs[i] = imageURLs[i + 1];
-                               
+
                                 }
                             }
 
@@ -429,7 +412,29 @@ namespace InfiniteRoleplay.Windows
                             ImageExists[imageIndex] = false;
 
                         }
-                   
+                        if (ReorderHooks == true)
+                        {
+                            ReorderHooks = false;
+                            bool nextHookExists = hookExists[NextAvailableHookIndex() + 1];
+                            int firstHookOpen = NextAvailableHookIndex();
+                            hookExists[firstHookOpen] = true;
+                            if (nextHookExists)
+                            {
+                                for (int i = firstHookOpen; i < hookCount; i++)
+                                {
+                                    HookNames[i] = HookNames[i + 1];
+                                    HookContents[i] = HookContents[i + 1];
+
+                                }
+                            }
+
+                            hookCount--;
+                            HookNames[hookCount] = string.Empty;
+                            HookContents[hookCount] = string.Empty;
+                            hookExists[hookCount] = false;
+
+                        }
+
 
                     }
                 }
@@ -439,7 +444,39 @@ namespace InfiniteRoleplay.Windows
                 }
             }
         }
+        public void DrawHook(int i, Plugin plugin)
+        {
+            if (hookExists[i] == true)
+            {
+                if (ImGui.BeginChild("##Hook" + i, new Vector2(550, 250)))
+                {
+                    ImGui.InputTextWithHint("##HookName" + i, "Hook Name", ref HookNames[i], 300);
+                    ImGui.InputTextMultiline("##HookContent" + i, ref HookContents[i], 5000, new Vector2(500, 200));
+                    
+                    try
+                    {
+                        if (ImGui.BeginChild("##HookControls" + i))
+                        {
+                            if (ImGui.Button("Remove##" + "hook" + i))
+                            {
+                                hookExists[i] = false;
+                                ReorderHooks = true;
+                                //DataSender.RemoveGalleryImage(playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString(), i, imageIndex);
+                            }
+                        }
+                        ImGui.EndChild();
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                }
 
+
+                ImGui.EndChild();
+
+
+            }
+        }
 
         public void AddImageToGallery(Plugin plugin, int imageIndex)
         {
@@ -466,14 +503,40 @@ namespace InfiniteRoleplay.Windows
             }
 
         }
-        
+        public void DrawHooksUI(Plugin plugin, int hookCount)
+        {
+            if (editHooks == true)
+            {
+                for (int i = 0; i < hookCount; i++)
+                {
+                    DrawHook(i, plugin);
+                }
+            }
+        }
+
+
         public static int NextAvailableImageIndex()
         {
             bool load = true;
             int index = 0;
-            for(int i = 0; i < ImageExists.Length; i++)
+            for (int i = 0; i < ImageExists.Length; i++)
             {
                 if (ImageExists[i] == false && load == true)
+                {
+                    load = false;
+                    index = i;
+                    return index;
+                }
+            }
+            return index;
+        }
+        public int NextAvailableHookIndex()
+        {
+            bool load = true;
+            int index = 0;
+            for (int i = 0; i < hookExists.Length; i++)
+            {
+                if (hookExists[i] == false && load == true)
                 {
                     load = false;
                     index = i;
@@ -519,7 +582,6 @@ namespace InfiniteRoleplay.Windows
                         {
                             if (ImGui.Button("Remove##" + "gallery_remove" + i))
                             {
-                                imageIndexVal = i;
                                 ImageExists[i] = false;
                                 Reorder = true;
                                 DataSender.RemoveGalleryImage(playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString(), i, imageIndex);
@@ -549,7 +611,6 @@ namespace InfiniteRoleplay.Windows
             {           
                 for (int g = 0; g < galleryImages.Length; g++)
                 {
-                    imageIndexVal = 0;
                     imageIndex = 0;
                     Reorder = true;
                 }
@@ -582,8 +643,9 @@ namespace InfiniteRoleplay.Windows
         {
             for (int h = 0; h < hookCount; h++)
             {
-                HookContent[h] = string.Empty;
-                HookEditContent[h] = string.Empty;
+                HookNames[h] = string.Empty;
+                HookContents[h] = string.Empty;
+                hookExists[h] = false;
             }
             hookCount = 0;
         }

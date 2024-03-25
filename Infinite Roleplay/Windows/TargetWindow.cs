@@ -27,7 +27,8 @@ namespace InfiniteRoleplay.Windows
         public static string[] StoryContent = new string[30];
         public static string[] ChapterContent = new string[30];
         public static string[] ChapterTitle = new string[30];
-        public static string[] HookContent = new string[30];
+        public static string[] HookNames = new string[30];
+        public static string[] HookContents = new string[30];
         public static string[] HookEditContent = new string[30];
         public static int chapterCount;
         public static bool viewBio, viewHooks, viewStory, viewOOC, viewGallery, addNotes = false;
@@ -85,7 +86,8 @@ namespace InfiniteRoleplay.Windows
                 StoryContent[i] = string.Empty;
                 ChapterContent[i] = string.Empty;
                 ChapterTitle[i] = string.Empty;
-                HookEditContent[i] = string.Empty;
+                HookContents[i] = string.Empty;
+                HookNames[i] = string.Empty;
                 galleryImagesList.Add(pictureTab);
                 galleryThumbsList.Add(pictureTab);
                 
@@ -237,7 +239,8 @@ namespace InfiniteRoleplay.Windows
                         Misc.SetTitle(plugin, true, "Hooks");
                         for (int h = 0; h < hookEditCount; h++)
                         {
-                            ImGui.Text(HookEditContent[h].Replace("---===---", "\n").Replace("''", "'"));
+                            ImGui.Text(HookNames[h]);
+                            ImGui.Text(HookContents[h]);
                         }
 
                     }

@@ -4,6 +4,7 @@ using Dalamud.Interface.Internal;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
 using ImGuiNET;
+using Lumina.Excel.GeneratedSheets;
 using Lumina.Excel.GeneratedSheets2;
 using Newtonsoft.Json.Linq;
 using OtterGui;
@@ -31,6 +32,21 @@ namespace InfiniteRoleplay.Helpers
 
             // Return the percentage
             return value / 100f * 100f;
+        }
+        public static void SetCenter(Plugin plugin, string name)
+        {
+         
+                int NameWidth = name.Length * 10;
+                var decidingWidth = Math.Max(500, ImGui.GetWindowWidth());
+                var offsetWidth = (decidingWidth - NameWidth) / 2;
+                var offsetVersion = name.Length > 0
+                    ? _modVersionWidth + ImGui.GetStyle().ItemSpacing.X + ImGui.GetStyle().WindowPadding.X
+                    : 0;
+                var offset = Math.Max(offsetWidth, offsetVersion);
+                if (offset > 0)
+                {
+                    ImGui.SetCursorPosX(offset);
+                }
         }
         public static void SetTitle(Plugin plugin, bool center, string title)
         {

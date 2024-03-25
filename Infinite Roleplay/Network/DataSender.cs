@@ -1,3 +1,4 @@
+using Dalamud.Hooking;
 using InfiniteRoleplay;
 using System;
 
@@ -320,7 +321,7 @@ namespace Networking
             }
 
         }
-        public static async void SendHooks(string charactername, string characterworld, string hooks)
+        public static async void SendHooks(string charactername, string characterworld, string hookTitle, string hookContent, int index)
         {
             try
             {
@@ -328,7 +329,9 @@ namespace Networking
                 buffer.WriteInteger((int)ClientPackets.CSendHooks);
                 buffer.WriteString(charactername);
                 buffer.WriteString(characterworld);
-                buffer.WriteString(hooks);
+                buffer.WriteInteger(index);
+                buffer.WriteString(hookTitle);
+                buffer.WriteString(hookContent);
                 await ClientTCP.SendData(buffer.ToArray());
                 buffer.Dispose();
             }
