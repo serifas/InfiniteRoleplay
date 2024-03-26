@@ -1,6 +1,7 @@
 using Dalamud.Hooking;
 using InfiniteRoleplay;
 using System;
+using System.Collections.Generic;
 
 namespace Networking
 {
@@ -162,16 +163,21 @@ namespace Networking
                 Dalamud.Logging.PluginLog.LogError("Error in SendGalleryImage: " + ex.ToString());
             }
         }
-        public static async void SendStory(string username, string worldname, string title, string chapters)
+        public static async void SendStory(string playername, string worldname, string storyTitle, SortedList<int, Tuple<string, string>> storyChapters)
         {
             try
             {
                 var buffer = new ByteBuffer();
                 buffer.WriteInteger((int)ClientPackets.CSendStory);
-                buffer.WriteString(username);
+                buffer.WriteString(playername);
                 buffer.WriteString(worldname);
-                buffer.WriteString(title);
-                buffer.WriteString(chapters);
+                buffer.WriteInteger(storyChapters.Count);
+                buffer.WriteString(storyTitle);
+                for(int i = 0; i < storyChapters.Count; i++)
+                {
+                    buffer.WriteString(storyChapters[i].Item1);
+                    buffer.WriteString(storyChapters[i].Item2);
+                }
                 await ClientTCP.SendData(buffer.ToArray());
                 buffer.Dispose();
             }

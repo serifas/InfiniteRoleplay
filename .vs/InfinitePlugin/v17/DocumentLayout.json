@@ -3,16 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\windows\\profilewindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\windows\\profilewindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\network\\datasender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\network\\datasender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\network\\datareceiver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\network\\datareceiver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\windows\\profilewindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\windows\\profilewindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\network\\clienttcp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -21,6 +17,10 @@
     {
       "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\windows\\targetwindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\windows\\targetwindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\network\\datasender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\network\\datasender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\windows\\optionswindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -125,7 +125,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -133,41 +133,42 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "DataReceiver.cs",
               "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Network\\DataReceiver.cs",
               "RelativeDocumentMoniker": "Infinite Roleplay\\Network\\DataReceiver.cs",
               "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Network\\DataReceiver.cs",
               "RelativeToolTip": "Infinite Roleplay\\Network\\DataReceiver.cs",
-              "ViewState": "AQIAAFsCAAAAAAAAAAAiwIUCAAAjAAAA",
+              "ViewState": "AQIAAJICAAAAAAAAAAArwK8CAAAxAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-21T05:06:02.199Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "ProfileWindow.cs",
               "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\ProfileWindow.cs",
               "RelativeDocumentMoniker": "Infinite Roleplay\\Windows\\ProfileWindow.cs",
               "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\ProfileWindow.cs",
               "RelativeToolTip": "Infinite Roleplay\\Windows\\ProfileWindow.cs",
-              "ViewState": "AQIAALEBAAAAAAAAAAAewMIBAABFAAAA",
+              "ViewState": "AQIAACQBAAAAAAAAAAAAwDYBAAA2AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-21T05:06:02.197Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 3,
               "Title": "TargetWindow.cs",
               "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\TargetWindow.cs",
               "RelativeDocumentMoniker": "Infinite Roleplay\\Windows\\TargetWindow.cs",
               "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\TargetWindow.cs",
               "RelativeToolTip": "Infinite Roleplay\\Windows\\TargetWindow.cs",
-              "ViewState": "AQIAAN4AAAAAAAAAAAAAAO8AAAAzAAAA",
+              "ViewState": "AQIAAKYAAAAAAAAAAAAkwAABAAAdAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-21T05:06:02.2Z"
+              "WhenOpened": "2024-03-21T05:06:02.2Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -195,13 +196,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "DataSender.cs",
               "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Network\\DataSender.cs",
               "RelativeDocumentMoniker": "Infinite Roleplay\\Network\\DataSender.cs",
               "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Network\\DataSender.cs",
               "RelativeToolTip": "Infinite Roleplay\\Network\\DataSender.cs",
-              "ViewState": "AQIAADgBAAAAAAAAAAAowEMBAACHAAAA",
+              "ViewState": "AQIAAJIAAAAAAAAAAADwv64AAAAvAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-22T17:40:10.823Z",
               "EditorCaption": ""
@@ -220,7 +221,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "ClientTCP.cs",
               "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Network\\ClientTCP.cs",
               "RelativeDocumentMoniker": "Infinite Roleplay\\Network\\ClientTCP.cs",
@@ -228,7 +229,8 @@
               "RelativeToolTip": "Infinite Roleplay\\Network\\ClientTCP.cs",
               "ViewState": "AQIAAAYAAAAAAAAAAAAAABkAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-22T17:37:02.323Z"
+              "WhenOpened": "2024-03-22T17:37:02.323Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",

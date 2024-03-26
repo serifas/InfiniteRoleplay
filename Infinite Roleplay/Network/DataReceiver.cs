@@ -653,23 +653,20 @@ namespace Networking
             var buffer = new ByteBuffer();
             buffer.WriteBytes(data);
             var packetID = buffer.ReadInt();
+            int chapterCount = buffer.ReadInt();
             string storyTitle = buffer.ReadString();
-            string chaptersMsg = buffer.ReadString();
             plugin.profileWindow.ExistingStory = true;
+            ProfileWindow.storyTitle = storyTitle;
 
-            Regex chapterTitleRx = new Regex(@"<chapter_title>(.*?)</chapter_title>");
-            Regex chapterRx = new Regex(@"<chapter>(.*?)</chapter>");
-            string[] chaptersSplit = chaptersMsg.Replace("|||", "~").Split('~');
-
-            ProfileWindow.storyEditTitle = storyTitle;
-            for (int i = 0; i < chaptersSplit.Count(); i++)
+            for (int i = 0; i < chapterCount; i++)
             {
-                string hookContent = chapterRx.Match(chaptersSplit[i]).Groups[1].Value;
-                string hookTitle = chapterTitleRx.Match(chaptersSplit[i]).Groups[1].Value;
-                ProfileWindow.chapterEditCount = i;
+                string chapterName = buffer.ReadString();
+                string chapterContent = buffer.ReadString();
+                ProfileWindow.storyChapterCount = i + 1;
                 ProfileWindow.resetStory = true;
-                ProfileWindow.ChapterEditTitle[i] = hookTitle;
-                ProfileWindow.ChapterEditContent[i] = hookContent.Replace("---===---", "\n").Replace("''", "'");
+                ProfileWindow.ChapterNames[i] = chapterName;
+                ProfileWindow.ChapterContents[i] = chapterContent;
+                ProfileWindow.storyChapterExists[i] = true;
             }
             buffer.Dispose();
             StoryLoadStatus = 1;
@@ -680,20 +677,18 @@ namespace Networking
             var buffer = new ByteBuffer();
             buffer.WriteBytes(data);
             var packetID = buffer.ReadInt();
+            int chapterCount = buffer.ReadInt();
             string storyTitle = buffer.ReadString();
-            string chapters = buffer.ReadString();
             TargetWindow.ExistingStory = true;
-            Regex chapterTitleRx = new Regex(@"<chapter_title>(.*?)</chapter_title>");
-            Regex chapterRx = new Regex(@"<chapter>(.*?)</chapter>");
-            string[] chapterSplit = chapters.Replace("|||", "~").Split('~');
             TargetWindow.storyTitle = storyTitle;
-            for (int i = 0; i < chapterSplit.Count(); i++)
+            for (int i = 0; i < chapterCount; i++)
             {
-                string chapterTitle = chapterTitleRx.Match(chapterSplit[i]).Groups[1].Value;
-                string chapterContent = chapterRx.Match(chapterSplit[i]).Groups[1].Value;
-                TargetWindow.chapterCount = i;
-                TargetWindow.ChapterTitle[i] = chapterTitle;
+                string chapterName = buffer.ReadString();
+                string chapterContent = buffer.ReadString();
+                TargetWindow.chapterCount = i + 1;
+                TargetWindow.ChapterTitle[i] = chapterName;
                 TargetWindow.ChapterContent[i] = chapterContent;
+                TargetWindow.ChapterExists[i] = true;
             }
             buffer.Dispose();
             TargetStoryLoadStatus = 1;

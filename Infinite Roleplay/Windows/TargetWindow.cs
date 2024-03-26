@@ -66,6 +66,8 @@ namespace InfiniteRoleplay.Windows
                                 oocInfo = string.Empty;
         private bool AllLoaded;
 
+        public static bool[] ChapterExists = new bool[30];
+
         public TargetWindow(Plugin plugin, DalamudPluginInterface Interface) : base(
        "TARGET", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)
         {
@@ -86,6 +88,7 @@ namespace InfiniteRoleplay.Windows
                 StoryContent[i] = string.Empty;
                 ChapterContent[i] = string.Empty;
                 ChapterTitle[i] = string.Empty;
+                ChapterExists[i] = false;
                 HookContents[i] = string.Empty;
                 HookNames[i] = string.Empty;
                 galleryImagesList.Add(pictureTab);
@@ -232,118 +235,112 @@ namespace InfiniteRoleplay.Windows
                         }   
 
 
-                    }
 
-                    if (viewHooks == true)
-                    {
-                        Misc.SetTitle(plugin, true, "Hooks");
-                        for (int h = 0; h < hookEditCount; h++)
+                        if (viewHooks == true)
                         {
-                            ImGui.Text(HookNames[h]);
-                            ImGui.Text(HookContents[h]);
-                        }
-
-                    }
-
-                    if (viewStory == true)
-                    {
-                        Misc.SetTitle(plugin, true, storyTitle);
-                        string chapterMsg = "";
-
-
-                        for (int h = 0; h < chapterCount; h++)
-                        {
-                            string Chapter = ChapterContent[h].Replace("---===---", "\n").Replace("''", "'");
-
-                            ImGui.Text(ChapterTitle[h]);
-                            using var defInfFontDen = ImRaii.DefaultFont();
-                            ImGui.Text(Chapter);
-                        }
-
-
-                    }
-                    if(viewOOC == true)
-                    {
-                        Misc.SetTitle(plugin, true, "OOC Information");
-                        ImGui.Text(oocInfo);
-                    }
-                    if (viewGallery == true)
-                    {
-
-                        Misc.SetTitle(plugin, true, "Gallery");
-                        if (ImGui.BeginTable("##GalleryTargetTable", 4))
-                        {
-                            for (int i = 0; i < existingGalleryImageCount; i++)
+                            Misc.SetTitle(plugin, true, "Hooks");
+                            for (int h = 0; h < hookEditCount; h++)
                             {
-                                if (i % 4 == 0)
-                                {
-                                    ImGui.TableNextRow();
-                                    ImGui.TableNextColumn();
+                                ImGui.Text(HookNames[h]);
+                                ImGui.Text(HookContents[h]);
+                            }
 
-                                    // you might normally want to embed resources and load them from the manifest stream
-                                    //this.imageTextures.Add(goatImage);
+                        }
+
+                        if (viewStory == true)
+                        {
+                            Misc.SetTitle(plugin, true, storyTitle);
+                            string chapterMsg = "";
+
+
+                            for (int h = 0; h < chapterCount; h++)
+                            {                                
+
+                                ImGui.Text(ChapterTitle[h].ToUpper());
+                                using var defInfFontDen = ImRaii.DefaultFont();
+                                ImGui.Text(ChapterContent[h]);
+                            }
+
+
+                        }
+                        if(viewOOC == true)
+                        {
+                            Misc.SetTitle(plugin, true, "OOC Information");
+                            ImGui.Text(oocInfo);
+                        }
+                        if (viewGallery == true)
+                        {
+
+                            Misc.SetTitle(plugin, true, "Gallery");
+                            if (ImGui.BeginTable("##GalleryTargetTable", 4))
+                            {
+                                for (int i = 0; i < existingGalleryImageCount; i++)
+                                {
+                                    if (i % 4 == 0)
+                                    {
+                                        ImGui.TableNextRow();
+                                        ImGui.TableNextColumn();
+
+                                        // you might normally want to embed resources and load them from the manifest stream
+                                        //this.imageTextures.Add(goatImage);
                                    
 
-                                    ImGui.Image(galleryThumbs[i].ImGuiHandle, new Vector2(galleryThumbs[i].Width, galleryThumbs[i].Height));
-                                    if (ImGui.IsItemHovered()) { ImGui.SetTooltip("Click to enlarge"); }
-                                    if (ImGui.IsItemClicked())
-                                    {
-                                        ImagePreview.width = galleryImages[i].Width;
-                                        ImagePreview.height = galleryImages[i].Height;
-                                        ImagePreview.PreviewImage = galleryImages[i];
-                                        plugin.loadPreview = true;
+                                        ImGui.Image(galleryThumbs[i].ImGuiHandle, new Vector2(galleryThumbs[i].Width, galleryThumbs[i].Height));
+                                        if (ImGui.IsItemHovered()) { ImGui.SetTooltip("Click to enlarge"); }
+                                        if (ImGui.IsItemClicked())
+                                        {
+                                            ImagePreview.width = galleryImages[i].Width;
+                                            ImagePreview.height = galleryImages[i].Height;
+                                            ImagePreview.PreviewImage = galleryImages[i];
+                                            plugin.loadPreview = true;
+                                        }
                                     }
-                                }
-                                else
-                                {
-                                    ImGui.TableNextColumn();
-                                    // simulate some work
+                                    else
+                                    {
+                                        ImGui.TableNextColumn();
+                                        // simulate some work
 
-                                    // you might normally want to embed resources and load them from the manifest stream
-                                    //this.imageTextures.Add(goatImage);
+                                        // you might normally want to embed resources and load them from the manifest stream
+                                        //this.imageTextures.Add(goatImage);
                                    
 
-                                    ImGui.Image(galleryThumbs[i].ImGuiHandle, new Vector2(galleryThumbs[i].Width, galleryThumbs[i].Height));
-                                    if (ImGui.IsItemHovered()) { ImGui.SetTooltip("Click to enlarge"); }
-                                    if (ImGui.IsItemClicked())
-                                    {
-                                        ImagePreview.width = galleryImages[i].Width;
-                                        ImagePreview.height = galleryImages[i].Height;
-                                        ImagePreview.PreviewImage = galleryImages[i];
-                                        plugin.loadPreview = true;
+                                        ImGui.Image(galleryThumbs[i].ImGuiHandle, new Vector2(galleryThumbs[i].Width, galleryThumbs[i].Height));
+                                        if (ImGui.IsItemHovered()) { ImGui.SetTooltip("Click to enlarge"); }
+                                        if (ImGui.IsItemClicked())
+                                        {
+                                            ImagePreview.width = galleryImages[i].Width;
+                                            ImagePreview.height = galleryImages[i].Height;
+                                            ImagePreview.PreviewImage = galleryImages[i];
+                                            plugin.loadPreview = true;
+                                        }
                                     }
+
                                 }
+                                ImGui.EndTable();
+
+
+
+
 
                             }
-                            ImGui.EndTable();
-
-
-
-
-
                         }
-                    }
                    
-                    if(addNotes == true)
-                    {
-
-                        Misc.SetTitle(plugin, true, "Personal Notes");
-
-                        ImGui.Text("Here you can add personal notes about this player or profile");
-                        ImGui.InputTextMultiline("##info", ref profileNotes, 500, new Vector2(400, 100));
-                        if(ImGui.Button("Add Notes"))
+                        if(addNotes == true)
                         {
-                            DataSender.AddProfileNotes(plugin.Configuration.username, characterNameVal, characterWorldVal, profileNotes);
-                        }
+
+                            Misc.SetTitle(plugin, true, "Personal Notes");
+
+                            ImGui.Text("Here you can add personal notes about this player or profile");
+                            ImGui.InputTextMultiline("##info", ref profileNotes, 500, new Vector2(400, 100));
+                            if(ImGui.Button("Add Notes"))
+                            {
+                                DataSender.AddProfileNotes(plugin.Configuration.username, characterNameVal, characterWorldVal, profileNotes);
+                            }
                         
+                        }
                     }
-                }
 
-                else
-                {
-                    ImGui.Text("No Profile Available");
                 }
-
 
 
 
