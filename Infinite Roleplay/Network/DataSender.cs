@@ -328,7 +328,7 @@ namespace Networking
             }
 
         }
-        public static async void SendHooks(string charactername, string characterworld, string hookTitle, string hookContent, int index)
+        public static async void SendHooks(string charactername, string characterworld, List<Tuple<int, string, string>> hooks)
         {
             try
             {
@@ -336,9 +336,13 @@ namespace Networking
                 buffer.WriteInteger((int)ClientPackets.CSendHooks);
                 buffer.WriteString(charactername);
                 buffer.WriteString(characterworld);
-                buffer.WriteInteger(index);
-                buffer.WriteString(hookTitle);
-                buffer.WriteString(hookContent);
+                buffer.WriteInteger(hooks.Count);
+                for(int i = 0; i < hooks.Count; i++)
+                {
+                    buffer.WriteInteger(hooks[i].Item1);
+                    buffer.WriteString(hooks[i].Item2);
+                    buffer.WriteString(hooks[i].Item3);
+                }
                 await ClientTCP.SendData(buffer.ToArray());
                 buffer.Dispose();
             }

@@ -274,17 +274,13 @@ namespace InfiniteRoleplay.Windows
                             ImGui.SameLine();
                             if (ImGui.Button("Submit Hooks"))
                             {
-                                if(hookCount > 0)
+                                List<Tuple<int, string, string>> hooks = new List<Tuple<int, string, string>>();
+                                for (int i = 0; i < hookCount; i++)
                                 {
-                                    for (int i = 0; i < hookCount; i++)
-                                    {
-                                        DataSender.SendHooks(playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString(), HookNames[i].ToString(), HookContents[i].ToString(), i);
-                                    }
+                                    Tuple<int,string,string> hook = Tuple.Create(i, HookNames[i], HookContents[i]);
+                                    hooks.Add(hook);
                                 }
-                                else
-                                {
-                                    DataSender.SendHooks(playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString(), "", "", 0);
-                                }
+                                DataSender.SendHooks(playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString(),hooks);
 
                             }
                             ImGui.NewLine();
