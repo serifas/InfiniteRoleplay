@@ -12,10 +12,11 @@ using Dalamud.Game.Gui.ContextMenu;
 using Dalamud.Game.Text;
 using Lumina.Excel.GeneratedSheets;
 using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace InfiniteRoleplay
 {
-    public sealed class Plugin : IDalamudPlugin
+    public sealed partial class Plugin : IDalamudPlugin
     {
 
         public bool loggedIn = false;
@@ -50,6 +51,9 @@ namespace InfiniteRoleplay
         private IDutyState dutyState { get; init; }
         private IContextMenu ct { get; init; }
         private ICommandManager CommandManager { get; init; }
+        [LibraryImport("user32")]
+        internal static partial short GetKeyState(int nVirtKey);
+        public static bool CtrlPressed() => (GetKeyState(0xA2) & 0x8000) != 0 || (GetKeyState(0xA3) & 0x8000) != 0;
         public Configuration Configuration { get; init; }
         public WindowSystem WindowSystem = new("InfiniteRoleplay");
         public Plugin([RequiredVersion("1.0")] IClientState ClientState,

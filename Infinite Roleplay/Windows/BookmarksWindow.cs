@@ -78,10 +78,21 @@ namespace InfiniteRoleplay.Windows
 
                     }
                     ImGui.SameLine();
-                    if (ImGui.Button("Remove##Removal" + i))
+                    using (OtterGui.Raii.ImRaii.Disabled(!Plugin.CtrlPressed()))
                     {
-                        DataSender.RemoveBookmarkedPlayer(plugin.Configuration.username.ToString(), profiles.Keys[i], profiles.Values[i]);
+                        if (ImGui.Button("Remove##Removal" + i))
+                        {
+                            DataSender.RemoveBookmarkedPlayer(plugin.Configuration.username.ToString(), profiles.Keys[i], profiles.Values[i]);
+                        }
                     }
+                    if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
+                    {
+                        ImGui.SetTooltip("Ctrl Click to Enable");
+                    }
+
+
+
+                 
                     if (DisableBookmarkSelection == true)
                     {
                         ImGui.EndDisabled();

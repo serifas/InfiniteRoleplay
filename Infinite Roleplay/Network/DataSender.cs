@@ -163,7 +163,7 @@ namespace Networking
                 Dalamud.Logging.PluginLog.LogError("Error in SendGalleryImage: " + ex.ToString());
             }
         }
-        public static async void SendStory(string playername, string worldname, string storyTitle, SortedList<int, Tuple<string, string>> storyChapters)
+        public static async void SendStory(string playername, string worldname, string storyTitle, List<Tuple<string, string>> storyChapters)
         {
             try
             {
@@ -177,6 +177,7 @@ namespace Networking
                 {
                     buffer.WriteString(storyChapters[i].Item1);
                     buffer.WriteString(storyChapters[i].Item2);
+                    plugin.chatGUI.Print(storyChapters[i].Item1);
                 }
                 await ClientTCP.SendData(buffer.ToArray());
                 buffer.Dispose();

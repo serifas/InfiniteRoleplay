@@ -15,6 +15,10 @@ using Dalamud.Interface.Internal;
 using Dalamud.Plugin.Services;
 using InfiniteRoleplay.Scripts.Misc;
 using OtterGui;
+using Dalamud.Interface;
+using System.Linq;
+using Dalamud.Interface.Utility.Raii;
+using System.Reflection.Emit;
 
 namespace InfiniteRoleplay.Windows
 {
@@ -37,21 +41,19 @@ namespace InfiniteRoleplay.Windows
         public static bool personalityHidden = false;
         public static bool galleryTableAdded = false;
         public static bool resetHooks;
-        public static int imageIndex, chapterIndex = 0;
+        public static int imageIndex = 0;
         public static bool resetStory;
         public static IDalamudTextureWrap pictureTab;
-        public static string[] HookNames = new string[30];
-        public static string[] HookContents = new string[30];
-        public static string[] ChapterContents = new string[30];
-        public static string[] ChapterEditContent = new string[30];
-        public static string[] ChapterNames = new string[30];
-        public static string[] ChapterEditTitle = new string[30];
-        public static string[] chapterBtnLabels = new string[30];
-        public static string[] imageURLs = new string[30];
-        public static bool[] NSFW = new bool[30];
-        public static bool[] TRIGGER = new bool[30];
-        public static bool[] ImageExists = new bool[30];
-        public static bool[] viewChapter = new bool[30];
+        public static string[] HookNames = new string[31];
+        public static string[] HookContents = new string[31];
+        public static string[] ChapterContents = new string[31];
+        public static string[] ChapterNames = new string[31];
+        public static string[] ChapterEditTitle = new string[31];
+        public static string[] imageURLs = new string[31];
+        public static bool[] NSFW = new bool[31];
+        public static bool[] TRIGGER = new bool[31];
+        public static bool[] ImageExists = new bool[31];
+        public static bool[] viewChapter = new bool[31];
         public static bool editStory, addOOC, editOOC, addGallery, editGallery, addAvatar, editAvatar, addProfile, editProfile, LoadPreview = false;
         public static int hookCount, storyChapterCount = 0;
         public static int hookEditCount;
@@ -81,12 +83,14 @@ namespace InfiniteRoleplay.Windows
         public static System.Drawing.Image bl;
         private IDalamudTextureWrap persistAvatarHolder;
         private IDalamudTextureWrap[] otherImages;
-        public static bool[] hookExists = new bool[30];
-        public static bool[] storyChapterExists = new bool[30];
+        public static bool[] hookExists = new bool[31];
+        public static bool[] storyChapterExists = new bool[31];
         public static bool drawChapter;
+        public static int currentChapter;
 
         public bool AddHooks { get; private set; }
         public bool AddStoryChapter { get; private set; }
+        public bool ReorderChaptersAfterCreation { get; private set; }
 
         public ProfileWindow(Plugin plugin,
                              DalamudPluginInterface Interface,
@@ -114,12 +118,11 @@ namespace InfiniteRoleplay.Windows
             {
                 bioFieldsArr[bf] = string.Empty;
             }
-            for(int i = 0; i < 30; i++)
+            for(int i = 0; i < 31; i++)
             {
                 ChapterNames[i] = string.Empty;
                 ChapterEditTitle[i] = string.Empty;
                 ChapterContents[i] = string.Empty;
-                ChapterEditContent[i] = string.Empty;
                 HookNames[i] = string.Empty;
                 HookContents[i] = string.Empty;
                 hookExists[i] = false;
@@ -208,7 +211,7 @@ namespace InfiniteRoleplay.Windows
                                 else
                                 {
                                     ImGui.Text(BioField.Item1);
-                                    ImGui.InputTextMultiline(BioField.Item2, ref bioFieldsArr[i], 3000, new Vector2(500, 150));
+                                    ImGui.InputTextMultiline(BioField.Item2, ref bioFieldsArr[i], 3100, new Vector2(500, 150));
                                 }
                             }
                             ImGui.Spacing();
@@ -263,7 +266,7 @@ namespace InfiniteRoleplay.Windows
                         {
                             if (ImGui.Button("Add Hook"))
                             {
-                                if (hookCount < 29)
+                                if (hookCount < 30)
                                 {
                                     hookCount++;
                                 }
@@ -271,9 +274,16 @@ namespace InfiniteRoleplay.Windows
                             ImGui.SameLine();
                             if (ImGui.Button("Submit Hooks"))
                             {
-                                for (int i = 0; i < hookCount; i++)
+                                if(hookCount > 0)
                                 {
-                                    DataSender.SendHooks(playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString(), HookNames[i].ToString(), HookContents[i].ToString(), i);
+                                    for (int i = 0; i < hookCount; i++)
+                                    {
+                                        DataSender.SendHooks(playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString(), HookNames[i].ToString(), HookContents[i].ToString(), i);
+                                    }
+                                }
+                                else
+                                {
+                                    DataSender.SendHooks(playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString(), "", "", 0);
                                 }
 
                             }
@@ -288,41 +298,35 @@ namespace InfiniteRoleplay.Windows
                             ImGui.InputText("Story Title", ref storyTitle, 35);
                             if (ImGui.Button("Add Chapter"))
                             {
-                                if (storyChapterCount < 29)
-                                {
-                                    storyChapterCount++;
-                                }
+                                CreateChapter();
                             }
                             ImGui.SameLine();
-                            if (ImGui.Button("Submit Story"))
+
+                            using (OtterGui.Raii.ImRaii.Disabled(!storyChapterExists.Any(x => x)))
                             {
-                                SortedList<int, Tuple<string, string>> storyChapters = new SortedList<int, Tuple<string, string>>();
-                                for (int i = 0; i < storyChapterCount; i++)
+                                if (ImGui.Button("Submit Story"))
                                 {
-                                    string chapterName = ChapterNames[i].ToString();
-                                    string chapterContent = ChapterContents[i].ToString();
-                                    Tuple<string, string> chapter = Tuple.Create(chapterName, chapterContent);
-                                    storyChapters.Add(i, chapter);
-                                }
-                                DataSender.SendStory(playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString(), storyTitle, storyChapters);
-                            }
-                            Misc.SetCenter(plugin, "123");
-                            ImGui.Spacing();
-                            for (int i = 0; i < storyChapterCount; i++)
-                            {
-                                ImGui.SameLine();
-                                int chapterLabel = i + 1;
-                                chapterBtnLabels[i] = chapterLabel.ToString();
-                                if (ImGui.Button(chapterBtnLabels[i] +"##chapter" + i))
-                                {
-                                    chapterIndex = i;
-                                    ClearChaptersInView();
-                                    viewChapter[i] = true;
-                                    drawChapter = true;
+                                    List<Tuple<string, string>> storyChapters = new List<Tuple<string, string>>();
+                                    for (int i = 0; i < storyChapterCount + 1; i++)
+                                    {
+
+                                        string chapterName = ChapterNames[i].ToString();
+                                        string chapterContent = ChapterContents[i].ToString();
+                                        Tuple<string, string> chapter = Tuple.Create(chapterName, chapterContent);
+                                        storyChapters.Add(chapter);
+                                    }
+                                    DataSender.SendStory(playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString(), storyTitle, storyChapters);
                                 }
                             }
+                            if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
+                            {
+                                ImGui.SetTooltip("Add a chapter to submit your story");
+                            }
+
+                            ImGui.SameLine();
+                            AddChapterSelection();
+
                             ImGui.NewLine();
-                            storyChapterExists[storyChapterCount] = true;
                         }
                         #endregion
                         #region GALLERY
@@ -331,7 +335,7 @@ namespace InfiniteRoleplay.Windows
                         {
                             if (ImGui.Button("Add Image"))
                             {
-                                if (imageIndex < 29)
+                                if (imageIndex < 30)
                                 {
                                     imageIndex++;
                                 }
@@ -378,9 +382,9 @@ namespace InfiniteRoleplay.Windows
                         }
                         if(drawChapter == true)
                         {
-                            DrawChapter(chapterIndex, plugin);
+                            ImGui.NewLine();
+                            DrawChapter(currentChapter, plugin);
                         }
-
                         if (Reorder == true)
                         {
                             Reorder = false;
@@ -426,7 +430,7 @@ namespace InfiniteRoleplay.Windows
                             hookExists[hookCount] = false;
 
                         }
-                        if (ReorderChapters == true)
+                        if (ReorderChapters== true)
                         {
                             ReorderChapters = false;
                             bool nextChapterExists = storyChapterExists[NextAvailableChapterIndex() + 1];
@@ -438,17 +442,13 @@ namespace InfiniteRoleplay.Windows
                                 {
                                     ChapterNames[i] = ChapterNames[i + 1];
                                     ChapterContents[i] = ChapterContents[i + 1];
-                                    chapterBtnLabels[i] = chapterBtnLabels[i + 1];
+                                    DrawChapter(i, plugin);
                                 }
                             }
-
-                            storyChapterCount--;
-                            ChapterNames[storyChapterCount] = string.Empty;
-                            ChapterContents[storyChapterCount] = string.Empty;
-                            chapterBtnLabels[storyChapterCount] = string.Empty;
-                            storyChapterExists[storyChapterCount] = false;
+                           
 
                         }
+                        
 
                     }
                 }
@@ -458,7 +458,32 @@ namespace InfiniteRoleplay.Windows
                 }
             }
         }
+        public void CreateChapter()
+        {
+            if (storyChapterCount < 30)
+            {
+                storyChapterCount++;
+                storyChapterExists[storyChapterCount] = true;
+                ChapterNames[storyChapterCount] = "New Chapter";
+                currentChapter = storyChapterCount;
+                viewChapter[storyChapterCount] = true;
+            }
+            ReorderChapters = true;
+        }
+        public void RemoveChapter(int index)
+        {
+            storyChapterCount--;
+            storyChapterExists[index] = false;
+            ChapterNames[index] = string.Empty;
+            ChapterContents[index] = string.Empty;
+            if (storyChapterExists[index - 1] == true)
+            {
+                currentChapter = index - 1;
+                viewChapter[index - 1] = true;
+            }
+            ReorderChapters = true;
         
+        }
         public void ClearChaptersInView()
         {
             for(int i = 0;i < viewChapter.Length; i++)
@@ -470,27 +495,49 @@ namespace InfiniteRoleplay.Windows
         {
             if (storyChapterExists[i] == true && viewChapter[i] == true)
             {
-                if (ImGui.BeginChild("##Chapter" + i, new Vector2(550, 250)))
+                if(i > -1)
                 {
-                    ImGui.InputTextWithHint("##ChapterName" + i, "Chapter Name", ref ChapterNames[i], 300);
-                    ImGui.InputTextMultiline("##ChapterContent" + i, ref ChapterContents[i], 5000, new Vector2(500, 200));
-                    try
+                   
+                    if (ImGui.BeginChild("##Chapter" + i, new Vector2(550, 250)))
                     {
-                        if (ImGui.BeginChild("##ChapterControls" + i))
+                        ImGui.InputTextWithHint("##ChapterName" + i, "Chapter Name", ref ChapterNames[i], 300);
+                        ImGui.InputTextMultiline("##ChapterContent" + i, ref ChapterContents[i], 5000, new Vector2(500, 200));
+                        try
                         {
-                            if (ImGui.Button("Remove##" + "chapter" + i))
+                        
+                            if(i > 0)
                             {
-                                storyChapterExists[i] = false;
-                                ReorderChapters = true;
+                                if (ImGui.BeginChild("##ChapterControls" + i))
+                                {
+                                    using (OtterGui.Raii.ImRaii.Disabled(!Plugin.CtrlPressed()))
+                                    {
+                                        if (ImGui.Button("Remove##" + "chapter" + i))
+                                        {
+                                            RemoveChapter(i);
+                                           
+                                        }
+
+                                    }
+                                    if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
+                                    {
+                                        ImGui.SetTooltip("Ctrl Click to Enable");
+                                    }
+
+
+                                }
+
+
+
                             }
+                            ImGui.EndChild();
                         }
-                        ImGui.EndChild();
+                        catch (Exception ex)
+                        {
+                        }
                     }
-                    catch (Exception ex)
-                    {
-                    }
+                    ImGui.EndChild();
                 }
-                ImGui.EndChild();
+
             }
         }
         public void DrawHook(int i, Plugin plugin)
@@ -504,12 +551,20 @@ namespace InfiniteRoleplay.Windows
                     
                     try
                     {
+                      
                         if (ImGui.BeginChild("##HookControls" + i))
-                        {
-                            if (ImGui.Button("Remove##" + "hook" + i))
+                        { 
+                            using (OtterGui.Raii.ImRaii.Disabled(!Plugin.CtrlPressed()))
                             {
-                                hookExists[i] = false;
-                                ReorderHooks = true;
+                                if (ImGui.Button("Remove##" + "hook" + i))
+                                {
+                                    hookExists[i] = false;
+                                    ReorderHooks = true;
+                                }
+                            }
+                            if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
+                            {
+                                ImGui.SetTooltip("Ctrl Click to Enable");
                             }
                         }
                         ImGui.EndChild();
@@ -637,14 +692,26 @@ namespace InfiniteRoleplay.Windows
                             ImagePreview.PreviewImage = galleryImages[i];
                             plugin.loadPreview = true;
                         }
+
+
+
+
                         if (ImGui.BeginChild("##GalleryImageControls" + i))
                         {
-                            if (ImGui.Button("Remove##" + "gallery_remove" + i))
+                            using (OtterGui.Raii.ImRaii.Disabled(!Plugin.CtrlPressed()))
                             {
-                                ImageExists[i] = false;
-                                Reorder = true;
-                                DataSender.RemoveGalleryImage(playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString(), i, imageIndex);
+                                if (ImGui.Button("Remove##" + "gallery_remove" + i))
+                                {
+                                    ImageExists[i] = false;
+                                    Reorder = true;
+                                    DataSender.RemoveGalleryImage(playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString(), i, imageIndex);
+                                }
                             }
+                            if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
+                            {
+                                ImGui.SetTooltip("Ctrl Click to Enable");
+                            }
+                      
                         }
                         ImGui.EndChild();
                     }
@@ -710,19 +777,18 @@ namespace InfiniteRoleplay.Windows
         }
         public void ResetStory()
         {
-            for (int s = 0; s < chapterEditCount; s++)
+            for (int s = 0; s < storyChapterCount; s++)
             {
                 ChapterNames[s] = string.Empty;
                 ChapterEditTitle[s] = string.Empty;
                 ChapterContents[s] = string.Empty;
-                ChapterEditContent[s] = string.Empty;
                 chapterCount = 0;
             }
 
 
 
             chapterCount = 0;
-            chapterEditCount = 0;
+            storyChapterCount = 0;
             storyTitle = string.Empty;
         }
        
@@ -791,10 +857,40 @@ namespace InfiniteRoleplay.Windows
                 plugin.chatGUI.Print("Other Image Removed" + o.ToString());
             }
         }
+        public void AddChapterSelection()
+        {
+            string chapterName = ChapterNames[currentChapter];
+
+            using var combo = OtterGui.Raii.ImRaii.Combo("##Chapter", chapterName);
+            if (!combo)
+                return;
+            foreach (var (newText, idx) in ChapterNames.WithIndex())
+            {
+                string label = newText;
+                if (storyChapterExists[currentChapter])
+                {
+                    if(label == string.Empty)
+                    {
+                        label = "New Chapter";
+                    }
+                }
+                if (newText != string.Empty)
+                {
+                    if (ImGui.Selectable("Chapter " + idx + "||" + label+ "##"+ idx, idx == currentChapter))
+                    {
+                        currentChapter = idx;
+                        storyChapterExists[currentChapter] = true;                      
+                        viewChapter[currentChapter] = true;
+                        drawChapter = true;
+                    }
+                    ImGuiUtil.SelectableHelpMarker("Select to edit chapter");
+                }
+            }
+        }
         public void AddAlignmentSelection()
         {
             var (text, desc) = Constants.AlignmentVals[currentAlignment];
-            using var combo = ImRaii.Combo("##Alignment", text);
+            using var combo = OtterGui.Raii.ImRaii.Combo("##Alignment", text);
             ImGuiUtil.HoverTooltip(desc);
             if (!combo)
                 return;
@@ -810,7 +906,7 @@ namespace InfiniteRoleplay.Windows
         public void AddPersonalitySelection_1()
         {
             var (text, desc) = Constants.PersonalityValues[currentPersonality_1];
-            using var combo = ImRaii.Combo("##Personality Feature #1", text);
+            using var combo = OtterGui.Raii.ImRaii.Combo("##Personality Feature #1", text);
             ImGuiUtil.HoverTooltip(desc);
             if (!combo)
                 return;
@@ -826,7 +922,7 @@ namespace InfiniteRoleplay.Windows
         public void AddPersonalitySelection_2()
         {
             var (text, desc) = Constants.PersonalityValues[currentPersonality_2];
-            using var combo = ImRaii.Combo("##Personality Feature #2", text);
+            using var combo = OtterGui.Raii.ImRaii.Combo("##Personality Feature #2", text);
             ImGuiUtil.HoverTooltip(desc);
             if (!combo)
                 return;
@@ -842,7 +938,7 @@ namespace InfiniteRoleplay.Windows
         public void AddPersonalitySelection_3()
         {
             var (text, desc) = Constants.PersonalityValues[currentPersonality_3];
-            using var combo = ImRaii.Combo("##Personality Feature #3", text);
+            using var combo = OtterGui.Raii.ImRaii.Combo("##Personality Feature #3", text);
             ImGuiUtil.HoverTooltip(desc);
             if (!combo)
                 return;
