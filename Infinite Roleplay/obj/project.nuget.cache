@@ -1,10 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "PU5BFB9KYL603fw6APOY86DAkBlkFjVCAXV/Alsf03Q5VFTm1HQwNdiZymWPHJrACnHgq/cf30yu6pVjaCmnUQ==",
+  "dgSpecHash": "Q41F/ZttS7MEPwXjUSXttZTLVoJ55X4Gaf9V1zQRO9cKDbUuW3jMhj9O/NVE4eREFlGgWU8aZFwlQRNc2CCMCw==",
   "success": true,
   "projectFilePath": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\InfiniteRoleplay.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Preac\\.nuget\\packages\\dalamudpackager\\2.1.12\\dalamudpackager.2.1.12.nupkg.sha512",
+    "C:\\Users\\Preac\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\8.0.0\\microsoft.extensions.dependencyinjection.8.0.0.nupkg.sha512",
+    "C:\\Users\\Preac\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.0\\microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",
     "C:\\Users\\Preac\\.nuget\\packages\\microsoft.win32.systemevents\\8.0.0\\microsoft.win32.systemevents.8.0.0.nupkg.sha512",
     "C:\\Users\\Preac\\.nuget\\packages\\stbimagesharp\\2.27.13\\stbimagesharp.2.27.13.nupkg.sha512",
     "C:\\Users\\Preac\\.nuget\\packages\\system.drawing.common\\8.0.3\\system.drawing.common.8.0.3.nupkg.sha512"
