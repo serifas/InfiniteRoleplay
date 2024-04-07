@@ -736,6 +736,11 @@ namespace Networking
             buffer.WriteBytes(data);
             var packetID = buffer.ReadInt();
             plugin.profileWindow.ExistingStory = false;
+            for(int i =0; i < ProfileWindow.ChapterNames.Count(); i++)
+            {
+                ProfileWindow.ChapterNames[i] = string.Empty;
+                ProfileWindow.ChapterContents[i] = string.Empty;
+            }
             buffer.Dispose();
             StoryLoadStatus = 0;
         }

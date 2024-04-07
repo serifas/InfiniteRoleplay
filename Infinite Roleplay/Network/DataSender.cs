@@ -43,10 +43,44 @@ namespace Networking
         SSubmitRestorationKey = 34,
         SSendOOC = 35,
     }
+    public enum LogLevels
+    {
+        Log = 0,
+        LogInformation = 1,
+        LogDebug = 2,
+        LogWarning = 3,
+        LogError = 4,
+    }
     public class DataSender
     {
         public static int userID;
         public static Plugin plugin;
+
+        public static void PrintMessage(string message, LogLevels logLevel)
+        {
+            if(logLevel == LogLevels.Log)
+            {
+                Dalamud.Logging.PluginLog.Log(message);
+            }
+            if(logLevel == LogLevels.LogInformation)
+            {
+                Dalamud.Logging.PluginLog.LogInformation(message);
+            }
+            if(logLevel == LogLevels.LogDebug)
+            {
+                Dalamud.Logging.PluginLog.LogDebug(message);
+            }
+            if(logLevel == LogLevels.LogWarning)
+            {
+                Dalamud.Logging.PluginLog.Warning(message);
+            }
+            if(logLevel == LogLevels.LogError)
+            {
+                Dalamud.Logging.PluginLog.LogError(message);
+            }
+            
+        }
+
         public static async void SendHelloServer(string internalIP, string externalIP)
         {
             try
@@ -61,7 +95,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                Dalamud.Logging.PluginLog.LogError("Error in SendHelloServer: " + ex.ToString());
+                PrintMessage("Error in SendHelloServer: " + ex.ToString(), LogLevels.LogError);
             }
         }
      
@@ -80,7 +114,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                Dalamud.Logging.PluginLog.LogError("Error in Login: " + ex.ToString());
+                PrintMessage("Error in Login: " + ex.ToString(), LogLevels.LogError);
             }
         }
         public static async void Register(string username, string password, string email)
@@ -98,7 +132,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                Dalamud.Logging.PluginLog.LogError("Error in Register: " + ex.ToString());
+                PrintMessage("Error in Register: " + ex.ToString(), LogLevels.LogError);
             }
         }
         public static async void ReportProfile(string characterName, string characterWorld, string reporterAccountName, string reportInfo)
@@ -116,7 +150,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                Dalamud.Logging.PluginLog.LogError("Error in ReportProfile: " + ex.ToString());
+                PrintMessage("Error in ReportProfile: " + ex.ToString(), LogLevels.LogError);
             }
 
         }    
@@ -140,7 +174,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                Dalamud.Logging.PluginLog.LogError("Error in SendGalleryImage: " + ex.ToString());
+                PrintMessage("Error in SendGalleryImage: " + ex.ToString(), LogLevels.LogError);
             }
         }
         public static async void RemoveGalleryImage(string playername, string playerworld, int index, int imageCount)
@@ -160,7 +194,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                Dalamud.Logging.PluginLog.LogError("Error in SendGalleryImage: " + ex.ToString());
+                PrintMessage("Error in SendGalleryImage: " + ex.ToString(), LogLevels.LogError);
             }
         }
         public static async void SendStory(string playername, string worldname, string storyTitle, List<Tuple<string, string>> storyChapters)
@@ -184,7 +218,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                Dalamud.Logging.PluginLog.LogError("Error in SendStory: " + ex.ToString());
+                PrintMessage("Error in SendStory: " + ex.ToString(), LogLevels.LogError);
             }
         }
      
@@ -203,7 +237,7 @@ namespace Networking
             }
             catch(Exception ex) 
             {
-                Dalamud.Logging.PluginLog.LogError("Error in FetchProfile: " + ex.ToString());
+                PrintMessage("Error in FetchProfile: " + ex.ToString(), LogLevels.LogError);
             }
         }
         public static async void CreateProfile(string username, string playerName, string playerServer)
@@ -221,7 +255,7 @@ namespace Networking
             }
             catch(Exception ex)
             {
-                Dalamud.Logging.PluginLog.LogError("Error in CreateProfile: " + ex.ToString());
+                PrintMessage("Error in CreateProfile: " + ex.ToString(), LogLevels.LogError);
             }
         }
         public static async void BookmarkPlayer(string username, string playerName, string playerWorld)
@@ -238,7 +272,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                Dalamud.Logging.PluginLog.LogError("Error in BookmarkProfile: " + ex.ToString());
+                PrintMessage("Error in BookmarkProfile: " + ex.ToString(), LogLevels.LogError);
             }
 
         }   
@@ -255,7 +289,7 @@ namespace Networking
                 buffer.Dispose();
             }catch (Exception ex)
             {
-                Dalamud.Logging.PluginLog.LogError("Error in RemoveBookmarkedPlayer: " + ex.ToString());
+                PrintMessage("Error in RemoveBookmarkedPlayer: " + ex.ToString(), LogLevels.LogError);
             }
         }
         public static async void RequestBookmarks(string username)
@@ -270,7 +304,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                Dalamud.Logging.PluginLog.LogError("Error in RequestBookmarks: " + ex.ToString());
+                PrintMessage("Error in RequestBookmarks: " + ex.ToString(), LogLevels.LogError);
             }
 
         }
@@ -304,7 +338,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                Dalamud.Logging.PluginLog.LogError("Error in SubmitProfileBio: " + ex.ToString());
+                PrintMessage("Error in SubmitProfileBio: " + ex.ToString(), LogLevels.LogError);
             }
 
         }
@@ -324,7 +358,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                Dalamud.Logging.PluginLog.LogError("Error in SubmitProfileBio: " + ex.ToString());
+                PrintMessage("Error in SubmitProfileBio: " + ex.ToString(), LogLevels.LogError);
             }
 
         }
@@ -348,7 +382,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                Dalamud.Logging.PluginLog.LogError("Error in SendHooks: " + ex.ToString());
+                PrintMessage("Error in SendHooks: " + ex.ToString(), LogLevels.LogError);
             }
 
         }
@@ -371,7 +405,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                Dalamud.Logging.PluginLog.LogError("Error in AddProfileNotes: " + ex.ToString());
+                PrintMessage("Error in AddProfileNotes: " + ex.ToString(), LogLevels.LogError);
             }
 }
 
@@ -388,7 +422,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                Dalamud.Logging.PluginLog.LogError("Error in SendVerification: " + ex.ToString());
+                PrintMessage("Error in SendVerification: " + ex.ToString(), LogLevels.LogError);
             }
 
         }
@@ -405,7 +439,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                Dalamud.Logging.PluginLog.LogError("Error in SendRestorationRequest: " + ex.ToString());
+                PrintMessage("Error in SendRestorationRequest: " + ex.ToString(), LogLevels.LogError);
             }
         }
 
@@ -423,7 +457,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                Dalamud.Logging.PluginLog.LogError("Error in SendRestoration: " + ex.ToString());
+                PrintMessage("Error in SendRestoration: " + ex.ToString(), LogLevels.LogError);
             }
 }
 
@@ -441,7 +475,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                Dalamud.Logging.PluginLog.LogError("Error in SendOOCInfo: " + ex.ToString());
+                PrintMessage("Error in SendOOCInfo: " + ex.ToString(), LogLevels.LogError);
             }
         }
 

@@ -1,106 +1,117 @@
 using Dalamud.Interface.Internal;
 using InfiniteRoleplay.Scripts.Misc;
 using InfiniteRoleplay.Windows;
+using OtterGui.Log;
 using System;
 using System.Drawing;
 using System.IO;
 using System.Net;
+using InfiniteRoleplay;
+using Dalamud.Plugin;
+using Networking;
 
 namespace InfiniteRoleplay.Helpers
 {
     internal static class Imaging
     {
+        public static Plugin plugin;
         public static void DownloadProfileImage(bool self, string url, int profileID, bool nsfw, bool trigger, Plugin plugin, int index)
         {
             if(IsImageUrl(url))
             {
-                WebClient webClient = new WebClient();
-                string extension = GetImageFileExtension(url);
-                string GalleryPath = Path.Combine(plugin.PluginInterfacePub.AssemblyLocation.Directory?.FullName!, "UI/Galleries/" + profileID + "/");
-                string imagePath = Path.Combine(plugin.PluginInterfacePub.AssemblyLocation.Directory?.FullName!, "UI/Galleries/" + profileID + "/" + "gallery_" + profileID + "_" + index + "." + extension); // Create a folder named 'Images' in your root directory
-                if (!Directory.Exists(GalleryPath))
-                {
-                    Directory.CreateDirectory(GalleryPath);
-                }
-                webClient.DownloadFile(url, imagePath);
+                try { 
+                        WebClient webClient = new WebClient();
+                        string extension = GetImageFileExtension(url);
+                        string GalleryPath = Path.Combine(plugin.PluginInterfacePub.AssemblyLocation.Directory?.FullName!, "UI/Galleries/" + profileID + "/");
+                        string imagePath = Path.Combine(plugin.PluginInterfacePub.AssemblyLocation.Directory?.FullName!, "UI/Galleries/" + profileID + "/" + "gallery_" + profileID + "_" + index + "." + extension); // Create a folder named 'Images' in your root directory
+                        if (!Directory.Exists(GalleryPath))
+                        {
+                            Directory.CreateDirectory(GalleryPath);
+                        }
+                        webClient.DownloadFile(url, imagePath);
 
-                System.Drawing.Image baseImage = System.Drawing.Image.FromFile(imagePath);
-                System.Drawing.Image scaledImage = ScaleImage(baseImage, 1000, 800);
-                SaveImage(scaledImage, GalleryPath, "gallery_scaled_" + profileID + "_" + index + "." + extension);
-                string scaledImagePath = Path.Combine(plugin.PluginInterfacePub.AssemblyLocation.Directory?.FullName!, "UI/Galleries/" + profileID + "/" + "gallery_scaled_" + profileID + "_" + index + "." + extension);
+                        System.Drawing.Image baseImage = System.Drawing.Image.FromFile(imagePath);
+                        System.Drawing.Image scaledImage = ScaleImage(baseImage, 1000, 800);
+                        SaveImage(scaledImage, GalleryPath, "gallery_scaled_" + profileID + "_" + index + "." + extension);
+                        string scaledImagePath = Path.Combine(plugin.PluginInterfacePub.AssemblyLocation.Directory?.FullName!, "UI/Galleries/" + profileID + "/" + "gallery_scaled_" + profileID + "_" + index + "." + extension);
 
 
-                IDalamudTextureWrap galleryImage = plugin.PluginInterfacePub.UiBuilder.LoadImage(scaledImagePath);
-                IDalamudTextureWrap nsfwThumb = Constants.UICommonImage(plugin.PluginInterfacePub, Constants.CommonImageTypes.NSFW);
-                IDalamudTextureWrap triggerThumb = Constants.UICommonImage(plugin.PluginInterfacePub, Constants.CommonImageTypes.TRIGGER);
-                IDalamudTextureWrap nsfwTriggerThumb = Constants.UICommonImage(plugin.PluginInterfacePub, Constants.CommonImageTypes.NSFWTRIGGER);
+                        IDalamudTextureWrap galleryImage = plugin.PluginInterfacePub.UiBuilder.LoadImage(scaledImagePath);
+                        IDalamudTextureWrap nsfwThumb = Constants.UICommonImage(plugin.PluginInterfacePub, Constants.CommonImageTypes.NSFW);
+                        IDalamudTextureWrap triggerThumb = Constants.UICommonImage(plugin.PluginInterfacePub, Constants.CommonImageTypes.TRIGGER);
+                        IDalamudTextureWrap nsfwTriggerThumb = Constants.UICommonImage(plugin.PluginInterfacePub, Constants.CommonImageTypes.NSFWTRIGGER);
 
-                if (self == true)
-                {
-                    ProfileWindow.galleryImages[index] = galleryImage;
-                    ProfileWindow.imageURLs[index] = url;
-                    ProfileWindow.NSFW[index] = nsfw;
-                    ProfileWindow.TRIGGER[index] = trigger;
-                }
-                else
-                {                    
-                    TargetWindow.galleryImages[index] = galleryImage;
-                }
-                if(trigger == true && nsfw == false)
-                {
+                        if (self == true)
+                        {
+                            ProfileWindow.galleryImages[index] = galleryImage;
+                            ProfileWindow.imageURLs[index] = url;
+                            ProfileWindow.NSFW[index] = nsfw;
+                            ProfileWindow.TRIGGER[index] = trigger;
+                        }
+                        else
+                        {                    
+                            TargetWindow.galleryImages[index] = galleryImage;
+                        }
+                        if(trigger == true && nsfw == false)
+                        {
 
-                    if(self == true)
-                    {
-                        ProfileWindow.galleryThumbs[index] = triggerThumb;
-                    }
-                    else
-                    {
-                        TargetWindow.galleryThumbs[index] = triggerThumb;
-                    }
-                }
-                if(nsfw == true && trigger == false)
-                {
-                    if (self == true)
-                    {
-                        ProfileWindow.galleryThumbs[index] = nsfwThumb;
-                    }
-                    else
-                    {
-                        TargetWindow.galleryThumbs[index] = nsfwThumb;
-                    }
+                            if(self == true)
+                            {
+                                ProfileWindow.galleryThumbs[index] = triggerThumb;
+                            }
+                            else
+                            {
+                                TargetWindow.galleryThumbs[index] = triggerThumb;
+                            }
+                        }
+                        if(nsfw == true && trigger == false)
+                        {
+                            if (self == true)
+                            {
+                                ProfileWindow.galleryThumbs[index] = nsfwThumb;
+                            }
+                            else
+                            {
+                                TargetWindow.galleryThumbs[index] = nsfwThumb;
+                            }
 
-                }
-                if(nsfw == true && trigger == true)
-                {
-                    if (self == true)
-                    {
+                        }
+                        if(nsfw == true && trigger == true)
+                        {
+                            if (self == true)
+                            {
                        
-                        ProfileWindow.galleryThumbs[index] = nsfwTriggerThumb;
+                                ProfileWindow.galleryThumbs[index] = nsfwTriggerThumb;
 
-                    }
-                    else
-                    {
-                        TargetWindow.galleryThumbs[index] = nsfwTriggerThumb;
-                    }
-                }
+                            }
+                            else
+                            {
+                                TargetWindow.galleryThumbs[index] = nsfwTriggerThumb;
+                            }
+                        }
               
-                if(nsfw == false && trigger == false)
-                {
-                    System.Drawing.Image thumb = System.Drawing.Image.FromFile(imagePath);
-                    System.Drawing.Image img = ScaleImage(thumb, 120, 120);
-                    SaveImage(img, GalleryPath, "gallery_thumb_" + profileID + "_" + index + "." + extension);
-                    IDalamudTextureWrap imgThumb = plugin.PluginInterfacePub.UiBuilder.LoadImage(Path.Combine(plugin.PluginInterfacePub.AssemblyLocation.Directory?.FullName!, "UI/Galleries/" + profileID + "/gallery_thumb_" + profileID + "_" + index + "." + extension));
-                    if(self == true) 
-                    {
-                        ProfileWindow.galleryThumbs[index] = imgThumb;
-                    }
-                    else
-                    {
-                        TargetWindow.galleryThumbs[index] = imgThumb;
-                    }
+                        if(nsfw == false && trigger == false)
+                        {
+                            System.Drawing.Image thumb = System.Drawing.Image.FromFile(imagePath);
+                            System.Drawing.Image img = ScaleImage(thumb, 120, 120);
+                            SaveImage(img, GalleryPath, "gallery_thumb_" + profileID + "_" + index + "." + extension);
+                            IDalamudTextureWrap imgThumb = plugin.PluginInterfacePub.UiBuilder.LoadImage(Path.Combine(plugin.PluginInterfacePub.AssemblyLocation.Directory?.FullName!, "UI/Galleries/" + profileID + "/gallery_thumb_" + profileID + "_" + index + "." + extension));
+                            if(self == true) 
+                            {
+                                ProfileWindow.galleryThumbs[index] = imgThumb;
+                            }
+                            else
+                            {
+                                TargetWindow.galleryThumbs[index] = imgThumb;
+                            }
+                        }
+
+
                 }
-
-
+                catch
+                {
+                    DataSender.PrintMessage("Unable to Read or Write Image", LogLevels.LogError);
+                }
             }
         }
         static string GetImageFileExtension(string url)

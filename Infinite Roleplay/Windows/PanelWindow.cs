@@ -81,36 +81,55 @@ namespace InfiniteRoleplay.Windows
                 #endregion
                 }
                 ImGui.SameLine();
-                    
-                if (ImGui.ImageButton(this.connectionsSectionImage.ImGuiHandle, new Vector2(100, 50)))
+                using (OtterGui.Raii.ImRaii.Disabled(true))
                 {
-                    viewConnections = true;
-                    viewMainWindow = false;
+                    if (ImGui.ImageButton(this.connectionsSectionImage.ImGuiHandle, new Vector2(100, 50)))
+                    {
+                      //  viewConnections = true;
+                       // viewMainWindow = false;
+
+                    }
+
                 }
-                if (ImGui.IsItemHovered())
+                if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
                 {
-                    ImGui.SetTooltip("Connections");
+                    ImGui.SetTooltip("Connections - Coming soon");
                 }
-                   
-                if (ImGui.ImageButton(this.eventsSectionImage.ImGuiHandle, new Vector2(100, 50)))
+                using (OtterGui.Raii.ImRaii.Disabled(true))
                 {
-                    viewEvents = true;
-                    viewMainWindow = false;
+                    if (ImGui.ImageButton(this.eventsSectionImage.ImGuiHandle, new Vector2(100, 50)))
+                    {
+                        //  viewConnections = true;
+                        // viewMainWindow = false;
+
+                    }
+
                 }
-                if (ImGui.IsItemHovered())
+                if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
                 {
-                    ImGui.SetTooltip("Events");
+                    ImGui.SetTooltip("Events - Coming soon");
                 }
+
+
+              
                 ImGui.SameLine();
-                if (ImGui.ImageButton(this.systemsSectionImage.ImGuiHandle, new Vector2(100, 50)))
+
+                using (OtterGui.Raii.ImRaii.Disabled(true))
                 {
-                    viewSystems = true;
-                    viewMainWindow = false;
+                    if (ImGui.ImageButton(this.systemsSectionImage.ImGuiHandle, new Vector2(100, 50)))
+                    {
+                        //  viewConnections = true;
+                        // viewMainWindow = false;
+
+                    }
+
                 }
-                if (ImGui.IsItemHovered())
+                if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
                 {
-                    ImGui.SetTooltip("Systems");
+                    ImGui.SetTooltip("Systems - Coming soon");
                 }
+
+               
                 if (ImGui.Button("Options", new Vector2(225, 25)))
                 {
 
@@ -150,24 +169,40 @@ namespace InfiniteRoleplay.Windows
                 {
                     ImGui.SetTooltip("View profile bookmarks");
                 }
+                using (OtterGui.Raii.ImRaii.Disabled(true))
+                {
+                    if (ImGui.ImageButton(this.npcImage.ImGuiHandle, new Vector2(100, 50)))
+                    {
+                        //  viewConnections = true;
+                        // viewMainWindow = false;
 
-                if (ImGui.ImageButton(this.npcImage.ImGuiHandle, new Vector2(100, 50)))
-                {
-                    //SEND NPC PROFILE REQUEST
+                    }
+
                 }
-                if (ImGui.IsItemHovered())
+                if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
                 {
-                    ImGui.SetTooltip("Manage your NPCs");
+                    ImGui.SetTooltip("Manage NPCs - Coming soon");
                 }
+
+
+             
                 ImGui.SameLine();
-                if (ImGui.ImageButton(this.npcBookmarkImage.ImGuiHandle, new Vector2(100, 50)))
+
+                using (OtterGui.Raii.ImRaii.Disabled(true))
                 {
-                    //SEND NPC BOOKMARK REQUEST
+                    if (ImGui.ImageButton(this.npcBookmarkImage.ImGuiHandle, new Vector2(100, 50)))
+                    {
+                        //  viewConnections = true;
+                        // viewMainWindow = false;
+
+                    }
+
                 }
-                if (ImGui.IsItemHovered())
+                if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
                 {
-                    ImGui.SetTooltip("View NPC bookmarks");
+                    ImGui.SetTooltip("View NPC bookmarks - Coming soon");
                 }
+
             }
             
            

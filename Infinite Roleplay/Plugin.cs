@@ -10,9 +10,9 @@ using InfiniteRoleplay.Helpers;
 using Dalamud.Plugin.Services;
 using Dalamud.Game.Gui.ContextMenu;
 using Dalamud.Game.Text;
-using Lumina.Excel.GeneratedSheets;
-using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Timers;
+using System;
 
 namespace InfiniteRoleplay
 {
@@ -27,6 +27,7 @@ namespace InfiniteRoleplay
         public bool loadPreview = false;
         public bool uiLoaded = false;
         public string socketStatus;
+        public int tick = 0;
         public DalamudPluginInterface PluginInterfacePub;
         public TargetWindow targetWindow;
         public ImagePreview imagePreview;
@@ -51,6 +52,7 @@ namespace InfiniteRoleplay
         private IDutyState dutyState { get; init; }
         private IContextMenu ct { get; init; }
         private ICommandManager CommandManager { get; init; }
+        private Timer timer = new Timer(10000);
         [LibraryImport("user32")]
         internal static partial short GetKeyState(int nVirtKey);
         public static bool CtrlPressed() => (GetKeyState(0xA2) & 0x8000) != 0 || (GetKeyState(0xA3) & 0x8000) != 0;
@@ -88,15 +90,15 @@ namespace InfiniteRoleplay
                 HelpMessage = "to open the plugin panel window"
             });
           
-            ReloadClient();
             this.pluginInterface.UiBuilder.Draw += DrawUI;
             this.pluginInterface.UiBuilder.OpenConfigUi += LoadOptions;
             this.pluginInterface.UiBuilder.OpenMainUi += DrawLoginUI;
             ct.OnMenuOpened += AddContextMenu;
-
             DataReceiver.plugin = this;
             this.framework.Update += Update;
+            ReloadClient();
         }
+
 
         public void AddContextMenu(MenuOpenedArgs args)
         {
@@ -105,11 +107,11 @@ namespace InfiniteRoleplay
             {
                 MenuItem view = new MenuItem();
                 MenuItem bookmark = new MenuItem();
-                view.Name = "View profile";               
+                view.Name = "View Infinite Profile";               
                 view.PrefixColor = 56;
                 view.Prefix = SeIconChar.BoxedQuestionMark;
                 // Convert the ImGui color to a uint color value
-                bookmark.Name = "Bookmark profile";
+                bookmark.Name = "Bookmark Infinite Profile";
                 bookmark.PrefixColor = 56;
                 bookmark.Prefix = SeIconChar.BoxedPlus;
                 view.OnClicked += ViewProfile;
@@ -219,11 +221,12 @@ namespace InfiniteRoleplay
         }
         public void Dispose()
         {
+            this.timer.Stop();
+            this.timer.Dispose();
             this.pluginInterface.UiBuilder.Draw -= DrawUI;
             this.pluginInterface.UiBuilder.OpenConfigUi -= LoadOptions;
             this.pluginInterface.UiBuilder.OpenMainUi -= DrawLoginUI;
             this.framework.Update -= Update;
-
             this.CommandManager.RemoveHandler(CommandName);
             this.WindowSystem.RemoveAllWindows();
             if(ClientHandleData.packets.Count > 0)
@@ -248,17 +251,28 @@ namespace InfiniteRoleplay
             verificationWindow.IsOpen = false;
         }
 
-       
+
         public void Update(IFramework framework)
         {
             var targetPlayer = targetManager.Target as PlayerCharacter;
-            
+            tick++;
             if (loadPreview == true)
             {
                 imagePreview.IsOpen = true;
                 loadPreview = false;
             }
-            
+            if (tick >= 300)
+            {
+                tick = 0;
+                if (clientState.IsLoggedIn == true && clientState.LocalPlayer != null)
+                {
+                    if (!ClientTCP.IsConnectedToServer(ClientTCP.clientSocket))
+                    {
+                        chatGUI.Print("Connection was lost. Reconnecting to Infinite Roleplay");
+                        ReloadClient();
+                    }
+                }
+            }
         }
 
         private void OnCommand(string command, string args)
@@ -273,18 +287,6 @@ namespace InfiniteRoleplay
         }
 
       
-
-        public bool IsLoggedIn()
-        {
-            if (clientState.IsLoggedIn == true && clientState.LocalPlayer != null)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
 
         public async void DisconnectFromServer()
         {

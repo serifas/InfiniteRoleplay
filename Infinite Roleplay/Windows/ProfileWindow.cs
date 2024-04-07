@@ -291,13 +291,18 @@ namespace InfiniteRoleplay.Windows
                         #region STORY
                         if (editStory == true)
                         {
-                            ImGui.InputText("Story Title", ref storyTitle, 35);
+                            ImGui.Text("Story Title");
+                            ImGui.SameLine();
+                            ImGui.InputText("##storyTitle", ref storyTitle, 35);
+
+                            ImGui.Text("Chapter");
+                            ImGui.SameLine();
+                            AddChapterSelection();
+                            ImGui.SameLine();
                             if (ImGui.Button("Add Chapter"))
                             {
-                                CreateChapter();
+                                    CreateChapter();
                             }
-                            ImGui.SameLine();
-
                             using (OtterGui.Raii.ImRaii.Disabled(!storyChapterExists.Any(x => x)))
                             {
                                 if (ImGui.Button("Submit Story"))
@@ -318,10 +323,6 @@ namespace InfiniteRoleplay.Windows
                             {
                                 ImGui.SetTooltip("Add a chapter to submit your story");
                             }
-
-                            ImGui.SameLine();
-                            AddChapterSelection();
-
                             ImGui.NewLine();
                         }
                         #endregion
@@ -464,7 +465,11 @@ namespace InfiniteRoleplay.Windows
                 currentChapter = storyChapterCount;
                 viewChapter[storyChapterCount] = true;
             }
-            ReorderChapters = true;
+            if(storyChapterCount > 3)
+            {
+                ReorderChapters = true;
+            }
+            
         }
         public void RemoveChapter(int index)
         {
