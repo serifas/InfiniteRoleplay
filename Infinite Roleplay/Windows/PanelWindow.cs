@@ -138,7 +138,7 @@ namespace InfiniteRoleplay.Windows
                 if (ImGui.Button("Logout", new Vector2(225, 25)))
                 {
                     plugin.loggedIn = false;
-                    plugin.CloseAllWindows(false);
+                    plugin.CloseAllWindows();
                     plugin.loginWindow.IsOpen = true;
                 }
             }
@@ -146,7 +146,6 @@ namespace InfiniteRoleplay.Windows
             {
                 if (ImGui.ImageButton(this.profileImage.ImGuiHandle, new Vector2(100, 50)))
                 {
-                    LoginWindow.loginRequest = true;
                     plugin.profileWindow.Reset(plugin);
                     plugin.ReloadProfile();
                     plugin.profileWindow.IsOpen = true;

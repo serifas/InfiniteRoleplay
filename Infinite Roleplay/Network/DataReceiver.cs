@@ -208,10 +208,16 @@ namespace Networking
             buffer.WriteBytes(data);
             var packetID = buffer.ReadInt();
             buffer.Dispose();
-            TargetWindow.ExistingProfile = true;
-            plugin.targetWindow.IsOpen = true;
-            TargetWindow.ClearUI();
-            ReportWindow.reportStatus = "";
+            try
+            {
+                TargetWindow.ExistingProfile = true;
+                TargetWindow.ClearUI();
+                ReportWindow.reportStatus = "";
+            }
+            catch(Exception ex) 
+            {
+                DataSender.PrintMessage(ex.ToString(), LogLevels.LogError);
+            }
         }
         public static void RecProfileReportedSuccessfully(byte[] data)
         {
@@ -261,7 +267,6 @@ namespace Networking
             TargetWindow.ExistingStory = false;
             TargetWindow.ExistingOOC = false;
             TargetWindow.ExistingGallery = false;
-            plugin.targetWindow.IsOpen = true;
             TargetBioLoadStatus = 0;
             TargetHooksLoadStatus = 0;
             TargetStoryLoadStatus = 0;
@@ -280,7 +285,6 @@ namespace Networking
             buffer.Dispose();
             loggedIn = true;
             TargetWindow.ExistingGallery = false;
-            plugin.targetWindow.IsOpen = true;
             BookmarksWindow.DisableBookmarkSelection = false;
             TargetGalleryLoadStatus = 0;
         }
@@ -292,7 +296,6 @@ namespace Networking
             buffer.Dispose();
             loggedIn = true;
             TargetWindow.ExistingStory = false;
-            plugin.targetWindow.IsOpen = true;
             TargetStoryLoadStatus = 0;
         }
         
@@ -354,8 +357,7 @@ namespace Networking
             int profileID = buffer.ReadInt();
             string profileName = buffer.ReadString();
             buffer.Dispose();     
-            loggedIn = true;
-           
+            loggedIn = true;           
         }
      
       
@@ -450,13 +452,21 @@ namespace Networking
                 string url = buffer.ReadString();
                 bool nsfw = buffer.ReadBool();
                 bool trigger = buffer.ReadBool();
-                Imaging.DownloadProfileImage(false, url, profileID, nsfw, trigger, plugin, i);
-                TargetWindow.loading = "Gallery Image" + i;
-                TargetWindow.currentInd = i;
+                try
+                {
+
+                    Imaging.DownloadProfileImage(false, url, profileID, nsfw, trigger, plugin, i);
+                    TargetWindow.loading = "Gallery Image" + i;
+                    TargetWindow.currentInd = i;
+                } 
+                catch (Exception ex)
+                {
+                    DataSender.PrintMessage("Error Loading Images" + ex.Message.ToString(), LogLevels.LogError);
+                }
             }
             TargetWindow.existingGalleryImageCount = imageCount;
             TargetWindow.ExistingGallery = true;
-            BookmarksWindow.DisableBookmarkSelection = false;
+            //BookmarksWindow.DisableBookmarkSelection = false;
 
             TargetGalleryLoadStatus = 1;
             buffer.Dispose();
@@ -560,7 +570,6 @@ namespace Networking
             TargetWindow.ExistingBio = true;
             buffer.Dispose();
             TargetBioLoadStatus = 1;
-            plugin.targetWindow.IsOpen = true;
         }
         public static void ReceiveProfileBio(byte[] data)
         {
@@ -640,7 +649,6 @@ namespace Networking
                 ProfileWindow.hookExists[i] = true;
                 ProfileWindow.HookNames[i] = hookName;
                 ProfileWindow.HookContents[i] = hookContent;
-                plugin.chatGUI.Print(hookName);
 
             }
             ProfileWindow.hookCount = hookCount;

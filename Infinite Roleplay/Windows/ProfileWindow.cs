@@ -832,30 +832,25 @@ namespace InfiniteRoleplay.Windows
             for (int gil = 0; gil < galleryImagesList.Count; gil++)
             {
                 galleryImagesList[gil].Dispose();
-                plugin.chatGUI.Print("GalleryList Item Removed" + gil.ToString());
             }
             for (int gtl = 0; gtl < galleryThumbsList.Count; gtl++)
             {
                 galleryThumbsList[gtl].Dispose();
-                plugin.chatGUI.Print("GalleryThumbList Item Removed" + gtl.ToString());
             }
             foreach (IDalamudTextureWrap ti in galleryImages)
             {
                 ti.Dispose();
                 Array.Clear(galleryImages);
-                plugin.chatGUI.Print("GalleryArrImage Image Removed" + ti.ToString());
             }
             foreach (IDalamudTextureWrap gt in galleryThumbs)
             {
                 gt.Dispose();
                 Array.Clear(galleryThumbs);
-                plugin.chatGUI.Print("GalleryArrThumb Image Removed" + gt.ToString());
             }
             for(int o = 0; o < otherImages.Length; o++)
             {
                 otherImages[o].Dispose();
                 Array.Clear(otherImages);
-                plugin.chatGUI.Print("Other Image Removed" + o.ToString());
             }
         }
         public void AddChapterSelection()

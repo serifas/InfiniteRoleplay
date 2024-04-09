@@ -32,7 +32,7 @@ namespace Networking
         {
             try
             {
-                DataSender.PrintMessage("Checking connection to Infinite Roleplay", LogLevels.Log);
+                //DataSender.PrintMessage("Checking connection to Infinite Roleplay", LogLevels.Log);
                 if (_tcpClient != null && _tcpClient.Client != null && _tcpClient.Client.Connected)
                 {
                     // Detect if client disconnected

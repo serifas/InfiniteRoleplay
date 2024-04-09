@@ -2,6 +2,7 @@ using Dalamud.Hooking;
 using InfiniteRoleplay;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Networking
 {
@@ -77,7 +78,7 @@ namespace Networking
             if(logLevel == LogLevels.LogError)
             {
                 Dalamud.Logging.PluginLog.LogError(message);
-            }
+            }            
             
         }
 
@@ -211,7 +212,6 @@ namespace Networking
                 {
                     buffer.WriteString(storyChapters[i].Item1);
                     buffer.WriteString(storyChapters[i].Item2);
-                    plugin.chatGUI.Print(storyChapters[i].Item1);
                 }
                 await ClientTCP.SendData(buffer.ToArray());
                 buffer.Dispose();

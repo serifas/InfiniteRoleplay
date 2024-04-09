@@ -23,7 +23,6 @@ public class LoginWindow : Window, IDisposable
     public bool attemptedLogin = false;
     public bool login = true;
     public bool forgot = false;
-    public static bool loginRequest = false;
     public bool register = false;
     public bool AgreeTOS = false;
     public bool Agree18 = false;

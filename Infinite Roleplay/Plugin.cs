@@ -13,6 +13,7 @@ using Dalamud.Game.Text;
 using System.Runtime.InteropServices;
 using System.Timers;
 using System;
+using Dalamud.Game.Text.SeStringHandling;
 
 namespace InfiniteRoleplay
 {
@@ -52,7 +53,6 @@ namespace InfiniteRoleplay
         private IDutyState dutyState { get; init; }
         private IContextMenu ct { get; init; }
         private ICommandManager CommandManager { get; init; }
-        private Timer timer = new Timer(10000);
         [LibraryImport("user32")]
         internal static partial short GetKeyState(int nVirtKey);
         public static bool CtrlPressed() => (GetKeyState(0xA2) & 0x8000) != 0 || (GetKeyState(0xA3) & 0x8000) != 0;
@@ -76,7 +76,7 @@ namespace InfiniteRoleplay
             this.targetManager = targetManager;
             this.framework = framework;
             chatGUI = chatG;
-            ct = contextMenu;
+            this.ct = contextMenu;
             this.dutyState = dutyState;
             Configuration = pluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
             Configuration.Initialize(pluginInterface);
@@ -93,48 +93,71 @@ namespace InfiniteRoleplay
             this.pluginInterface.UiBuilder.Draw += DrawUI;
             this.pluginInterface.UiBuilder.OpenConfigUi += LoadOptions;
             this.pluginInterface.UiBuilder.OpenMainUi += DrawLoginUI;
-            ct.OnMenuOpened += AddContextMenu;
+            this.ct.OnMenuOpened += AddContextMenu;
             DataReceiver.plugin = this;
             this.framework.Update += Update;
-            ReloadClient();
         }
 
+
+        public void AttemptLogin()
+        {
+            string username = Configuration.username.ToString();
+            string password = Configuration.password.ToString();
+            PlayerCharacter playerCharacter = this.clientState.LocalPlayer;
+            if(Configuration.username.Length > 0 &&  Configuration.password.Length > 0 && playerCharacter != null)
+            {
+                DataSender.Login(username, password, playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString());
+            }
+        }
 
         public void AddContextMenu(MenuOpenedArgs args)
         {
             var targetPlayer = targetManager.Target as PlayerCharacter;
-            if(args.AddonPtr == (nint)0 && targetPlayer != null)
+            try
             {
-                MenuItem view = new MenuItem();
-                MenuItem bookmark = new MenuItem();
-                view.Name = "View Infinite Profile";               
-                view.PrefixColor = 56;
-                view.Prefix = SeIconChar.BoxedQuestionMark;
-                // Convert the ImGui color to a uint color value
-                bookmark.Name = "Bookmark Infinite Profile";
-                bookmark.PrefixColor = 56;
-                bookmark.Prefix = SeIconChar.BoxedPlus;
-                view.OnClicked += ViewProfile;
-                bookmark.OnClicked += BookmarkProfile;
-                args.AddMenuItem(view);
-                args.AddMenuItem(bookmark);
 
+                if (args.AddonPtr == (nint)0 && targetPlayer != null && loggedIn == true)
+                {
+                    MenuItem view = new MenuItem();
+                    MenuItem bookmark = new MenuItem();
+                    view.Name = "View Infinite Profile";
+                    view.PrefixColor = 56;
+                    view.Prefix = SeIconChar.BoxedQuestionMark;
+                    bookmark.Name = "Bookmark Infinite Profile";
+                    bookmark.PrefixColor = 56;
+                    bookmark.Prefix = SeIconChar.BoxedPlus;
+                    view.OnClicked += ViewProfile;
+                    bookmark.OnClicked += BookmarkProfile;
+                    args.AddMenuItem(view);
+                    args.AddMenuItem(bookmark);
+
+                }
+            }
+            catch(Exception ex) 
+            {
+                DataSender.PrintMessage("Error when creating context " + ex.ToString(), LogLevels.LogError);
             }
         }
 
         private void ViewProfile(MenuItemClickedArgs args)
         {
-            var targetPlayer = targetManager.Target as PlayerCharacter;
-            if (targetPlayer != null && args.AddonPtr == (nint)0)
-            {
-                LoginWindow.loginRequest = true;
-                ReloadTarget();
+            try { 
+                var targetPlayer = targetManager.Target as PlayerCharacter;
+                string characterName = targetPlayer.Name.ToString();
+                string characterWorld = targetPlayer.HomeWorld.GameData.Name.ToString();
+                ReportWindow.reportCharacterName = characterName;
+                ReportWindow.reportCharacterWorld = characterWorld;
+                TargetWindow.characterNameVal = characterName;
+                TargetWindow.characterWorldVal = characterWorld;
                 targetWindow.IsOpen = true;
-                TargetWindow.characterNameVal = targetPlayer.Name.ToString();
-                TargetWindow.characterWorldVal = targetPlayer.HomeWorld.GameData.Name.ToString();
-                DataSender.RequestTargetProfile(targetPlayer.Name.ToString(), targetPlayer.HomeWorld.GameData.Name.ToString(), Configuration.username);
+                DataSender.RequestTargetProfile(characterName, characterWorld, Configuration.username);
             }
-           
+            catch(Exception ex)
+            {
+                DataSender.PrintMessage("Error when viewing profile from context " + ex.ToString(), LogLevels.LogError);
+            }
+
+
         }
         private void BookmarkProfile(MenuItemClickedArgs args)
         {
@@ -221,12 +244,11 @@ namespace InfiniteRoleplay
         }
         public void Dispose()
         {
-            this.timer.Stop();
-            this.timer.Dispose();
             this.pluginInterface.UiBuilder.Draw -= DrawUI;
             this.pluginInterface.UiBuilder.OpenConfigUi -= LoadOptions;
             this.pluginInterface.UiBuilder.OpenMainUi -= DrawLoginUI;
             this.framework.Update -= Update;
+            this.ct.OnMenuOpened -= AddContextMenu;
             this.CommandManager.RemoveHandler(CommandName);
             this.WindowSystem.RemoveAllWindows();
             if(ClientHandleData.packets.Count > 0)
@@ -236,25 +258,24 @@ namespace InfiniteRoleplay
             Imaging.RemoveAllImages(this);
 
         }
-        public void CloseAllWindows(bool closeLogin)
+        public void CloseAllWindows()
         { 
-            if(closeLogin == true)
+            if(uiLoaded == true)
             {
-                loginWindow.IsOpen = false;
+                loginWindow.IsOpen = false;            
+                profileWindow.IsOpen = false;
+                bookmarksWindow.IsOpen = false;
+                imagePreview.IsOpen = false;
+                targetWindow.IsOpen = false;
+                panelWindow.IsOpen = false;
+                restorationWindow.IsOpen = false;
+                verificationWindow.IsOpen = false;
             }
-            profileWindow.IsOpen = false;
-            bookmarksWindow.IsOpen = false;
-            imagePreview.IsOpen = false;
-            targetWindow.IsOpen = false;
-            panelWindow.IsOpen = false;
-            restorationWindow.IsOpen = false;
-            verificationWindow.IsOpen = false;
         }
 
 
         public void Update(IFramework framework)
         {
-            var targetPlayer = targetManager.Target as PlayerCharacter;
             tick++;
             if (loadPreview == true)
             {
@@ -268,7 +289,7 @@ namespace InfiniteRoleplay
                 {
                     if (!ClientTCP.IsConnectedToServer(ClientTCP.clientSocket))
                     {
-                        chatGUI.Print("Connection was lost. Reconnecting to Infinite Roleplay");
+                        chatGUI.Print("Connecting to Infinite Roleplay");
                         ReloadClient();
                     }
                 }
@@ -286,7 +307,7 @@ namespace InfiniteRoleplay
             this.WindowSystem.Draw();
         }
 
-      
+        
 
         public async void DisconnectFromServer()
         {
@@ -305,7 +326,7 @@ namespace InfiniteRoleplay
             }
             else
             {
-                CloseAllWindows(false);
+                CloseAllWindows();
                 loginWindow.IsOpen = true;
             }
             if(loginWindow.IsOpen == false && loggedIn == false)
