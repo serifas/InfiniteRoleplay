@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ZLUACexA9gYlVLUSMwh4CVfczoyAUAV1sOSYsItG04hHeyoqCGkwN58xacK0b+VPDK9XPlwJOSxenqFN35UNxg==",
+  "dgSpecHash": "DjA7UKbbcbi1Z4TugJdRuNipedGdpo698BSr/qOn+WE/CCpgOu1RcZMguDf4FLoACfmITij/Dyl6r0QL5wSwHA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\InfiniteRoleplay.csproj",
+  "projectFilePath": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\InfiniteRoleplay.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Preac\\.nuget\\packages\\dalamudpackager\\2.1.12\\dalamudpackager.2.1.12.nupkg.sha512",
     "C:\\Users\\Preac\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\8.0.0\\microsoft.extensions.dependencyinjection.8.0.0.nupkg.sha512",

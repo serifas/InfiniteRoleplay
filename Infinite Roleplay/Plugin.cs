@@ -95,7 +95,9 @@ namespace InfiniteRoleplay
             this.pluginInterface.UiBuilder.OpenMainUi += DrawLoginUI;
             this.ct.OnMenuOpened += AddContextMenu;
             DataReceiver.plugin = this;
+            this.clientState.Login += CheckConnection;
             this.framework.Update += Update;
+
         }
 
 
@@ -113,29 +115,21 @@ namespace InfiniteRoleplay
         public void AddContextMenu(MenuOpenedArgs args)
         {
             var targetPlayer = targetManager.Target as PlayerCharacter;
-            try
+            if (args.AddonPtr == (nint)0 && targetPlayer != null && loggedIn == true)
             {
+                MenuItem view = new MenuItem();
+                MenuItem bookmark = new MenuItem();
+                view.Name = "View Infinite Profile";
+                view.PrefixColor = 56;
+                view.Prefix = SeIconChar.BoxedQuestionMark;
+                bookmark.Name = "Bookmark Infinite Profile";
+                bookmark.PrefixColor = 56;
+                bookmark.Prefix = SeIconChar.BoxedPlus;
+                view.OnClicked += ViewProfile;
+                bookmark.OnClicked += BookmarkProfile;
+                args.AddMenuItem(view);
+                args.AddMenuItem(bookmark);
 
-                if (args.AddonPtr == (nint)0 && targetPlayer != null && loggedIn == true)
-                {
-                    MenuItem view = new MenuItem();
-                    MenuItem bookmark = new MenuItem();
-                    view.Name = "View Infinite Profile";
-                    view.PrefixColor = 56;
-                    view.Prefix = SeIconChar.BoxedQuestionMark;
-                    bookmark.Name = "Bookmark Infinite Profile";
-                    bookmark.PrefixColor = 56;
-                    bookmark.Prefix = SeIconChar.BoxedPlus;
-                    view.OnClicked += ViewProfile;
-                    bookmark.OnClicked += BookmarkProfile;
-                    args.AddMenuItem(view);
-                    args.AddMenuItem(bookmark);
-
-                }
-            }
-            catch(Exception ex) 
-            {
-                DataSender.PrintMessage("Error when creating context " + ex.ToString(), LogLevels.LogError);
             }
         }
 
@@ -149,6 +143,7 @@ namespace InfiniteRoleplay
                 ReportWindow.reportCharacterWorld = characterWorld;
                 TargetWindow.characterNameVal = characterName;
                 TargetWindow.characterWorldVal = characterWorld;
+                ReloadTarget();
                 targetWindow.IsOpen = true;
                 DataSender.RequestTargetProfile(characterName, characterWorld, Configuration.username);
             }
@@ -191,85 +186,99 @@ namespace InfiniteRoleplay
             DataReceiver.HooksLoadStatus = -1;
             DataReceiver.StoryLoadStatus = -1;
         }
-        public void UnloadUI()
-        {
-            if(uiLoaded == true)
-            {
-                this.WindowSystem.RemoveAllWindows();
-                uiLoaded = false;
-            }           
-        }
+       
         public void LoadUI()
         {
             if (uiLoaded == false)
             {
-                targetWindow = new TargetWindow(this, this.pluginInterface);
+                try
+                {
+                    targetWindow = new TargetWindow(this, this.pluginInterface);
 
-                imagePreview = new ImagePreview(this, this.pluginInterface, targetManager);
+                    imagePreview = new ImagePreview(this, this.pluginInterface, targetManager);
 
-                bookmarksWindow = new BookmarksWindow(this, this.pluginInterface, targetWindow);
+                    bookmarksWindow = new BookmarksWindow(this, this.pluginInterface, targetWindow);
 
-                optionsWindow = new OptionsWindow(this, this.pluginInterface);
+                    optionsWindow = new OptionsWindow(this, this.pluginInterface);
 
-                reportWindow = new ReportWindow(this, this.pluginInterface);
+                    reportWindow = new ReportWindow(this, this.pluginInterface);
 
 
-                panelWindow = new PanelWindow(this, this.pluginInterface, targetManager);
+                    panelWindow = new PanelWindow(this, this.pluginInterface, targetManager);
 
-                loginWindow = new LoginWindow(this, this.clientState.LocalPlayer);
-                profileWindow = new ProfileWindow(this, this.pluginInterface, chatGUI, this.Configuration);
-                restorationWindow = new RestorationWindow(this, this.pluginInterface);
-                verificationWindow = new VerificationWindow(this, this.pluginInterface);
-                termsWindow = new TOS(this, this.pluginInterface);
-                // this.WindowSystem.AddWindow(new Loader(this.pluginInterface, this));
-                // this.WindowSystem.AddWindow(new SystemsWindow(this));
-                this.WindowSystem.AddWindow(profileWindow);
+                    loginWindow = new LoginWindow(this, this.clientState.LocalPlayer);
+                    profileWindow = new ProfileWindow(this, this.pluginInterface, chatGUI, this.Configuration);
+                    restorationWindow = new RestorationWindow(this, this.pluginInterface);
+                    verificationWindow = new VerificationWindow(this, this.pluginInterface);
+                    termsWindow = new TOS(this, this.pluginInterface);
+                    // this.WindowSystem.AddWindow(new Loader(this.pluginInterface, this));
+                    // this.WindowSystem.AddWindow(new SystemsWindow(this));
+                    this.WindowSystem.AddWindow(profileWindow);
 
-                //  this.WindowSystem.AddWindow(new Rulebook(this));
-                this.WindowSystem.AddWindow(loginWindow);
-                this.WindowSystem.AddWindow(optionsWindow);
-                //this.WindowSystem.AddWindow(new SystemsWindow(this));
-                this.WindowSystem.AddWindow(panelWindow);
-                //   this.WindowSystem.AddWindow(new MessageBox(this));
-                //  this.WindowSystem.AddWindow(new AdminWindow(this, this.pluginInterface));
-                this.WindowSystem.AddWindow(targetWindow);
-                this.WindowSystem.AddWindow(bookmarksWindow);
-                this.WindowSystem.AddWindow(imagePreview);
-                this.WindowSystem.AddWindow(reportWindow);
-                this.WindowSystem.AddWindow(verificationWindow);
-                this.WindowSystem.AddWindow(restorationWindow);
-                this.WindowSystem.AddWindow(termsWindow);
-                uiLoaded = true;
+                    //  this.WindowSystem.AddWindow(new Rulebook(this));
+                    this.WindowSystem.AddWindow(loginWindow);
+                    this.WindowSystem.AddWindow(optionsWindow);
+                    //this.WindowSystem.AddWindow(new SystemsWindow(this));
+                    this.WindowSystem.AddWindow(panelWindow);
+                    //   this.WindowSystem.AddWindow(new MessageBox(this));
+                    //  this.WindowSystem.AddWindow(new AdminWindow(this, this.pluginInterface));
+                    this.WindowSystem.AddWindow(targetWindow);
+                    this.WindowSystem.AddWindow(bookmarksWindow);
+                    this.WindowSystem.AddWindow(imagePreview);
+                    this.WindowSystem.AddWindow(reportWindow);
+                    this.WindowSystem.AddWindow(verificationWindow);
+                    this.WindowSystem.AddWindow(restorationWindow);
+                    this.WindowSystem.AddWindow(termsWindow);
+                    uiLoaded = true;
+                }
+                catch(Exception ex)
+                {
+                    DataSender.PrintMessage("Unable to Load Plugin UI LoadUI Failed " + ex.ToString(), LogLevels.LogError);
+                }
             }
         }
         public void Dispose()
         {
-            this.pluginInterface.UiBuilder.Draw -= DrawUI;
-            this.pluginInterface.UiBuilder.OpenConfigUi -= LoadOptions;
-            this.pluginInterface.UiBuilder.OpenMainUi -= DrawLoginUI;
-            this.framework.Update -= Update;
-            this.ct.OnMenuOpened -= AddContextMenu;
-            this.CommandManager.RemoveHandler(CommandName);
-            this.WindowSystem.RemoveAllWindows();
-            if(ClientHandleData.packets.Count > 0)
+            try
             {
-                ClientHandleData.InitializePackets(false);
+                this.pluginInterface.UiBuilder.Draw -= DrawUI;
+                this.pluginInterface.UiBuilder.OpenConfigUi -= LoadOptions;
+                this.pluginInterface.UiBuilder.OpenMainUi -= DrawLoginUI;
+                this.framework.Update -= Update;
+                this.ct.OnMenuOpened -= AddContextMenu;
+                this.CommandManager.RemoveHandler(CommandName);
+                this.WindowSystem.RemoveAllWindows();
+                if(ClientHandleData.packets.Count > 0)
+                {
+                    ClientHandleData.InitializePackets(false);
+                }
+                Imaging.RemoveAllImages(this);
             }
-            Imaging.RemoveAllImages(this);
+            catch (Exception ex)
+            {
+                DataSender.PrintMessage("Unable to Dispose " + ex.ToString(), LogLevels.LogError);
+            }
 
         }
         public void CloseAllWindows()
         { 
             if(uiLoaded == true)
             {
-                loginWindow.IsOpen = false;            
-                profileWindow.IsOpen = false;
-                bookmarksWindow.IsOpen = false;
-                imagePreview.IsOpen = false;
-                targetWindow.IsOpen = false;
-                panelWindow.IsOpen = false;
-                restorationWindow.IsOpen = false;
-                verificationWindow.IsOpen = false;
+                try 
+                { 
+                    loginWindow.IsOpen = false;            
+                    profileWindow.IsOpen = false;
+                    bookmarksWindow.IsOpen = false;
+                    imagePreview.IsOpen = false;
+                    targetWindow.IsOpen = false;
+                    panelWindow.IsOpen = false;
+                    restorationWindow.IsOpen = false;
+                    verificationWindow.IsOpen = false;
+                }
+                catch(Exception ex)
+                {
+                    DataSender.PrintMessage("Unable to close windows CloseAllWindows failed " + ex.ToString(), LogLevels.LogError);
+                }
             }
         }
 
@@ -285,13 +294,26 @@ namespace InfiniteRoleplay
             if (tick >= 300)
             {
                 tick = 0;
-                if (clientState.IsLoggedIn == true && clientState.LocalPlayer != null)
+                CheckConnection();
+            }
+        }
+        public void CheckConnection()
+        {
+            if (clientState.IsLoggedIn == true && clientState.LocalPlayer != null)
+            {
+                if (!ClientTCP.IsConnectedToServer(ClientTCP.clientSocket))
                 {
-                    if (!ClientTCP.IsConnectedToServer(ClientTCP.clientSocket))
+                    try
                     {
-                        chatGUI.Print("Connecting to Infinite Roleplay");
+                        DataSender.PrintMessage("Connecting to Infinite Roleplay", LogLevels.Log);
                         ReloadClient();
                     }
+                    catch (Exception ex)
+                    {
+                        DataSender.PrintMessage("Could not connect to Infinite Roleplay", LogLevels.LogError);
+                        chatGUI.Print("Could not connect to Infinite Roleplay");
+                    }
+
                 }
             }
         }
@@ -311,14 +333,29 @@ namespace InfiniteRoleplay
 
         public async void DisconnectFromServer()
         {
-            ClientTCP.InitializingNetworking(false);
+            try
+            {
+                ClientTCP.InitializingNetworking(false);
+            }
+            catch(Exception ex)
+            {
+                DataSender.PrintMessage("Unable to disconnect DisconnectFromServer failed!" + ex.ToString(), LogLevels.LogError);
+            }
         }
         public static void ClearPackets()
         {
-            ClientHandleData.InitializePackets(false);
-        }
+            try
+            {
+                ClientHandleData.InitializePackets(false);
+            }
+            catch(Exception ex)
+            {
+                DataSender.PrintMessage("Unable to remove packets ClearPackets failed!" + ex.ToString(), LogLevels.LogError);
+            }
+}
         public void DrawLoginUI()
-        {           
+        {
+            CheckConnection();
             if (loggedIn == true)
             {
                 panelWindow.IsOpen = true;

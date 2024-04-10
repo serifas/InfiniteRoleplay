@@ -129,23 +129,12 @@ namespace Networking
          
          
          */
-        public static void RecPermissions(byte[] data)
-        {
-            var buffer = new ByteBuffer();
-            buffer.WriteBytes(data);
-            var packetID = buffer.ReadInt();
-            int permissions = buffer.ReadInt();
-            if(permissions == 1)
-            {
-                isAdmin = true;
-            }
-            else
-            {
-                isAdmin = false;
-            }
-        }
+     
         public static void RecBookmarks(byte[] data)
         {
+            try
+            {
+
             var buffer = new ByteBuffer();
             buffer.WriteBytes(data);
             var packetID = buffer.ReadInt();
@@ -165,6 +154,11 @@ namespace Networking
                 BookmarksWindow.profiles.Add(characterName, characterWorld);
             }
             BookmarkLoadStatus = 1;
+            }
+            catch(Exception ex)
+            {
+                DataSender.PrintMessage("Could not retreive bookmarks" + ex.ToString(), LogLevels.LogError);
+            }
         }
         public static void RecRulebookContent(byte[] data)
         {
@@ -452,17 +446,9 @@ namespace Networking
                 string url = buffer.ReadString();
                 bool nsfw = buffer.ReadBool();
                 bool trigger = buffer.ReadBool();
-                try
-                {
-
-                    Imaging.DownloadProfileImage(false, url, profileID, nsfw, trigger, plugin, i);
-                    TargetWindow.loading = "Gallery Image" + i;
-                    TargetWindow.currentInd = i;
-                } 
-                catch (Exception ex)
-                {
-                    DataSender.PrintMessage("Error Loading Images" + ex.Message.ToString(), LogLevels.LogError);
-                }
+                Imaging.DownloadProfileImage(false, url, profileID, nsfw, trigger, plugin, i);
+                TargetWindow.loading = "Gallery Image" + i;
+                TargetWindow.currentInd = i;
             }
             TargetWindow.existingGalleryImageCount = imageCount;
             TargetWindow.ExistingGallery = true;
@@ -670,8 +656,7 @@ namespace Networking
             {
                 string chapterName = buffer.ReadString();
                 string chapterContent = buffer.ReadString();
-                ProfileWindow.storyChapterCount = i + 1;
-                ProfileWindow.resetStory = true;
+                ProfileWindow.storyChapterCount = i;
                 ProfileWindow.ChapterNames[i] = chapterName;
                 ProfileWindow.ChapterContents[i] = chapterContent;
                 ProfileWindow.storyChapterExists[i] = true;

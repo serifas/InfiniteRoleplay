@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Numerics;
 using Dalamud.Utility;
-using OtterGui.Raii;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using Networking;
 using InfiniteRoleplay.Helpers;
@@ -15,10 +14,7 @@ using Dalamud.Interface.Internal;
 using Dalamud.Plugin.Services;
 using InfiniteRoleplay.Scripts.Misc;
 using OtterGui;
-using Dalamud.Interface;
 using System.Linq;
-using Dalamud.Interface.Utility.Raii;
-using System.Reflection.Emit;
 
 namespace InfiniteRoleplay.Windows
 {
@@ -28,21 +24,12 @@ namespace InfiniteRoleplay.Windows
         public static string loading;
         public static bool AllLoaded;
         public static float percentage = 0f;
-        public static bool Reorder = false;
         private Plugin plugin;
         public static PlayerCharacter playerCharacter;
         private DalamudPluginInterface pg;
-        public static bool addGalleryImageGUI = false;
         private FileDialogManager _fileDialogManager;
         public Configuration configuration;
-        public static bool editBio = false;
-        public static bool editHooks = false;
-        public static bool alignmentHidden = false;
-        public static bool personalityHidden = false;
-        public static bool galleryTableAdded = false;
-        public static bool resetHooks;
         public static int imageIndex = 0;
-        public static bool resetStory;
         public static IDalamudTextureWrap pictureTab;
         public static string[] HookNames = new string[31];
         public static string[] HookContents = new string[31];
@@ -54,21 +41,16 @@ namespace InfiniteRoleplay.Windows
         public static bool[] TRIGGER = new bool[31];
         public static bool[] ImageExists = new bool[31];
         public static bool[] viewChapter = new bool[31];
-        public static bool editStory, addOOC, editOOC, addGallery, editGallery, addAvatar, editAvatar, addProfile, editProfile, LoadPreview = false;
-        public static int hookCount, storyChapterCount = 0;
+        public static bool[] hookExists = new bool[31];
+        public static bool[] storyChapterExists = new bool[31];
+        public static bool editStory, addOOC, addGallery, editHooks, editBio, 
+                           addAvatar, editAvatar, addProfile, editProfile, LoadPreview, Reorder,
+                           addGalleryImageGUI, alignmentHidden, personalityHidden, galleryTableAdded = false;
         public static int hookEditCount;
-        public static int chapterCount = 0;
         public static int chapterEditCount;
-        public static string oocInfo = string.Empty;
-        public bool ExistingProfile;
-        public bool ExistingStory;
-        public bool ExistingOOC;
-        public bool ExistingGallery;
-        public bool ExistingBio;
-        public bool ReorderHooks, ReorderChapters;
-        public bool ExistingHooks;
-        public static string storyTitle = string.Empty;
-        public static int currentAlignment, currentPersonality_1, currentPersonality_2, currentPersonality_3 = 0;
+        public static string oocInfo, storyTitle = string.Empty;
+        public bool ExistingProfile, ExistingStory, ExistingOOC, ExistingHooks, ExistingGallery, ExistingBio, ReorderHooks, ReorderChapters, AddHooks, AddStoryChapter;
+        public static int chapterCount, currentAlignment, currentPersonality_1, currentPersonality_2, currentPersonality_3, hookCount, storyChapterCount = 0;
         public byte[] avatarBytes;
         public static float _modVersionWidth, loaderInd;
         public static IDalamudTextureWrap avatarHolder, currentAvatarImg;
@@ -76,21 +58,10 @@ namespace InfiniteRoleplay.Windows
         public static List<IDalamudTextureWrap> galleryImagesList = new List<IDalamudTextureWrap>();
         public static IDalamudTextureWrap[] galleryImages, galleryThumbs;
         public static string[] bioFieldsArr = new string[7];
-
-        public bool reduceChapters = false;
-        public bool reduceHooks = false;
-        public IDalamudTextureWrap blank;
-        public static System.Drawing.Image bl;
         private IDalamudTextureWrap persistAvatarHolder;
         private IDalamudTextureWrap[] otherImages;
-        public static bool[] hookExists = new bool[31];
-        public static bool[] storyChapterExists = new bool[31];
         public static bool drawChapter;
         public static int currentChapter;
-
-        public bool AddHooks { get; private set; }
-        public bool AddStoryChapter { get; private set; }
-        public bool ReorderChaptersAfterCreation { get; private set; }
 
         public ProfileWindow(Plugin plugin,
                              DalamudPluginInterface Interface,
@@ -301,7 +272,7 @@ namespace InfiniteRoleplay.Windows
                             ImGui.SameLine();
                             if (ImGui.Button("Add Chapter"))
                             {
-                                    CreateChapter();
+                                CreateChapter();
                             }
                             using (OtterGui.Raii.ImRaii.Disabled(!storyChapterExists.Any(x => x)))
                             {
@@ -464,10 +435,6 @@ namespace InfiniteRoleplay.Windows
                 ChapterNames[storyChapterCount] = "New Chapter";
                 currentChapter = storyChapterCount;
                 viewChapter[storyChapterCount] = true;
-            }
-            if(storyChapterCount > 3)
-            {
-                ReorderChapters = true;
             }
             
         }
@@ -793,34 +760,13 @@ namespace InfiniteRoleplay.Windows
             storyTitle = string.Empty;
         }
        
-        public void SET_VAL(string mytype, string myvalue)
-        {
-            this.GetType().GetField(mytype).SetValue(this, myvalue);
-            
-        }
-        public object FindValByName(string PropName)
-        {
-            PropName = PropName.ToLower();
-            var props = this.GetType().GetProperties();
-
-            foreach (var item in props)
-            {
-                if (item.Name.ToLower() == PropName)
-                {
-                    return item.GetValue(this);
-                }
-            }
-            return null;
-        }
         public static void ClearUI()
         {
             editBio = false;
             editHooks = false;
             editStory = false;
             addOOC = false;
-            editOOC = false;
             addGallery = false;
-            editGallery = false;
             drawChapter = false;
         }
         public void Dispose()
@@ -856,7 +802,6 @@ namespace InfiniteRoleplay.Windows
         public void AddChapterSelection()
         {
             string chapterName = ChapterNames[currentChapter];
-
             using var combo = OtterGui.Raii.ImRaii.Combo("##Chapter", chapterName);
             if (!combo)
                 return;
@@ -872,7 +817,7 @@ namespace InfiniteRoleplay.Windows
                 }
                 if (newText != string.Empty)
                 {
-                    if (ImGui.Selectable("Chapter " + idx + "||" + label+ "##"+ idx, idx == currentChapter))
+                    if (ImGui.Selectable(label+ "##"+ idx, idx == currentChapter))
                     {
                         currentChapter = idx;
                         storyChapterExists[currentChapter] = true;                      
@@ -979,11 +924,9 @@ namespace InfiniteRoleplay.Windows
                     DataReceiver.currentAvatar = this.avatarBytes;
                     currentAvatarImg = pg.UiBuilder.LoadImage(avatarBytes);
                 }
-               
-
-
             }, 0, null, this.configuration.AlwaysOpenDefaultImport);
+
         }
-       
+
     }
 }

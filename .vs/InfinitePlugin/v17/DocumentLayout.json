@@ -1,117 +1,125 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\",
+  "WorkspaceRootPath": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\desktop\\f\\infiniteroleplay\\infinite roleplay\\plugin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\plugin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\desktop\\f\\infiniteroleplay\\infinite roleplay\\network\\datareceiver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\network\\datareceiver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\desktop\\f\\infiniteroleplay\\infinite roleplay\\network\\datasender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\network\\datasender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\desktop\\f\\infiniteroleplay\\infinite roleplay\\windows\\profilewindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\windows\\profilewindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\windows\\profilewindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\desktop\\f\\infiniteroleplay\\infinite roleplay\\windows\\panelwindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\windows\\panelwindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\network\\datareceiver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\network\\datareceiver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\desktop\\f\\infiniteroleplay\\infinite roleplay\\helpers\\imaging.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\helpers\\imaging.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\plugin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\plugin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\desktop\\f\\infiniteroleplay\\infinite roleplay\\windows\\bookmarkswindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\windows\\bookmarkswindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\desktop\\f\\infiniteroleplay\\infinite roleplay\\windows\\targetwindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\windows\\targetwindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\desktop\\f\\infiniteroleplay\\infinite roleplay\\network\\clienttcp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\network\\clienttcp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\desktop\\f\\infiniteroleplay\\infinite roleplay\\windows\\loginwindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\windows\\loginwindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\windows\\loginwindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\desktop\\f\\infiniteroleplay\\infinite roleplay\\windows\\optionswindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\windows\\optionswindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\windows\\optionswindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\desktop\\f\\infiniteroleplay\\infinite roleplay\\dalamud.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\dalamud.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\windows\\panelwindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\windows\\panelwindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\desktop\\f\\infiniteroleplay\\infinite roleplay\\network\\clienthandledata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\network\\clienthandledata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\windows\\report window.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\windows\\report window.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\desktop\\f\\infiniteroleplay\\infinite roleplay\\windows\\verificationwindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\windows\\verificationwindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\windows\\targetwindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\windows\\targetwindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\desktop\\f\\infiniteroleplay\\infinite roleplay\\infiniteroleplay.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\infiniteroleplay.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\desktop\\f\\infiniteroleplay\\infinite roleplay\\defines\\constants.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\defines\\constants.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\desktop\\f\\infiniteroleplay\\infinite roleplay\\helpers\\misc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\helpers\\misc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\desktop\\f\\infiniteroleplay\\infinite roleplay\\configuration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\configuration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\desktop\\f\\infiniteroleplay\\infinite roleplay\\infiniteroleplay.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
-      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\infiniteroleplay.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0143E2CC-A6C2-4573-AEC0-843CBC4C0914}|OtterGui\\OtterGui.csproj|c:\\users\\preac\\desktop\\f\\infiniteroleplay\\ottergui\\ottergui.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
-      "RelativeMoniker": "D:0:0:{0143E2CC-A6C2-4573-AEC0-843CBC4C0914}|OtterGui\\OtterGui.csproj|solutionrelative:ottergui\\ottergui.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\desktop\\f\\infiniteroleplay\\infinite roleplay\\windows\\tos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\windows\\tos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\windows\\tos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\desktop\\f\\infiniteroleplay\\infinite roleplay\\windows\\imagepreview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\windows\\bookmarkswindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\windows\\bookmarkswindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\network\\clienttcp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\network\\clienttcp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\network\\clienthandledata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\network\\clienthandledata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\network\\bytebuffer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\network\\bytebuffer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\network\\datasender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\network\\datasender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\helpers\\imaging.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\helpers\\imaging.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\dalamud.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\dalamud.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\windows\\verificationwindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\windows\\verificationwindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\infiniteroleplay.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\infiniteroleplay.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\defines\\constants.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\defines\\constants.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\helpers\\misc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\helpers\\misc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\configuration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\configuration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\infiniteroleplay.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
+      "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\infiniteroleplay.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0143E2CC-A6C2-4573-AEC0-843CBC4C0914}|OtterGui\\OtterGui.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\ottergui\\ottergui.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
+      "RelativeMoniker": "D:0:0:{0143E2CC-A6C2-4573-AEC0-843CBC4C0914}|OtterGui\\OtterGui.csproj|solutionrelative:ottergui\\ottergui.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\windows\\imagepreview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\windows\\imagepreview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\desktop\\f\\infiniteroleplay\\infinite roleplay\\windows\\restorationwindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\windows\\restorationwindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\windows\\restorationwindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\desktop\\f\\infiniteroleplay\\infinite roleplay\\ui\\common\\section_events.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\ui\\common\\section_events.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
       "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\ui\\common\\section_events.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\desktop\\f\\infiniteroleplay\\infinite roleplay\\ui\\common\\spacer.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\ui\\common\\spacer.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
       "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\ui\\common\\spacer.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\desktop\\f\\infiniteroleplay\\infinite roleplay\\ui\\common\\blank.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\ui\\common\\blank.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
       "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\ui\\common\\blank.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\desktop\\f\\infiniteroleplay\\infinite roleplay\\ui\\common\\profiles\\galleries\\picturetab.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\ui\\common\\profiles\\galleries\\picturetab.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
       "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\ui\\common\\profiles\\galleries\\picturetab.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\desktop\\f\\infiniteroleplay\\infinite roleplay\\ui\\common\\disc_btn.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "AbsoluteMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|c:\\users\\preac\\holder\\infiniteroleplay\\infinite roleplay\\ui\\common\\disc_btn.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
       "RelativeMoniker": "D:0:0:{A2A9CC6D-37D2-4B52-A0BD-68F764EAF84B}|Infinite Roleplay\\InfiniteRoleplay.csproj|solutionrelative:infinite roleplay\\ui\\common\\disc_btn.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
     },
     {
@@ -125,7 +133,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 12,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
@@ -133,100 +141,127 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Report Window.cs",
+              "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\Report Window.cs",
+              "RelativeDocumentMoniker": "Infinite Roleplay\\Windows\\Report Window.cs",
+              "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\Report Window.cs",
+              "RelativeToolTip": "Infinite Roleplay\\Windows\\Report Window.cs",
+              "ViewState": "AQIAADMAAAAAAAAAAAAowAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-10T03:29:07.354Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "ByteBuffer.cs",
+              "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Network\\ByteBuffer.cs",
+              "RelativeDocumentMoniker": "Infinite Roleplay\\Network\\ByteBuffer.cs",
+              "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Network\\ByteBuffer.cs",
+              "RelativeToolTip": "Infinite Roleplay\\Network\\ByteBuffer.cs",
+              "ViewState": "AQIAAB8AAAAAAAAAAAA0wAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-10T02:27:05.815Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 1,
               "Title": "DataReceiver.cs",
-              "DocumentMoniker": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Network\\DataReceiver.cs",
+              "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Network\\DataReceiver.cs",
               "RelativeDocumentMoniker": "Infinite Roleplay\\Network\\DataReceiver.cs",
-              "ToolTip": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Network\\DataReceiver.cs",
+              "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Network\\DataReceiver.cs",
               "RelativeToolTip": "Infinite Roleplay\\Network\\DataReceiver.cs",
-              "ViewState": "AQIAALoBAAAAAAAAAADgv8kBAAAfAAAA",
+              "ViewState": "AQIAAIMCAAAAAAAAAADgv5ICAAAeAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-21T05:06:02.199Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "ProfileWindow.cs",
-              "DocumentMoniker": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\ProfileWindow.cs",
+              "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\ProfileWindow.cs",
               "RelativeDocumentMoniker": "Infinite Roleplay\\Windows\\ProfileWindow.cs",
-              "ToolTip": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\ProfileWindow.cs",
+              "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\ProfileWindow.cs",
               "RelativeToolTip": "Infinite Roleplay\\Windows\\ProfileWindow.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAACcAAAAhAAAA",
+              "ViewState": "AQIAAB4DAAAAAAAAAADgvzMDAAApAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-21T05:06:02.197Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 4,
               "Title": "OptionsWindow.cs",
-              "DocumentMoniker": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\OptionsWindow.cs",
+              "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\OptionsWindow.cs",
               "RelativeDocumentMoniker": "Infinite Roleplay\\Windows\\OptionsWindow.cs",
-              "ToolTip": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\OptionsWindow.cs",
+              "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\OptionsWindow.cs",
               "RelativeToolTip": "Infinite Roleplay\\Windows\\OptionsWindow.cs",
-              "ViewState": "AQIAABwAAAAAAAAAAADgvycAAAApAAAA",
+              "ViewState": "AQIAABkAAAAAAAAAAAAQwAsAAAAFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-21T05:06:02.212Z"
+              "WhenOpened": "2024-03-21T05:06:02.212Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "PanelWindow.cs",
-              "DocumentMoniker": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\PanelWindow.cs",
+              "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\PanelWindow.cs",
               "RelativeDocumentMoniker": "Infinite Roleplay\\Windows\\PanelWindow.cs",
-              "ToolTip": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\PanelWindow.cs",
+              "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\PanelWindow.cs",
               "RelativeToolTip": "Infinite Roleplay\\Windows\\PanelWindow.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAIwAAAAbAAAA",
+              "ViewState": "AQIAAN0AAAAAAAAAAAAwwFEAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-21T05:06:02.219Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 13,
               "Title": "DataSender.cs",
-              "DocumentMoniker": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Network\\DataSender.cs",
+              "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Network\\DataSender.cs",
               "RelativeDocumentMoniker": "Infinite Roleplay\\Network\\DataSender.cs",
-              "ToolTip": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Network\\DataSender.cs",
+              "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Network\\DataSender.cs",
               "RelativeToolTip": "Infinite Roleplay\\Network\\DataSender.cs",
               "ViewState": "AQIAAFQBAAAAAAAAAAAUwFoBAAA1AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-22T17:40:10.823Z",
+              "WhenOpened": "2024-03-22T17:40:10.823Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "LoginWindow.cs",
+              "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\LoginWindow.cs",
+              "RelativeDocumentMoniker": "Infinite Roleplay\\Windows\\LoginWindow.cs",
+              "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\LoginWindow.cs",
+              "RelativeToolTip": "Infinite Roleplay\\Windows\\LoginWindow.cs",
+              "ViewState": "AQIAACgAAAAAAAAAAAAgwFgAAAA0AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-03-21T05:06:02.21Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "LoginWindow.cs",
-              "DocumentMoniker": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\LoginWindow.cs",
-              "RelativeDocumentMoniker": "Infinite Roleplay\\Windows\\LoginWindow.cs",
-              "ToolTip": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\LoginWindow.cs",
-              "RelativeToolTip": "Infinite Roleplay\\Windows\\LoginWindow.cs",
-              "ViewState": "AQIAABcAAAAAAAAAAAAQwEYAAABvAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-21T05:06:02.21Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 10,
               "Title": "ClientTCP.cs",
-              "DocumentMoniker": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Network\\ClientTCP.cs",
+              "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Network\\ClientTCP.cs",
               "RelativeDocumentMoniker": "Infinite Roleplay\\Network\\ClientTCP.cs",
-              "ToolTip": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Network\\ClientTCP.cs",
+              "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Network\\ClientTCP.cs",
               "RelativeToolTip": "Infinite Roleplay\\Network\\ClientTCP.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAEUAAAAsAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAFQAAAAfAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-22T17:37:02.323Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 17,
               "Title": "InfiniteRoleplay.csproj",
-              "DocumentMoniker": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\InfiniteRoleplay.csproj",
+              "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\InfiniteRoleplay.csproj",
               "RelativeDocumentMoniker": "Infinite Roleplay\\InfiniteRoleplay.csproj",
-              "ToolTip": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\InfiniteRoleplay.csproj",
+              "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\InfiniteRoleplay.csproj",
               "RelativeToolTip": "Infinite Roleplay\\InfiniteRoleplay.csproj",
               "ViewState": "AQIAANcAAAAAAAAAAAAcwPkAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
@@ -234,11 +269,11 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 16,
               "Title": "VerificationWindow.cs",
-              "DocumentMoniker": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\VerificationWindow.cs",
+              "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\VerificationWindow.cs",
               "RelativeDocumentMoniker": "Infinite Roleplay\\Windows\\VerificationWindow.cs",
-              "ToolTip": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\VerificationWindow.cs",
+              "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\VerificationWindow.cs",
               "RelativeToolTip": "Infinite Roleplay\\Windows\\VerificationWindow.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAACcAAAAbAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -246,11 +281,11 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 18,
               "Title": "Constants.cs",
-              "DocumentMoniker": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Defines\\Constants.cs",
+              "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Defines\\Constants.cs",
               "RelativeDocumentMoniker": "Infinite Roleplay\\Defines\\Constants.cs",
-              "ToolTip": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Defines\\Constants.cs",
+              "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Defines\\Constants.cs",
               "RelativeToolTip": "Infinite Roleplay\\Defines\\Constants.cs",
               "ViewState": "AQIAAMcBAAAAAAAAAAAnwNkBAAA/AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -258,39 +293,38 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 14,
               "Title": "Imaging.cs",
-              "DocumentMoniker": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Helpers\\Imaging.cs",
+              "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Helpers\\Imaging.cs",
               "RelativeDocumentMoniker": "Infinite Roleplay\\Helpers\\Imaging.cs",
-              "ToolTip": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Helpers\\Imaging.cs",
+              "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Helpers\\Imaging.cs",
               "RelativeToolTip": "Infinite Roleplay\\Helpers\\Imaging.cs",
               "ViewState": "AQIAAGwAAAAAAAAAAAAAABEAAAAvAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-21T05:06:02.203Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-21T05:06:02.203Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "Plugin.cs",
-              "DocumentMoniker": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Plugin.cs",
+              "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Plugin.cs",
               "RelativeDocumentMoniker": "Infinite Roleplay\\Plugin.cs",
-              "ToolTip": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Plugin.cs",
+              "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Plugin.cs",
               "RelativeToolTip": "Infinite Roleplay\\Plugin.cs",
-              "ViewState": "AQIAAFcAAAAAAAAAAAAlwIkAAABsAAAA",
+              "ViewState": "AQIAAPIAAAAAAAAAAADgv2ABAABHAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-21T05:06:02.214Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 9,
               "Title": "BookmarksWindow.cs",
-              "DocumentMoniker": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\BookmarksWindow.cs",
+              "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\BookmarksWindow.cs",
               "RelativeDocumentMoniker": "Infinite Roleplay\\Windows\\BookmarksWindow.cs",
-              "ToolTip": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\BookmarksWindow.cs",
+              "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\BookmarksWindow.cs",
               "RelativeToolTip": "Infinite Roleplay\\Windows\\BookmarksWindow.cs",
-              "ViewState": "AQIAADgAAAAAAAAAAAAQwEkAAAAaAAAA",
+              "ViewState": "AQIAADMAAAAAAAAAAAAAAEgAAAAuAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-22T17:57:41.855Z",
               "EditorCaption": ""
@@ -299,22 +333,22 @@
               "$type": "Document",
               "DocumentIndex": 7,
               "Title": "TargetWindow.cs",
-              "DocumentMoniker": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\TargetWindow.cs",
+              "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\TargetWindow.cs",
               "RelativeDocumentMoniker": "Infinite Roleplay\\Windows\\TargetWindow.cs",
-              "ToolTip": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\TargetWindow.cs",
+              "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\TargetWindow.cs",
               "RelativeToolTip": "Infinite Roleplay\\Windows\\TargetWindow.cs",
-              "ViewState": "AQIAAD4AAAAAAAAAAAAQwDMAAAAjAAAA",
+              "ViewState": "AQIAAGQBAAAAAAAAAAAwwDMAAAAjAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-21T05:06:02.2Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 19,
               "Title": "Misc.cs",
-              "DocumentMoniker": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Helpers\\Misc.cs",
+              "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Helpers\\Misc.cs",
               "RelativeDocumentMoniker": "Infinite Roleplay\\Helpers\\Misc.cs",
-              "ToolTip": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Helpers\\Misc.cs",
+              "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Helpers\\Misc.cs",
               "RelativeToolTip": "Infinite Roleplay\\Helpers\\Misc.cs",
               "ViewState": "AQIAABsAAAAAAAAAAAAiwCkAAAAvAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -322,23 +356,24 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 11,
               "Title": "ClientHandleData.cs",
-              "DocumentMoniker": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Network\\ClientHandleData.cs",
+              "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Network\\ClientHandleData.cs",
               "RelativeDocumentMoniker": "Infinite Roleplay\\Network\\ClientHandleData.cs",
-              "ToolTip": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Network\\ClientHandleData.cs",
+              "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Network\\ClientHandleData.cs",
               "RelativeToolTip": "Infinite Roleplay\\Network\\ClientHandleData.cs",
-              "ViewState": "AQIAABMAAAAAAAAAAAAAABMAAAANAAAA",
+              "ViewState": "AQIAAAUAAAAAAAAAAAAwwBUAAABcAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-21T05:06:02.168Z"
+              "WhenOpened": "2024-03-21T05:06:02.168Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 15,
               "Title": "Dalamud.cs",
-              "DocumentMoniker": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Dalamud.cs",
+              "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Dalamud.cs",
               "RelativeDocumentMoniker": "Infinite Roleplay\\Dalamud.cs",
-              "ToolTip": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Dalamud.cs",
+              "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Dalamud.cs",
               "RelativeToolTip": "Infinite Roleplay\\Dalamud.cs",
               "ViewState": "AQIAAAcAAAAAAAAAAAAmwBUAAAA7AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -346,11 +381,11 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 20,
               "Title": "Configuration.cs",
-              "DocumentMoniker": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Configuration.cs",
+              "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Configuration.cs",
               "RelativeDocumentMoniker": "Infinite Roleplay\\Configuration.cs",
-              "ToolTip": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Configuration.cs",
+              "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Configuration.cs",
               "RelativeToolTip": "Infinite Roleplay\\Configuration.cs",
               "ViewState": "AQIAAAwAAAAAAAAAAAAowBkAAAAfAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -358,45 +393,46 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 21,
               "Title": "InfiniteRoleplay",
-              "DocumentMoniker": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\InfiniteRoleplay.csproj",
+              "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\InfiniteRoleplay.csproj",
               "RelativeDocumentMoniker": "Infinite Roleplay\\InfiniteRoleplay.csproj",
-              "ToolTip": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\InfiniteRoleplay.csproj",
+              "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\InfiniteRoleplay.csproj",
               "RelativeToolTip": "Infinite Roleplay\\InfiniteRoleplay.csproj",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
               "WhenOpened": "2024-03-21T05:06:02.301Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 8,
               "Title": "TOS.cs",
-              "DocumentMoniker": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\TOS.cs",
+              "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\TOS.cs",
               "RelativeDocumentMoniker": "Infinite Roleplay\\Windows\\TOS.cs",
-              "ToolTip": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\TOS.cs",
+              "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\TOS.cs",
               "RelativeToolTip": "Infinite Roleplay\\Windows\\TOS.cs",
-              "ViewState": "AQIAACMAAAAAAAAAAAASwDIAAAAVAAAA",
+              "ViewState": "AQIAABoAAAAAAAAAAAASwDIAAAAVAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-22T18:05:44.436Z"
+              "WhenOpened": "2024-03-22T18:05:44.436Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 22,
               "Title": "OtterGui",
-              "DocumentMoniker": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\OtterGui\\OtterGui.csproj",
+              "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\OtterGui\\OtterGui.csproj",
               "RelativeDocumentMoniker": "OtterGui\\OtterGui.csproj",
-              "ToolTip": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\OtterGui\\OtterGui.csproj",
+              "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\OtterGui\\OtterGui.csproj",
               "RelativeToolTip": "OtterGui\\OtterGui.csproj",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
               "WhenOpened": "2024-03-21T05:06:02.298Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 23,
               "Title": "ImagePreview.cs",
-              "DocumentMoniker": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\ImagePreview.cs",
+              "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\ImagePreview.cs",
               "RelativeDocumentMoniker": "Infinite Roleplay\\Windows\\ImagePreview.cs",
-              "ToolTip": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\ImagePreview.cs",
+              "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\ImagePreview.cs",
               "RelativeToolTip": "Infinite Roleplay\\Windows\\ImagePreview.cs",
               "ViewState": "AQIAACMAAAAAAAAAAAAQwAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -404,11 +440,11 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 24,
               "Title": "RestorationWindow.cs",
-              "DocumentMoniker": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\RestorationWindow.cs",
+              "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\RestorationWindow.cs",
               "RelativeDocumentMoniker": "Infinite Roleplay\\Windows\\RestorationWindow.cs",
-              "ToolTip": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\RestorationWindow.cs",
+              "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\Windows\\RestorationWindow.cs",
               "RelativeToolTip": "Infinite Roleplay\\Windows\\RestorationWindow.cs",
               "ViewState": "AQIAAAMAAAAAAAAAAIBJwCkAAAA2AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -416,67 +452,67 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 25,
               "Title": "section_events.png",
-              "DocumentMoniker": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\UI\\common\\section_events.png",
+              "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\UI\\common\\section_events.png",
               "RelativeDocumentMoniker": "Infinite Roleplay\\UI\\common\\section_events.png",
-              "ToolTip": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\UI\\common\\section_events.png",
+              "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\UI\\common\\section_events.png",
               "RelativeToolTip": "Infinite Roleplay\\UI\\common\\section_events.png",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
               "WhenOpened": "2024-03-21T05:06:02.266Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 26,
               "Title": "spacer.png",
-              "DocumentMoniker": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\UI\\common\\spacer.png",
+              "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\UI\\common\\spacer.png",
               "RelativeDocumentMoniker": "Infinite Roleplay\\UI\\common\\spacer.png",
-              "ToolTip": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\UI\\common\\spacer.png",
+              "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\UI\\common\\spacer.png",
               "RelativeToolTip": "Infinite Roleplay\\UI\\common\\spacer.png",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
               "WhenOpened": "2024-03-21T05:06:02.27Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 27,
               "Title": "blank.png",
-              "DocumentMoniker": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\UI\\common\\blank.png",
+              "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\UI\\common\\blank.png",
               "RelativeDocumentMoniker": "Infinite Roleplay\\UI\\common\\blank.png",
-              "ToolTip": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\UI\\common\\blank.png",
+              "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\UI\\common\\blank.png",
               "RelativeToolTip": "Infinite Roleplay\\UI\\common\\blank.png",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
               "WhenOpened": "2024-03-21T05:06:02.274Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 28,
               "Title": "picturetab.png",
-              "DocumentMoniker": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\UI\\common\\profiles\\galleries\\picturetab.png",
+              "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\UI\\common\\profiles\\galleries\\picturetab.png",
               "RelativeDocumentMoniker": "Infinite Roleplay\\UI\\common\\profiles\\galleries\\picturetab.png",
-              "ToolTip": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\UI\\common\\profiles\\galleries\\picturetab.png",
+              "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\UI\\common\\profiles\\galleries\\picturetab.png",
               "RelativeToolTip": "Infinite Roleplay\\UI\\common\\profiles\\galleries\\picturetab.png",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
               "WhenOpened": "2024-03-21T05:06:02.277Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 29,
               "Title": "disc_btn.png",
-              "DocumentMoniker": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\UI\\common\\disc_btn.png",
+              "DocumentMoniker": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\UI\\common\\disc_btn.png",
               "RelativeDocumentMoniker": "Infinite Roleplay\\UI\\common\\disc_btn.png",
-              "ToolTip": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\UI\\common\\disc_btn.png",
+              "ToolTip": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\UI\\common\\disc_btn.png",
               "RelativeToolTip": "Infinite Roleplay\\UI\\common\\disc_btn.png",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
               "WhenOpened": "2024-03-21T05:06:02.281Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 30,
               "Title": "Microsoft.Common.CurrentVersion.targets",
               "DocumentMoniker": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\amd64\\Microsoft.Common.CurrentVersion.targets",
-              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\amd64\\Microsoft.Common.CurrentVersion.targets",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\amd64\\Microsoft.Common.CurrentVersion.targets",
               "ToolTip": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\amd64\\Microsoft.Common.CurrentVersion.targets",
-              "RelativeToolTip": "..\\..\\..\\..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\amd64\\Microsoft.Common.CurrentVersion.targets",
+              "RelativeToolTip": "..\\..\\..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\amd64\\Microsoft.Common.CurrentVersion.targets",
               "ViewState": "AQIAAC0HAAAAAAAAAAArwEMHAAAEAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
               "WhenOpened": "2024-03-19T19:49:25.131Z"

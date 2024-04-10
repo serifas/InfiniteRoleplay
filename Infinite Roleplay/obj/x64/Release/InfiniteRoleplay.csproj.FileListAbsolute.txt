@@ -314,3 +314,5 @@ C:\Users\Preac\Desktop\f\InfiniteRoleplay\Infinite Roleplay\obj\x64\Release\Infi
 C:\Users\Preac\Desktop\f\InfiniteRoleplay\Infinite Roleplay\obj\x64\Release\Infinite.C7FC50FA.Up2Date
 C:\Users\Preac\Desktop\f\InfiniteRoleplay\Infinite Roleplay\obj\x64\Release\InfiniteRoleplay.dll
 C:\Users\Preac\Desktop\f\InfiniteRoleplay\Infinite Roleplay\obj\x64\Release\InfiniteRoleplay.pdb
+C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\bin\x64\Release\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\Preac\Holder\InfiniteRoleplay\Infinite Roleplay\bin\x64\Release\Microsoft.Extensions.DependencyInjection.Abstractions.dll

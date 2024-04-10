@@ -307,11 +307,11 @@
   "project": {
     "version": "0.0.0.1",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\InfiniteRoleplay.csproj",
+      "projectUniqueName": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\InfiniteRoleplay.csproj",
       "projectName": "InfiniteRoleplay",
-      "projectPath": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\InfiniteRoleplay.csproj",
+      "projectPath": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\InfiniteRoleplay.csproj",
       "packagesPath": "C:\\Users\\Preac\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\Infinite Roleplay\\obj\\",
+      "outputPath": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\Infinite Roleplay\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Users\\Preac\\AppData\\Roaming\\Godot\\mono\\GodotNuGetFallbackFolder",
@@ -334,8 +334,8 @@
         "net8.0-windows8.0": {
           "targetAlias": "net8.0-windows8.0",
           "projectReferences": {
-            "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\OtterGui\\OtterGui.csproj": {
-              "projectPath": "C:\\Users\\Preac\\Desktop\\f\\InfiniteRoleplay\\OtterGui\\OtterGui.csproj"
+            "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\OtterGui\\OtterGui.csproj": {
+              "projectPath": "C:\\Users\\Preac\\Holder\\InfiniteRoleplay\\OtterGui\\OtterGui.csproj"
             }
           }
         }
@@ -387,7 +387,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.203/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
