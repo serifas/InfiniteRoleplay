@@ -45,7 +45,7 @@ namespace InfiniteRoleplay.Windows
         public static bool[] storyChapterExists = new bool[31];
         public static bool editStory, addOOC, addGallery, editHooks, editBio, 
                            addAvatar, editAvatar, addProfile, editProfile, LoadPreview, Reorder,
-                           addGalleryImageGUI, alignmentHidden, personalityHidden, galleryTableAdded = false;
+                           addGalleryImageGUI, alignmentHidden, personalityHidden, galleryTableAdded, loadPreview = false;
         public static int hookEditCount;
         public static int chapterEditCount;
         public static string oocInfo, storyTitle = string.Empty;
@@ -334,7 +334,11 @@ namespace InfiniteRoleplay.Windows
                             }
                         }
                         #endregion
-                                     
+                        if (loadPreview == true)
+                        {
+                            plugin.imagePreview.IsOpen = true;
+                            loadPreview = false;
+                        }
                         if (addGalleryImageGUI == true)
                         {
                             AddImageToGallery(plugin, imageIndex);
@@ -658,7 +662,8 @@ namespace InfiniteRoleplay.Windows
                             ImagePreview.width = galleryImages[i].Width;
                             ImagePreview.height = galleryImages[i].Height;
                             ImagePreview.PreviewImage = galleryImages[i];
-                            plugin.loadPreview = true;
+                            loadPreview = true;
+                           
                         }
 
 

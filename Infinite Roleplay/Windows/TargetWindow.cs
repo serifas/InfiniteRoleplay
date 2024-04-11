@@ -31,7 +31,7 @@ namespace InfiniteRoleplay.Windows
         public static string[] HookContents = new string[30];
         public static string[] HookEditContent = new string[30];
         public static int chapterCount;
-        public static bool viewBio, viewHooks, viewStory, viewOOC, viewGallery, addNotes = false;
+        public static bool viewBio, viewHooks, viewStory, viewOOC, viewGallery, addNotes, loadPreview = false;
         public static bool ExistingBio;
         public static bool ExistingHooks;
         public static int hookEditCount, existingGalleryImageCount;
@@ -283,7 +283,7 @@ namespace InfiniteRoleplay.Windows
 
                                         // you might normally want to embed resources and load them from the manifest stream
                                         //this.imageTextures.Add(goatImage);
-                                   
+                                        
 
                                         ImGui.Image(galleryThumbs[i].ImGuiHandle, new Vector2(galleryThumbs[i].Width, galleryThumbs[i].Height));
                                         if (ImGui.IsItemHovered()) { ImGui.SetTooltip("Click to enlarge"); }
@@ -292,7 +292,7 @@ namespace InfiniteRoleplay.Windows
                                             ImagePreview.width = galleryImages[i].Width;
                                             ImagePreview.height = galleryImages[i].Height;
                                             ImagePreview.PreviewImage = galleryImages[i];
-                                            plugin.loadPreview = true;
+                                            loadPreview = true;
                                         }
                                     }
                                     else
@@ -311,7 +311,7 @@ namespace InfiniteRoleplay.Windows
                                             ImagePreview.width = galleryImages[i].Width;
                                             ImagePreview.height = galleryImages[i].Height;
                                             ImagePreview.PreviewImage = galleryImages[i];
-                                            plugin.loadPreview = true;
+                                            loadPreview = true;
                                         }
                                     }
 
@@ -336,7 +336,12 @@ namespace InfiniteRoleplay.Windows
                             {
                                 DataSender.AddProfileNotes(plugin.Configuration.username, characterNameVal, characterWorldVal, profileNotes);
                             }
-                        
+
+                        }
+                        if (loadPreview == true)
+                        {
+                            plugin.imagePreview.IsOpen = true;
+                            loadPreview = false;
                         }
                     }
 

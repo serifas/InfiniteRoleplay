@@ -12,6 +12,7 @@ using InfiniteRoleplay;
 using System.IO;
 using System.Net.Http;
 using FFXIVClientStructs.Interop;
+using InfiniteRoleplay.Windows;
 
 namespace Networking
 {
@@ -41,12 +42,17 @@ namespace Networking
                         byte[] buff = new byte[1];
                         if (_tcpClient.Client.Receive(buff, SocketFlags.Peek) == 0)
                         {
+
+                            LoginWindow.status = "Could not connect to server";
+                            LoginWindow.statusColor = new System.Numerics.Vector4(255, 0, 0, 255);
                             // Client is not connected
                             DataSender.PrintMessage("Could not connect to server, client receive is 0", LogLevels.Log);
                             return false;
                         }
                         else
                         {
+                            LoginWindow.status = "Connected to server";
+                            LoginWindow.statusColor = new System.Numerics.Vector4(0, 255, 0, 255);
                             //client is connected
                             DataSender.PrintMessage("Connected to server", LogLevels.Log);
                             return true;
@@ -57,6 +63,8 @@ namespace Networking
                 }
                 else
                 {
+                    LoginWindow.status = "Could not connect to server";
+                    LoginWindow.statusColor = new System.Numerics.Vector4(255, 0, 0, 255);
                     return false;
                 }
             }
@@ -107,10 +115,14 @@ namespace Networking
                 await InitializingNetworking(true);
                 loadCallback = true;
                 await CheckStatus();
+                LoginWindow.status = "Connected to Server...";
+                LoginWindow.statusColor = new System.Numerics.Vector4(0, 255, 0, 255);
             }
             catch (Exception ex)
             {
-               DataSender.PrintMessage("Could not connect to server " + ex.ToString(), LogLevels.LogError);
+                LoginWindow.status = "Could not connect to server.";
+                LoginWindow.statusColor = new System.Numerics.Vector4(255, 0, 0, 255);
+                DataSender.PrintMessage("Could not connect to server " + ex.ToString(), LogLevels.LogError);
             }
         }
 
@@ -148,6 +160,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
+                clientSocket.Dispose();
                 DataSender.PrintMessage("Could not establish connection " + ex.ToString(), LogLevels.LogError);
             }
         }

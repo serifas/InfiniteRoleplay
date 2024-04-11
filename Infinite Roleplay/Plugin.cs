@@ -25,7 +25,6 @@ namespace InfiniteRoleplay
         public bool targeted = false;
         public bool targetMenuClosed = true;
         public bool loadCallback = false;
-        public bool loadPreview = false;
         public bool uiLoaded = false;
         public string socketStatus;
         public int tick = 0;
@@ -89,7 +88,7 @@ namespace InfiniteRoleplay
             {
                 HelpMessage = "to open the plugin panel window"
             });
-          
+
             this.pluginInterface.UiBuilder.Draw += DrawUI;
             this.pluginInterface.UiBuilder.OpenConfigUi += LoadOptions;
             this.pluginInterface.UiBuilder.OpenMainUi += DrawLoginUI;
@@ -97,7 +96,12 @@ namespace InfiniteRoleplay
             DataReceiver.plugin = this;
             this.clientState.Login += CheckConnection;
             this.framework.Update += Update;
-
+            LoadUI();
+            if (clientState.IsLoggedIn == true && clientState.LocalPlayer != null)
+            {
+                ReloadClient();
+                AttemptLogin();
+            }
         }
 
 
@@ -106,7 +110,7 @@ namespace InfiniteRoleplay
             string username = Configuration.username.ToString();
             string password = Configuration.password.ToString();
             PlayerCharacter playerCharacter = this.clientState.LocalPlayer;
-            if(Configuration.username.Length > 0 &&  Configuration.password.Length > 0 && playerCharacter != null)
+            if(Configuration.username.Length > 0 &&  Configuration.password.Length > 0)
             {
                 DataSender.Login(username, password, playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString());
             }
@@ -252,6 +256,8 @@ namespace InfiniteRoleplay
                 {
                     ClientHandleData.InitializePackets(false);
                 }
+                ClientTCP.clientSocket.Close();
+                ClientTCP.clientSocket.Dispose();
                 Imaging.RemoveAllImages(this);
             }
             catch (Exception ex)
@@ -285,17 +291,7 @@ namespace InfiniteRoleplay
 
         public void Update(IFramework framework)
         {
-            tick++;
-            if (loadPreview == true)
-            {
-                imagePreview.IsOpen = true;
-                loadPreview = false;
-            }
-            if (tick >= 300)
-            {
-                tick = 0;
-                CheckConnection();
-            }
+
         }
         public void CheckConnection()
         {
@@ -305,11 +301,15 @@ namespace InfiniteRoleplay
                 {
                     try
                     {
+                        LoginWindow.status = "Connecting to Infinite Roleplay...";
+                        LoginWindow.statusColor = new System.Numerics.Vector4(96, 163, 175, 255);
                         DataSender.PrintMessage("Connecting to Infinite Roleplay", LogLevels.Log);
                         ReloadClient();
                     }
                     catch (Exception ex)
                     {
+                        LoginWindow.status = "Could not connect to Infinite Roleplay";
+                        LoginWindow.statusColor = new System.Numerics.Vector4(255, 0, 0, 255);
                         DataSender.PrintMessage("Could not connect to Infinite Roleplay", LogLevels.LogError);
                         chatGUI.Print("Could not connect to Infinite Roleplay");
                     }
@@ -356,6 +356,7 @@ namespace InfiniteRoleplay
         public void DrawLoginUI()
         {
             CheckConnection();
+            AttemptLogin();
             if (loggedIn == true)
             {
                 panelWindow.IsOpen = true;
