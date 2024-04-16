@@ -78,7 +78,6 @@ namespace InfiniteRoleplay.Windows
 
             this.plugin = plugin;
             pg = plugin.PluginInterfacePub;
-            string path = pg.AssemblyLocation.Directory?.FullName!;
             this.configuration = plugin.Configuration;
             this._fileDialogManager = new FileDialogManager();
             avatarHolder = Constants.UICommonImage(Interface, Constants.CommonImageTypes.avatarHolder); 
@@ -112,8 +111,10 @@ namespace InfiniteRoleplay.Windows
             {
                 bioFieldsArr[b] = string.Empty;
             }
-            
-            this.avatarBytes = File.ReadAllBytes(Path.Combine(path, "UI/common/profiles/avatar_holder.png"));
+            if (plugin.PluginInterfacePub is { AssemblyLocation.Directory.FullName: { } path })
+            {
+                this.avatarBytes = File.ReadAllBytes(Path.Combine(path, "UI/common/profiles/avatar_holder.png"));
+            }
          }
       
 

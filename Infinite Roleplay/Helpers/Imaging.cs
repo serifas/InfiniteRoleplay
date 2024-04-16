@@ -20,10 +20,12 @@ namespace InfiniteRoleplay.Helpers
             if(IsImageUrl(url))
             {
                 try { 
-                        WebClient webClient = new WebClient();
-                        string extension = GetImageFileExtension(url);
-                        string GalleryPath = Path.Combine(plugin.PluginInterfacePub.AssemblyLocation.Directory?.FullName!, "UI/Galleries/" + profileID + "/");
-                        string imagePath = Path.Combine(plugin.PluginInterfacePub.AssemblyLocation.Directory?.FullName!, "UI/Galleries/" + profileID + "/" + "gallery_" + profileID + "_" + index + "." + extension); // Create a folder named 'Images' in your root directory
+                    WebClient webClient = new WebClient();
+                    string extension = GetImageFileExtension(url);
+                    if (plugin.PluginInterfacePub is { AssemblyLocation.Directory.FullName: { } path })
+                    {
+                        string GalleryPath = Path.Combine(path, "UI/Galleries/" + profileID + "/");
+                        string imagePath = Path.Combine(path, "UI/Galleries/" + profileID + "/" + "gallery_" + profileID + "_" + index + "." + extension); // Create a folder named 'Images' in your root directory
                         if (!Directory.Exists(GalleryPath))
                         {
                             Directory.CreateDirectory(GalleryPath);
@@ -33,7 +35,7 @@ namespace InfiniteRoleplay.Helpers
                         System.Drawing.Image baseImage = System.Drawing.Image.FromFile(imagePath);
                         System.Drawing.Image scaledImage = ScaleImage(baseImage, 1000, 800);
                         SaveImage(scaledImage, GalleryPath, "gallery_scaled_" + profileID + "_" + index + "." + extension);
-                        string scaledImagePath = Path.Combine(plugin.PluginInterfacePub.AssemblyLocation.Directory?.FullName!, "UI/Galleries/" + profileID + "/" + "gallery_scaled_" + profileID + "_" + index + "." + extension);
+                        string scaledImagePath = Path.Combine(path, "UI/Galleries/" + profileID + "/" + "gallery_scaled_" + profileID + "_" + index + "." + extension);
 
 
                         IDalamudTextureWrap galleryImage = plugin.PluginInterfacePub.UiBuilder.LoadImage(scaledImagePath);
@@ -49,13 +51,13 @@ namespace InfiniteRoleplay.Helpers
                             ProfileWindow.TRIGGER[index] = trigger;
                         }
                         else
-                        {                    
+                        {
                             TargetWindow.galleryImages[index] = galleryImage;
                         }
-                        if(trigger == true && nsfw == false)
+                        if (trigger == true && nsfw == false)
                         {
 
-                            if(self == true)
+                            if (self == true)
                             {
                                 ProfileWindow.galleryThumbs[index] = triggerThumb;
                             }
@@ -64,7 +66,7 @@ namespace InfiniteRoleplay.Helpers
                                 TargetWindow.galleryThumbs[index] = triggerThumb;
                             }
                         }
-                        if(nsfw == true && trigger == false)
+                        if (nsfw == true && trigger == false)
                         {
                             if (self == true)
                             {
@@ -76,11 +78,11 @@ namespace InfiniteRoleplay.Helpers
                             }
 
                         }
-                        if(nsfw == true && trigger == true)
+                        if (nsfw == true && trigger == true)
                         {
                             if (self == true)
                             {
-                       
+
                                 ProfileWindow.galleryThumbs[index] = nsfwTriggerThumb;
 
                             }
@@ -89,14 +91,14 @@ namespace InfiniteRoleplay.Helpers
                                 TargetWindow.galleryThumbs[index] = nsfwTriggerThumb;
                             }
                         }
-              
-                        if(nsfw == false && trigger == false)
+
+                        if (nsfw == false && trigger == false)
                         {
                             System.Drawing.Image thumb = System.Drawing.Image.FromFile(imagePath);
                             System.Drawing.Image img = ScaleImage(thumb, 120, 120);
                             SaveImage(img, GalleryPath, "gallery_thumb_" + profileID + "_" + index + "." + extension);
-                            IDalamudTextureWrap imgThumb = plugin.PluginInterfacePub.UiBuilder.LoadImage(Path.Combine(plugin.PluginInterfacePub.AssemblyLocation.Directory?.FullName!, "UI/Galleries/" + profileID + "/gallery_thumb_" + profileID + "_" + index + "." + extension));
-                            if(self == true) 
+                            IDalamudTextureWrap imgThumb = plugin.PluginInterfacePub.UiBuilder.LoadImage(Path.Combine(path, "UI/Galleries/" + profileID + "/gallery_thumb_" + profileID + "_" + index + "." + extension));
+                            if (self == true)
                             {
                                 ProfileWindow.galleryThumbs[index] = imgThumb;
                             }
@@ -106,7 +108,7 @@ namespace InfiniteRoleplay.Helpers
                             }
                         }
 
-
+                    }
                 }
                 catch
                 {
@@ -322,10 +324,13 @@ namespace InfiniteRoleplay.Helpers
 
         internal static void RemoveAllImages(Plugin plugin)
         {
-            string GalleryPath = Path.Combine(plugin.PluginInterfacePub.AssemblyLocation.Directory?.FullName!, "UI/Galleries/");
-            if (Directory.Exists(GalleryPath))
+            if (plugin.PluginInterfacePub is { AssemblyLocation.Directory.FullName: { } path })
             {
-                Directory.Delete(GalleryPath, true);
+                string GalleryPath = Path.Combine(path, "UI/Galleries/");
+                if (Directory.Exists(GalleryPath))
+                {
+                    Directory.Delete(GalleryPath, true);
+                }
             }
             
         }
