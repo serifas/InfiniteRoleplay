@@ -81,28 +81,6 @@ namespace Networking
             Buff.AddRange(Encoding.ASCII.GetBytes(input));
             buffUpdated = true;
         }
-        public byte ReadByte(bool Peek = true)
-        {
-            if (Buff.Count > readPos)
-            {
-                if (buffUpdated)
-                {
-                    readBuff = Buff.ToArray();
-                    buffUpdated = false;
-                }
-
-                var value = readBuff[readPos];
-                if (Peek & Buff.Count > readPos)
-                {
-                    readPos += 1;
-                }
-                return value;
-            }
-            else
-            {
-                throw new Exception("Wrong Data Type.You are not trying to read out a 'BYTE'");
-            }
-        }
         
         public byte[] ReadBytes(int length, bool Peek = true)
         {

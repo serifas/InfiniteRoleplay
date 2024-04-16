@@ -80,7 +80,7 @@ namespace InfiniteRoleplay
             Configuration = pluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
             Configuration.Initialize(pluginInterface);
             DataSender.plugin = this;
-            ClientTCP.Plugin = this;
+            ClientTCP.plugin = this;
             Misc.pg = this;
             string name = "";
 
@@ -252,12 +252,13 @@ namespace InfiniteRoleplay
                 this.ct.OnMenuOpened -= AddContextMenu;
                 this.CommandManager.RemoveHandler(CommandName);
                 this.WindowSystem.RemoveAllWindows();
-                if(ClientHandleData.packets.Count > 0)
+                ClientTCP.Disconnect();
+                if (ClientHandleData.packets.Count > 0)
                 {
                     ClientHandleData.InitializePackets(false);
                 }
-                ClientTCP.Disconnect();
-                
+
+
                 Imaging.RemoveAllImages(this);
             }
             catch (Exception ex)
@@ -293,12 +294,11 @@ namespace InfiniteRoleplay
         {
 
         }
-        public async void CheckConnection()
+        public void CheckConnection()
         {
             if (clientState.IsLoggedIn == true && clientState.LocalPlayer != null)
             {
-                bool ConnectedToServer = await ClientTCP.IsConnectedToServer();
-                if (!ConnectedToServer)
+                if (!ClientTCP.IsConnectedToServer(ClientTCP.clientSocket))
                 {
                     try
                     {
