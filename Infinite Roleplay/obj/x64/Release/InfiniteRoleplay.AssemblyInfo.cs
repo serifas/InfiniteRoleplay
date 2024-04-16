@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("An all around Roleplay Plugin.")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("0.0.0.1")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("0.0.0.1+b18545e2581a1b99efa097d50da0b649d96aae87")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("0.0.0.1+84f189fa5be9b5655c6710e0c7f6735db2a73f44")]
 [assembly: System.Reflection.AssemblyProductAttribute("InfiniteRoleplay")]
 [assembly: System.Reflection.AssemblyTitleAttribute("InfiniteRoleplay")]
 [assembly: System.Reflection.AssemblyVersionAttribute("0.0.0.1")]

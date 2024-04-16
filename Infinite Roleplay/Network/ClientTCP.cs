@@ -1,233 +1,199 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net.Sockets;
-using System.Net.NetworkInformation;
-using System.Net;
-using System.Runtime.CompilerServices;
-using InfiniteRoleplay.Windows.Functions;
 using InfiniteRoleplay;
+using Networking;
+using System;
 using System.IO;
-using System.Net.Http;
-using FFXIVClientStructs.Interop;
-using InfiniteRoleplay.Windows;
+using System.Net.Sockets;
+using System.Threading.Tasks;
 
-namespace Networking
+public class ClientTCP : IDisposable
 {
-    public class ClientTCP
+    private static TcpClient _clientSocket;
+    private static NetworkStream _myStream;
+    private static byte[] _recBuffer;
+    private static readonly string _server = "185.33.84.184";
+    private static readonly int _port = 25565;
+    public static bool Connected { get; private set; }
+    public static bool LoadCallback { get; set; }
+    public static Plugin Plugin { get; set; }
+    public int CheckCounter { get; set; } = 5;
+
+    public static async Task<bool> IsConnectedToServer()
     {
-        public static bool loadCallback;
-        public static bool Connected;
-        public static TcpClient clientSocket;
-        private static NetworkStream myStream;
-        private static byte[] recBuffer;
-        private static string server = "185.33.84.184";
-        private static DataSender dataSender;
-        private static int port = 25565;
-        public static Plugin plugin;
-        public static int CheckCounter = 5;
-       
-        public static bool IsConnectedToServer(TcpClient _tcpClient)
+        try
         {
-            try
+            if (_clientSocket != null && _clientSocket.Connected)
             {
-                //DataSender.PrintMessage("Checking connection to Infinite Roleplay", LogLevels.Log);
-                if (_tcpClient != null && _tcpClient.Client != null && _tcpClient.Client.Connected)
+                if (_clientSocket.Client.Poll(0, SelectMode.SelectRead))
                 {
-                    // Detect if client disconnected
-                    if (_tcpClient.Client.Poll(0, SelectMode.SelectRead))
+                    byte[] buff = new byte[1];
+                    if (_clientSocket.Client.Receive(buff, SocketFlags.Peek) == 0)
                     {
-                        byte[] buff = new byte[1];
-                        if (_tcpClient.Client.Receive(buff, SocketFlags.Peek) == 0)
-                        {
-
-                            LoginWindow.status = "Could not connect to server";
-                            LoginWindow.statusColor = new System.Numerics.Vector4(255, 0, 0, 255);
-                            // Client is not connected
-                            DataSender.PrintMessage("Could not connect to server, client receive is 0", LogLevels.Log);
-                            return false;
-                        }
-                        else
-                        {
-                            LoginWindow.status = "Connected to server";
-                            LoginWindow.statusColor = new System.Numerics.Vector4(0, 255, 0, 255);
-                            //client is connected
-                            DataSender.PrintMessage("Connected to server", LogLevels.Log);
-                            return true;
-                        }
+                        // Client is not connected
+                        // Handle UI or logging here
+                        return false;
                     }
-
+                    // Client is connected
                     return true;
                 }
-                else
+                return true;
+            }
+            // Client is not connected
+            return false;
+        }
+        catch (Exception ex)
+        {
+            // Handle exception
+            return false;
+        }
+    }
+
+    public static async Task CheckStatus()
+    {
+        try
+        {
+            if (await IsConnectedToServer())
+            {
+                if (LoadCallback)
                 {
-                    LoginWindow.status = "Could not connect to server";
-                    LoginWindow.statusColor = new System.Numerics.Vector4(255, 0, 0, 255);
-                    return false;
+                    ClientConnectionCallback();
+                    LoadCallback = false;
+                }
+                if (!Plugin.uiLoaded)
+                {
+                    Plugin.LoadUI();
                 }
             }
-            catch (Exception ex)
+            else
             {
-                DataSender.PrintMessage("Could not check IsConnectedToServer " + ex.Message, LogLevels.LogWarning);
-                return false;
+                await ConnectToServer();
             }
         }
-
-        public static async Task CheckStatus()
+        catch (Exception ex)
         {
-            try
+            // Handle exception
+        }
+    }
+
+    public static async Task ConnectToServer()
+    {
+        try
+        {
+            await InitializingNetworking(true);
+            LoadCallback = true;
+            await CheckStatus();
+        }
+        catch (Exception ex)
+        {
+            // Handle exception
+        }
+    }
+
+    public static async Task InitializingNetworking(bool start)
+    {
+        try
+        {
+            if (start)
             {
-                DataSender.PrintMessage("Checking connection status", LogLevels.Log);
-                if (IsConnectedToServer(ClientTCP.clientSocket))
-                {
-                    if (loadCallback)
-                    {
-                        ClientConnectionCallback();
-                        loadCallback = false;
-                       
-                    }
-                    if (!plugin.uiLoaded)
-                    {
-                        plugin.LoadUI();
-                    }
-                }
-                else
-                {
-                    await ConnectToServer();
-                }
+                await EstablishConnection();
             }
-            catch (Exception ex)
+            else
             {
-                DataSender.PrintMessage("Could not check status" + ex.ToString(), LogLevels.LogWarning);
+                if (_clientSocket != null && _clientSocket.Connected)
+                {
+                    Disconnect();
+                }
             }
         }
-
-        public static async Task ConnectToServer()
+        catch (Exception ex)
         {
-            try
-            {
-                if(ClientHandleData.packets.Count < 30)
-                {
-                    ClientHandleData.InitializePackets(true);
-                }
-                await InitializingNetworking(true);
-                loadCallback = true;
-                await CheckStatus();
-                LoginWindow.status = "Connected to Server...";
-                LoginWindow.statusColor = new System.Numerics.Vector4(0, 255, 0, 255);
-            }
-            catch (Exception ex)
-            {
-                LoginWindow.status = "Could not connect to server.";
-                LoginWindow.statusColor = new System.Numerics.Vector4(255, 0, 0, 255);
-                DataSender.PrintMessage("Could not connect to server " + ex.ToString(), LogLevels.LogError);
-            }
+            // Handle exception
         }
+    }
 
-        public static async Task InitializingNetworking(bool start)
+    public static async Task EstablishConnection()
+    {
+        try
         {
-            try
-            {
-                if (start == true)
-                {
-                    await EstablishConnection();
-                }
-                else
-                {
-                    if (clientSocket.Connected == true)
-                    {
-                        Disconnect();
-                }
-                }
-
-            }catch(Exception ex) 
-            {
-                DataSender.PrintMessage("Could not Initialize Networking " + ex.ToString(), LogLevels.LogError);
-            }
+            _clientSocket = new TcpClient();
+            _clientSocket.ReceiveBufferSize = 65535;
+            _clientSocket.SendBufferSize = 65535;
+            _recBuffer = new byte[65535 * 2];
+            await _clientSocket.ConnectAsync(_server, _port);
+            ClientConnectionCallback();
         }
-
-        public static async Task EstablishConnection()
+        catch (Exception ex)
         {
-            try
-            {
-                clientSocket = new TcpClient();
-                clientSocket.ReceiveBufferSize = 65535;
-                clientSocket.SendBufferSize = 65535;
-                recBuffer = new byte[65535 * 2];
-                await clientSocket.ConnectAsync(server, port);
-            }
-            catch (Exception ex)
-            {
-                clientSocket.Dispose();
-                DataSender.PrintMessage("Could not establish connection " + ex.ToString(), LogLevels.LogError);
-            }
+            // Handle exception
         }
+    }
 
-        public static void ClientConnectionCallback()
+    public static void ClientConnectionCallback()
+    {
+        try
         {
-            try
-            {
             Connected = true;
-            clientSocket.NoDelay = true;
-            myStream = clientSocket.GetStream();
-            myStream.BeginRead(recBuffer, 0, 4096 * 2, ReceiveCallback, null);
-
-            }catch(Exception ex)
-            {
-                DataSender.PrintMessage("ClientConnectionCallback failed " + ex.ToString(), LogLevels.LogError);
-            }
+            _clientSocket.NoDelay = true;
+            _myStream = _clientSocket.GetStream();
+            _myStream.BeginRead(_recBuffer, 0, 4096 * 2, ReceiveCallback, null);
         }
-
-        private static void ReceiveCallback(IAsyncResult result)
+        catch (Exception ex)
         {
-            try
-            {
-                var length = myStream.EndRead(result);
-                if (length <= 0)
-                {
-                    return;
-                }
-                var newBytes = new byte[length];
-                Array.Copy(recBuffer, newBytes, length);
-                ClientHandleData.HandleData(newBytes);
-                myStream.BeginRead(recBuffer, 0, 4096 * 2, ReceiveCallback, null);
-            }
-            catch (Exception ex)
-            {
-                DataSender.PrintMessage("Could not receive callback " + ex.ToString(), LogLevels.LogError);
-            }
+            // Handle exception
         }
+    }
 
-        public static async Task SendData(byte[] data)
+    private static void ReceiveCallback(IAsyncResult result)
+    {
+        try
         {
-            try
+            var length = _myStream.EndRead(result);
+            if (length <= 0)
             {
-                var buffer = new ByteBuffer();
-                buffer.WriteInteger(data.GetUpperBound(0) - data.GetLowerBound(0) + 1);
-                buffer.WriteBytes(data);
-                await myStream.WriteAsync(buffer.ToArray(), 0, buffer.ToArray().Length);
-                buffer.Dispose();
+                return;
             }
-            catch (Exception ex)
-            {
-                DataSender.PrintMessage("Could not send data " + ex.ToString(), LogLevels.LogError);
-            }
+            var newBytes = new byte[length];
+            Array.Copy(_recBuffer, newBytes, length);
+            ClientHandleData.HandleData(newBytes);
+            _myStream.BeginRead(_recBuffer, 0, 4096 * 2, ReceiveCallback, null);
         }
-
-        public static void Disconnect()
+        catch (Exception ex)
         {
-            try
-            {
-                Connected = false;
-                clientSocket.Close();
-            }
-            catch (Exception ex)
-            {
-                DataSender.PrintMessage("Could not disconnect " + ex.ToString(), LogLevels.LogError);
-            }
+            // Handle exception
         }
+    }
 
+    public static async Task SendData(byte[] data)
+    {
+        try
+        {
+            var buffer = new ByteBuffer();
+            buffer.WriteInteger(data.Length);
+            buffer.WriteBytes(data);
+            await _myStream.WriteAsync(buffer.ToArray(), 0, buffer.ToArray().Length);
+            buffer.Dispose();
+        }
+        catch (Exception ex)
+        {
+            // Handle exception
+        }
+    }
+
+    public static void Disconnect()
+    {
+        try
+        {
+            Connected = false;
+            _clientSocket?.Close();
+        }
+        catch (Exception ex)
+        {
+            // Handle exception
+        }
+    }
+
+    public void Dispose()
+    {
+        _myStream?.Dispose();
+        _clientSocket?.Dispose();
     }
 }
