@@ -100,9 +100,9 @@ namespace Networking
                     ClientHandleData.InitializePackets(true);
                     InitializingNetworking(true).Wait();
                     loadCallback = true;
-                    CheckStatus().Wait();
                     LoginWindow.status = "Connected to Server...";
                     LoginWindow.statusColor = new System.Numerics.Vector4(0, 255, 0, 255);
+                    CheckStatus().Wait();
                 }
                 catch (Exception ex)
                 {

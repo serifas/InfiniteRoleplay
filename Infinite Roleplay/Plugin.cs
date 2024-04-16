@@ -95,7 +95,6 @@ namespace InfiniteRoleplay
             this.ct.OnMenuOpened += AddContextMenu;
             DataReceiver.plugin = this;
             this.clientState.Login += CheckConnection;
-            this.framework.Update += Update;
             LoadUI();
             if (clientState.IsLoggedIn == true && clientState.LocalPlayer != null)
             {
@@ -248,7 +247,6 @@ namespace InfiniteRoleplay
                 this.pluginInterface.UiBuilder.Draw -= DrawUI;
                 this.pluginInterface.UiBuilder.OpenConfigUi -= LoadOptions;
                 this.pluginInterface.UiBuilder.OpenMainUi -= DrawLoginUI;
-                this.framework.Update -= Update;
                 this.ct.OnMenuOpened -= AddContextMenu;
                 this.CommandManager.RemoveHandler(CommandName);
                 this.WindowSystem.RemoveAllWindows();
@@ -290,10 +288,6 @@ namespace InfiniteRoleplay
         }
 
 
-        public void Update(IFramework framework)
-        {
-
-        }
         public void CheckConnection()
         {
             if (clientState.IsLoggedIn == true && clientState.LocalPlayer != null)
@@ -328,6 +322,7 @@ namespace InfiniteRoleplay
         private void DrawUI()
         {
             this.WindowSystem.Draw();
+            
         }
 
         
@@ -353,10 +348,10 @@ namespace InfiniteRoleplay
             {
                 DataSender.PrintMessage("Unable to remove packets ClearPackets failed!" + ex.ToString(), LogLevels.LogError);
             }
-}
+        }
         public void DrawLoginUI()
         {
-            CheckConnection();
+            ReloadClient();
             AttemptLogin();
             if (loggedIn == true)
             {
