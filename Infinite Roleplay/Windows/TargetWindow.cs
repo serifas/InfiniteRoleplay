@@ -254,9 +254,10 @@ namespace InfiniteRoleplay.Windows
 
 
                             for (int h = 0; h < chapterCount; h++)
-                            {                                
-
+                            {
+                                Misc.SetCenter(plugin, ChapterTitle[h]);
                                 ImGui.Text(ChapterTitle[h].ToUpper());
+                                ImGui.Spacing();
                                 using var defInfFontDen = ImRaii.DefaultFont();
                                 ImGui.Text(ChapterContent[h]);
                             }
