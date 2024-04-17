@@ -241,8 +241,8 @@ namespace InfiniteRoleplay.Windows
                             Misc.SetTitle(plugin, true, "Hooks");
                             for (int h = 0; h < hookEditCount; h++)
                             {
-                                ImGui.Text(HookNames[h].ToUpper());
                                 Misc.SetCenter(plugin, HookNames[h].ToString());
+                                ImGui.Text(HookNames[h].ToUpper());
                                 ImGui.Text(HookContents[h]);
                             }
 
