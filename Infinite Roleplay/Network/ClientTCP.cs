@@ -1,10 +1,9 @@
 using System;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using System.Runtime.CompilerServices;
 using InfiniteRoleplay.Windows.Functions;
-using InfiniteRoleplay;
 using InfiniteRoleplay.Windows;
+using InfiniteRoleplay;
 
 namespace Networking
 {
@@ -62,100 +61,99 @@ namespace Networking
 
         public static Task CheckStatus()
         {
-            return Task.Run(() =>
+            try
             {
-                try
+                DataSender.PrintMessage("Checking connection status", LogLevels.Log);
+                if (IsConnectedToServer(clientSocket))
                 {
-                    DataSender.PrintMessage("Checking connection status", LogLevels.Log);
-                    if (IsConnectedToServer(clientSocket))
+                    if (loadCallback)
                     {
-                        if (loadCallback)
-                        {
-                            ClientConnectionCallback();
-                            loadCallback = false;
-                        }
-                        if (!plugin.uiLoaded)
-                        {
-                            plugin.LoadUI();
-                        }
+                        ClientConnectionCallback();
+                        loadCallback = false;
                     }
-                    else
+                    if (!plugin.uiLoaded)
                     {
-                        ConnectToServer().Wait();
+                        plugin.LoadUI();
                     }
                 }
-                catch (Exception ex)
+                else
                 {
-                    DataSender.PrintMessage("Could not check status" + ex.ToString(), LogLevels.LogWarning);
+                    ConnectToServer().Wait();
                 }
-            });
+            }
+            catch (Exception ex)
+            {
+                DataSender.PrintMessage("Could not check status" + ex.ToString(), LogLevels.LogWarning);
+            }
+
+            return Task.FromResult(true);
         }
 
         public static Task ConnectToServer()
         {
-            return Task.Run(() =>
+            try
             {
-                try
+                if (ClientHandleData.packets.Count < 30)
                 {
                     ClientHandleData.InitializePackets(true);
-                    InitializingNetworking(true).Wait();
-                    loadCallback = true;
-                    LoginWindow.status = "Connected to Server...";
-                    LoginWindow.statusColor = new System.Numerics.Vector4(0, 255, 0, 255);
-                    CheckStatus().Wait();
                 }
-                catch (Exception ex)
-                {
-                    LoginWindow.status = "Could not connect to server.";
-                    LoginWindow.statusColor = new System.Numerics.Vector4(255, 0, 0, 255);
-                    DataSender.PrintMessage("Could not connect to server " + ex.ToString(), LogLevels.LogError);
-                }
-            });
+                InitializingNetworking(true).Wait();
+                loadCallback = true;
+                LoginWindow.status = "Connected to Server...";
+                LoginWindow.statusColor = new System.Numerics.Vector4(0, 255, 0, 255);
+                CheckStatus().Wait();
+            }
+            catch (Exception ex)
+            {
+                LoginWindow.status = "Could not connect to server.";
+                LoginWindow.statusColor = new System.Numerics.Vector4(255, 0, 0, 255);
+                DataSender.PrintMessage("Could not connect to server " + ex.ToString(), LogLevels.LogError);
+            }
+
+            return Task.FromResult(true);
         }
 
         public static Task InitializingNetworking(bool start)
         {
-            return Task.Run(() =>
+            try
             {
-                try
+                if (start == true)
                 {
-                    if (start == true)
+                    EstablishConnection().Wait();
+                }
+                else
+                {
+                    if (clientSocket.Connected == true)
                     {
-                        EstablishConnection().Wait();
-                    }
-                    else
-                    {
-                        if (clientSocket.Connected == true)
-                        {
-                            Disconnect();
-                        }
+                        Disconnect();
                     }
                 }
-                catch (Exception ex)
-                {
-                    DataSender.PrintMessage("Could not Initialize Networking " + ex.ToString(), LogLevels.LogError);
-                }
-            });
+            }
+            catch (Exception ex)
+            {
+                DataSender.PrintMessage("Could not Initialize Networking " + ex.ToString(), LogLevels.LogError);
+            }
+
+            return Task.FromResult(true);
         }
 
         public static Task EstablishConnection()
         {
-            return Task.Run(() =>
+            try
             {
-                try
-                {
-                    clientSocket = new TcpClient();
-                    clientSocket.ReceiveBufferSize = 65535;
-                    clientSocket.SendBufferSize = 65535;
-                    recBuffer = new byte[65535 * 2];
-                    clientSocket.Connect(server, port);
-                }
-                catch (Exception ex)
-                {
-                    clientSocket.Dispose();
-                    DataSender.PrintMessage("Could not establish connection " + ex.ToString(), LogLevels.LogError);
-                }
-            });
+                clientSocket = new TcpClient();
+                clientSocket.ReceiveBufferSize = 65535;
+                clientSocket.SendBufferSize = 65535;
+                recBuffer = new byte[65535 * 2];
+                clientSocket.Connect(server, port);
+            }
+            catch (Exception ex)
+            {
+                clientSocket.Dispose();
+                DataSender.PrintMessage("Could not establish connection " + ex.ToString(), LogLevels.LogError);
+            }
+
+            return Task.FromResult(true);
         }
 
         public static void ClientConnectionCallback()
@@ -184,7 +182,7 @@ namespace Networking
                 }
                 var newBytes = new byte[length];
                 Array.Copy(recBuffer, newBytes, length);
-                ClientHandleData.HandleData(newBytes); 
+                ClientHandleData.HandleData(newBytes);
                 myStream.BeginRead(recBuffer, 0, 4096 * 2, ReceiveCallback, null);
             }
             catch (Exception ex)
@@ -195,21 +193,20 @@ namespace Networking
 
         public static Task SendData(byte[] data)
         {
-            return Task.Run(() =>
+            try
             {
-                try
-                {
-                    var buffer = new ByteBuffer();
-                    buffer.WriteInteger(data.GetUpperBound(0) - data.GetLowerBound(0) + 1);
-                    buffer.WriteBytes(data);
-                    myStream.Write(buffer.ToArray(), 0, buffer.ToArray().Length);
-                    buffer.Dispose();
-                }
-                catch (Exception ex)
-                {
-                    DataSender.PrintMessage("Could not send data " + ex.ToString(), LogLevels.LogError);
-                }
-            });
+                var buffer = new ByteBuffer();
+                buffer.WriteInteger(data.GetUpperBound(0) - data.GetLowerBound(0) + 1);
+                buffer.WriteBytes(data);
+                myStream.Write(buffer.ToArray(), 0, buffer.ToArray().Length);
+                buffer.Dispose();
+            }
+            catch (Exception ex)
+            {
+                DataSender.PrintMessage("Could not send data " + ex.ToString(), LogLevels.LogError);
+            }
+
+            return Task.FromResult(true);
         }
 
         public static void Disconnect()
