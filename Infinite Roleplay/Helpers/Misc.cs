@@ -36,7 +36,7 @@ namespace InfiniteRoleplay.Helpers
         public static void SetCenter(Plugin plugin, string name)
         {
          
-                int NameWidth = name.Length * 10;
+                int NameWidth = name.Length * 6;
                 var decidingWidth = Math.Max(500, ImGui.GetWindowWidth());
                 var offsetWidth = (decidingWidth - NameWidth) / 2;
                 var offsetVersion = name.Length > 0
@@ -58,7 +58,7 @@ namespace InfiniteRoleplay.Helpers
                 var offsetVersion = title.Length > 0
                     ? _modVersionWidth + ImGui.GetStyle().ItemSpacing.X + ImGui.GetStyle().WindowPadding.X
                     : 0;
-                var offset = Math.Max(offsetWidth, offsetVersion) - 20;
+                var offset = Math.Max(offsetWidth, offsetVersion);
                 if (offset > 0)
                 {
                     ImGui.SetCursorPosX(offset);
