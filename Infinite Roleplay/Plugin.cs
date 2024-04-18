@@ -98,12 +98,6 @@ namespace InfiniteRoleplay
             this.ct.OnMenuOpened += AddContextMenu;
             DataReceiver.plugin = this;
             this.clientState.Login += CheckConnection;
-            LoadUI();
-            if (clientState.IsLoggedIn == true && clientState.LocalPlayer != null)
-            {
-                ReloadClient();
-                AttemptLogin();
-            }
         }
 
 
@@ -366,22 +360,26 @@ namespace InfiniteRoleplay
         }
         public void DrawLoginUI()
         {
-            ReloadClient();
-            AttemptLogin();
-            if (loggedIn == true)
+            if(clientState.IsLoggedIn && clientState.LocalPlayer != null)
             {
-                panelWindow.IsOpen = true;
-                loginWindow.IsOpen = false;
+                ReloadClient();
+                AttemptLogin();
+                if (loggedIn == true)
+                {
+                    panelWindow.IsOpen = true;
+                    loginWindow.IsOpen = false;
+                }
+                else
+                {
+                    CloseAllWindows();
+                    loginWindow.IsOpen = true;
+                }
+                if (loginWindow.IsOpen == false && loggedIn == false)
+                {
+                    loginWindow.IsOpen = true;
+                }
             }
-            else
-            {
-                CloseAllWindows();
-                loginWindow.IsOpen = true;
-            }
-            if(loginWindow.IsOpen == false && loggedIn == false)
-            {
-                loginWindow.IsOpen = true;
-            }
+         
         }
         
 
