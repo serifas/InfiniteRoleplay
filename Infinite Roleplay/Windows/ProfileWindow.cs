@@ -22,7 +22,6 @@ namespace InfiniteRoleplay.Windows
     public class ProfileWindow : Window, IDisposable
     {
         public static string loading;
-        public static bool AllLoaded;
         public static float percentage = 0f;
         private Plugin plugin;
         public static PlayerCharacter playerCharacter;
@@ -40,6 +39,18 @@ namespace InfiniteRoleplay.Windows
         public static bool[] NSFW = new bool[31];
         public static bool[] TRIGGER = new bool[31];
         public static bool[] ImageExists = new bool[31];
+
+        /*
+        IMAGES FORMAT
+        IDalamudTextureWrap = Image itself
+        String = Image url
+        #1 bool = NSFW
+        #2 bool = TRIGGER
+        #3 bool = ImageExists
+         */
+        List<Tuple<IDalamudTextureWrap, string, bool, bool, bool>> Images = new List<Tuple<IDalamudTextureWrap, string, bool, bool, bool>>();
+
+
         public static bool[] viewChapter = new bool[31];
         public static bool[] hookExists = new bool[31];
         public static bool[] storyChapterExists = new bool[31];
@@ -116,14 +127,25 @@ namespace InfiniteRoleplay.Windows
                 this.avatarBytes = File.ReadAllBytes(Path.Combine(path, "UI/common/profiles/avatar_holder.png"));
             }
          }
-      
 
+        public static bool AllLoaded()
+        {
+            if (DataReceiver.StoryLoadStatus != -1 &&
+                   DataReceiver.HooksLoadStatus != -1 &&
+                   DataReceiver.BioLoadStatus != -1 &&
+                   DataReceiver.GalleryLoadStatus != -1)
+            {
+                return true;
+            }
+            return false;
+        }
         public override void Draw()
         {
             if (playerCharacter != null)
             {
                 
-                if (AllLoaded == true)
+
+                if (AllLoaded() == true)
                 {
                     _fileDialogManager.Draw();
 
@@ -781,6 +803,8 @@ namespace InfiniteRoleplay.Windows
             avatarHolder.Dispose();
             pictureTab.Dispose();
             currentAvatarImg.Dispose();
+            Array.Clear(galleryImages);
+            Array.Clear(galleryThumbs);
             for (int gil = 0; gil < galleryImagesList.Count; gil++)
             {
                 galleryImagesList[gil].Dispose();
@@ -792,17 +816,10 @@ namespace InfiniteRoleplay.Windows
             foreach (IDalamudTextureWrap ti in galleryImages)
             {
                 ti.Dispose();
-                Array.Clear(galleryImages);
             }
             foreach (IDalamudTextureWrap gt in galleryThumbs)
             {
                 gt.Dispose();
-                Array.Clear(galleryThumbs);
-            }
-            for(int o = 0; o < otherImages.Length; o++)
-            {
-                otherImages[o].Dispose();
-                Array.Clear(otherImages);
             }
         }
         public void AddChapterSelection()
@@ -898,22 +915,6 @@ namespace InfiniteRoleplay.Windows
                 ImGuiUtil.SelectableHelpMarker(newDesc);
             }
         }
-        public override void Update()
-        {
-            if (DataReceiver.StoryLoadStatus != -1 &&
-               DataReceiver.HooksLoadStatus != -1 &&
-               DataReceiver.BioLoadStatus != -1 &&
-               DataReceiver.GalleryLoadStatus != -1
-               )
-            {
-
-                AllLoaded = true;
-            }
-            else
-            {
-                AllLoaded = false;
-            }
-        }    
       
         public void EditImage(bool avatar, int imageIndex)
         {

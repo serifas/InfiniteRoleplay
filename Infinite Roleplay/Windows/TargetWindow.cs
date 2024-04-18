@@ -109,6 +109,18 @@ namespace InfiniteRoleplay.Windows
         
         public override void Draw()
         {
+            if (DataReceiver.TargetStoryLoadStatus != -1 &&
+               DataReceiver.TargetHooksLoadStatus != -1 &&
+               DataReceiver.TargetBioLoadStatus != -1 &&
+               DataReceiver.TargetGalleryLoadStatus != -1 &&
+               DataReceiver.TargetNotesLoadStatus != -1)
+            {
+                AllLoaded = true;
+            }
+            else
+            {
+                AllLoaded = false;
+            }
             if (AllLoaded == true)
             {
                 if (ExistingProfile == true)
@@ -378,6 +390,8 @@ namespace InfiniteRoleplay.Windows
             personalityImg1.Dispose();
             personalityImg2.Dispose();
             personalityImg3.Dispose();
+            Array.Clear(galleryThumbs);
+            Array.Clear(galleryImages);
             for (int gt = 0; gt < galleryThumbsList.Count; gt++)
             {
                 galleryThumbsList[gt].Dispose();
@@ -389,29 +403,11 @@ namespace InfiniteRoleplay.Windows
             for(int i = 0; i < galleryImages.Length; i++)
             {
                 galleryImages[i].Dispose();
-                Array.Clear(galleryImages);
             }
             for(int t = 0; t < galleryThumbs.Length; t++)
             {
                 galleryThumbs[t].Dispose();
-                Array.Clear(galleryThumbs);
             }
-        }
-        public override void Update()
-        {         
-            if (DataReceiver.TargetStoryLoadStatus != -1 &&
-               DataReceiver.TargetHooksLoadStatus != -1 &&
-               DataReceiver.TargetBioLoadStatus != -1 &&
-               DataReceiver.TargetGalleryLoadStatus != -1 &&
-               DataReceiver.TargetNotesLoadStatus != -1)
-            {
-                AllLoaded = true;
-            }
-            else
-            {
-                AllLoaded = false;
-            }
-
         }
        
        
