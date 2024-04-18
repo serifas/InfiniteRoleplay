@@ -8,6 +8,7 @@ using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Interface.Internal;
 using Dalamud.Utility;
 using InfiniteRoleplay.Scripts.Misc;
+using Dalamud.Configuration;
 
 namespace InfiniteRoleplay.Windows;
 
@@ -134,6 +135,7 @@ public class LoginWindow : Window, IDisposable
                 {
                     if (registerPassword == registerVerPassword)
                     {
+                        plugin.Configuration.username = registerUser;
                         DataSender.Register(registerUser, registerPassword, email);
                         login = true;
                         register = false;

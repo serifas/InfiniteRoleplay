@@ -347,17 +347,7 @@ namespace InfiniteRoleplay
                 DataSender.PrintMessage("Unable to disconnect DisconnectFromServer failed!" + ex.ToString(), LogLevels.LogError);
             }
         }
-        public static void ClearPackets()
-        {
-            try
-            {
-                ClientHandleData.InitializePackets(false);
-            }
-            catch(Exception ex)
-            {
-                DataSender.PrintMessage("Unable to remove packets ClearPackets failed!" + ex.ToString(), LogLevels.LogError);
-            }
-        }
+       
         public void DrawLoginUI()
         {
             if(clientState.IsLoggedIn && clientState.LocalPlayer != null)

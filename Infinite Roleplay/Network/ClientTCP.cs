@@ -15,10 +15,9 @@ namespace Networking
         private static NetworkStream myStream;
         private static byte[] recBuffer;
         private static string server = "185.33.84.184";
-        private static DataSender dataSender;
         private static int port = 25565;
+        private static int bufferSize = 1048576;
         public static Plugin plugin;
-        public static int CheckCounter = 5;
 
         public static bool IsConnectedToServer(TcpClient _tcpClient)
         {
@@ -142,9 +141,9 @@ namespace Networking
             try
             {
                 clientSocket = new TcpClient();
-                clientSocket.ReceiveBufferSize = 65535;
-                clientSocket.SendBufferSize = 65535;
-                recBuffer = new byte[65535 * 2];
+                clientSocket.ReceiveBufferSize = bufferSize;
+                clientSocket.SendBufferSize = bufferSize;
+                recBuffer = new byte[bufferSize];
                 clientSocket.Connect(server, port);
             }
             catch (Exception ex)
@@ -161,9 +160,8 @@ namespace Networking
             try
             {
                 Connected = true;
-                clientSocket.NoDelay = true;
                 myStream = clientSocket.GetStream();
-                myStream.BeginRead(recBuffer, 0, 4096 * 2, ReceiveCallback, null);
+                myStream.BeginRead(recBuffer, 0, recBuffer.Length, ReceiveCallback, null);
             }
             catch (Exception ex)
             {
@@ -183,7 +181,7 @@ namespace Networking
                 var newBytes = new byte[length];
                 Array.Copy(recBuffer, newBytes, length);
                 ClientHandleData.HandleData(newBytes);
-                myStream.BeginRead(recBuffer, 0, 4096 * 2, ReceiveCallback, null);
+                myStream.BeginRead(recBuffer, 0, recBuffer.Length, ReceiveCallback, null);
             }
             catch (Exception ex)
             {
