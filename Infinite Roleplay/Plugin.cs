@@ -15,7 +15,6 @@ using System.Timers;
 using System;
 using Dalamud.Game.Text.SeStringHandling;
 using System.Threading.Tasks;
-using InfiniteRoleplay.Network;
 
 namespace InfiniteRoleplay
 {

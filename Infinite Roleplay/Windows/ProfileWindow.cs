@@ -15,9 +15,18 @@ using Dalamud.Plugin.Services;
 using InfiniteRoleplay.Scripts.Misc;
 using OtterGui;
 using System.Linq;
+using FFXIVClientStructs.Havok;
 
 namespace InfiniteRoleplay.Windows
 {
+    public enum TabValue
+    {
+        Bio = 1,
+        Hooks = 2,
+        Story = 3,
+        OOC = 4,
+        Gallery = 5,
+    }
     //changed
     public class ProfileWindow : Window, IDisposable
     {
@@ -34,31 +43,15 @@ namespace InfiniteRoleplay.Windows
         public static string[] HookContents = new string[31];
         public static string[] ChapterContents = new string[31];
         public static string[] ChapterNames = new string[31];
-        public static string[] ChapterEditTitle = new string[31];
         public static string[] imageURLs = new string[31];
         public static bool[] NSFW = new bool[31];
         public static bool[] TRIGGER = new bool[31];
         public static bool[] ImageExists = new bool[31];
-
-        /*
-        IMAGES FORMAT
-        IDalamudTextureWrap = Image itself
-        String = Image url
-        #1 bool = NSFW
-        #2 bool = TRIGGER
-        #3 bool = ImageExists
-         */
-        List<Tuple<IDalamudTextureWrap, string, bool, bool, bool>> Images = new List<Tuple<IDalamudTextureWrap, string, bool, bool, bool>>();
-
-
         public static bool[] viewChapter = new bool[31];
         public static bool[] hookExists = new bool[31];
         public static bool[] storyChapterExists = new bool[31];
-        public static bool editStory, addOOC, addGallery, editHooks, editBio, 
-                           addAvatar, editAvatar, addProfile, editProfile, LoadPreview, Reorder,
-                           addGalleryImageGUI, alignmentHidden, personalityHidden, galleryTableAdded, loadPreview = false;
-        public static int hookEditCount;
-        public static int chapterEditCount;
+        public static SortedList<TabValue, bool> TabOpen = new SortedList<TabValue, bool>();
+        public static bool editAvatar, addProfile, editProfile, Reorder, addGalleryImageGUI, alignmentHidden, personalityHidden, loadPreview = false;
         public static string oocInfo, storyTitle = string.Empty;
         public bool ExistingProfile, ExistingStory, ExistingOOC, ExistingHooks, ExistingGallery, ExistingBio, ReorderHooks, ReorderChapters, AddHooks, AddStoryChapter;
         public static int chapterCount, currentAlignment, currentPersonality_1, currentPersonality_2, currentPersonality_3, hookCount, storyChapterCount = 0;
@@ -99,10 +92,13 @@ namespace InfiniteRoleplay.Windows
             {
                 bioFieldsArr[bf] = string.Empty;
             }
-            for(int i = 0; i < 31; i++)
+            foreach(TabValue tab in Enum.GetValues(typeof(TabValue)))
             {
+                TabOpen.Add(tab, false);
+            }
+            for(int i = 0; i < 31; i++)
+            {              
                 ChapterNames[i] = string.Empty;
-                ChapterEditTitle[i] = string.Empty;
                 ChapterContents[i] = string.Empty;
                 HookNames[i] = string.Empty;
                 HookContents[i] = string.Empty;
@@ -164,15 +160,15 @@ namespace InfiniteRoleplay.Windows
                     {
                         addProfile = false;
                         ImGui.Spacing();
-                        if (this.ExistingBio == true) { if (ImGui.Button("Edit Bio", new Vector2(100, 20))) { ClearUI(); editBio = true; } if (ImGui.IsItemHovered()) { ImGui.SetTooltip("Edit your bio."); } } else { if (ImGui.Button("Add Bio", new Vector2(100, 20))) { ClearUI(); editBio = true; } }
+                        if (ImGui.Button("Edit Bio", new Vector2(100, 20))) { ClearUI(); TabOpen[TabValue.Bio] = true; } 
                         ImGui.SameLine();
-                        if (this.ExistingHooks == true) { if (ImGui.Button("Edit Hooks", new Vector2(100, 20))) { ClearUI(); editHooks = true; } if (ImGui.IsItemHovered()) { ImGui.SetTooltip("Edit your Hooks."); } } else { if (ImGui.Button("Add Hooks", new Vector2(100, 20))) { ClearUI(); editHooks = true; } }
+                        if (ImGui.Button("Edit Hooks", new Vector2(100, 20))) { ClearUI(); TabOpen[TabValue.Hooks] = true; } 
                         ImGui.SameLine();
-                        if (this.ExistingStory == true) { if (ImGui.Button("Edit Story", new Vector2(100, 20))) { ClearUI(); editStory = true; } if (ImGui.IsItemHovered()) { ImGui.SetTooltip("Edit your Story."); } } else { if (ImGui.Button("Add Story", new Vector2(100, 20))) { ClearUI(); editStory = true; } }
+                        if (ImGui.Button("Edit Story", new Vector2(100, 20))) { ClearUI(); TabOpen[TabValue.Story] = true; } 
                         ImGui.SameLine();
-                        if (this.ExistingOOC == true) { if (ImGui.Button("Edit OOC Info", new Vector2(100, 20))) { ClearUI(); addOOC = true; } if (ImGui.IsItemHovered()) { ImGui.SetTooltip("Edit your OOC Info."); } } else { if (ImGui.Button("Add OOC Info", new Vector2(100, 20))) { ClearUI(); addOOC = true; } }
+                        if (ImGui.Button("Edit OOC Info", new Vector2(100, 20))) { ClearUI(); TabOpen[TabValue.OOC] = true; } 
                         ImGui.SameLine();
-                        if (this.ExistingGallery == true) { if (ImGui.Button("Edit Gallery", new Vector2(100, 20))) { ClearUI(); addGallery = true; } if (ImGui.IsItemHovered()) { ImGui.SetTooltip("Edit your Gallery."); } } else { if (ImGui.Button("Add Gallery", new Vector2(100, 20))) { ClearUI(); addGallery = true; } }
+                        if (ImGui.Button("Edit Gallery", new Vector2(100, 20))) { ClearUI(); TabOpen[TabValue.Gallery] = true; } 
 
                     }
                     bool warning = false;
@@ -180,7 +176,7 @@ namespace InfiniteRoleplay.Windows
                     if (ImGui.BeginChild("PROFILE"))
                     {
                         #region BIO
-                        if (editBio == true)
+                        if (TabOpen[TabValue.Bio])
                         {
 
                             ImGui.Image(currentAvatarImg.ImGuiHandle, new Vector2(100, 100));
@@ -256,7 +252,7 @@ namespace InfiniteRoleplay.Windows
                         }
                         #endregion
                         #region HOOKS
-                        if (editHooks == true)
+                        if (TabOpen[TabValue.Hooks])
                         {
                             if (ImGui.Button("Add Hook"))
                             {
@@ -283,7 +279,7 @@ namespace InfiniteRoleplay.Windows
                         }
                         #endregion
                         #region STORY
-                        if (editStory == true)
+                        if (TabOpen[TabValue.Story])
                         {
                             ImGui.Text("Story Title");
                             ImGui.SameLine();
@@ -322,7 +318,7 @@ namespace InfiniteRoleplay.Windows
                         #endregion
                         #region GALLERY
 
-                        if (addGallery == true)
+                        if (TabOpen[TabValue.Gallery])
                         {
                             if (ImGui.Button("Add Image"))
                             {
@@ -338,6 +334,7 @@ namespace InfiniteRoleplay.Windows
                                 {
                                     DataSender.SendGalleryImage(configuration.username, playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString(),
                                                       NSFW[i], TRIGGER[i], imageURLs[i], i);
+                                    
                                 }   
                             
                             }
@@ -348,7 +345,7 @@ namespace InfiniteRoleplay.Windows
                         #endregion
                         #region OOC
 
-                        if (addOOC)
+                        if (TabOpen[TabValue.OOC])
                         {
                             ImGui.InputTextMultiline("##OOC", ref oocInfo, 50000, new Vector2(500, 600));  
                             if(ImGui.Button("Submit OOC"))
@@ -574,12 +571,12 @@ namespace InfiniteRoleplay.Windows
 
         public void AddImageToGallery(Plugin plugin, int imageIndex)
         {
-            if(addGallery == true)
-            {          
+            if (TabOpen[TabValue.Gallery])
+            {
                 if (ImGui.BeginTable("##GalleryTable", 4))
-                {                    
+                {
                     for (int i = 0; i < imageIndex; i++)
-                    {                       
+                    {
                         if (i % 4 == 0)
                         {
                             ImGui.TableNextRow();
@@ -595,16 +592,12 @@ namespace InfiniteRoleplay.Windows
                     ImGui.EndTable();
                 }
             }
-
         }
         public void DrawHooksUI(Plugin plugin, int hookCount)
-        {
-            if (editHooks == true)
+        {           
+            for (int i = 0; i < hookCount; i++)
             {
-                for (int i = 0; i < hookCount; i++)
-                {
-                    DrawHook(i, plugin);
-                }
+                DrawHook(i, plugin);
             }
         }
 
@@ -776,7 +769,6 @@ namespace InfiniteRoleplay.Windows
             for (int s = 0; s < storyChapterCount; s++)
             {
                 ChapterNames[s] = string.Empty;
-                ChapterEditTitle[s] = string.Empty;
                 ChapterContents[s] = string.Empty;
                 chapterCount = 0;
             }
@@ -790,12 +782,11 @@ namespace InfiniteRoleplay.Windows
        
         public static void ClearUI()
         {
-            editBio = false;
-            editHooks = false;
-            editStory = false;
-            addOOC = false;
-            addGallery = false;
-            drawChapter = false;
+            TabOpen[TabValue.Bio] = false;
+            TabOpen[TabValue.Hooks] = false;
+            TabOpen[TabValue.Story] = false;
+            TabOpen[TabValue.OOC] = false;
+            TabOpen[TabValue.Gallery] = false;
         }
         public void Dispose()
         {
