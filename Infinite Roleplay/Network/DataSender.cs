@@ -82,24 +82,6 @@ namespace Networking
             
         }
 
-        public static async void SendHelloServer(string internalIP, string externalIP)
-        {
-            try
-            {
-                var buffer = new ByteBuffer();
-                buffer.WriteInteger((int)ClientPackets.CHelloServer);
-                buffer.WriteString(internalIP);
-                buffer.WriteString(externalIP);
-                buffer.WriteString("===New Connection===");
-                await ClientTCP.SendData(buffer.ToArray());
-                buffer.Dispose();
-            }
-            catch (Exception ex)
-            {
-                PrintMessage("Error in SendHelloServer: " + ex.ToString(), LogLevels.LogError);
-            }
-        }
-     
         public static async void Login(string username, string password, string playerName, string playerWorld)
         {
             try
@@ -136,15 +118,16 @@ namespace Networking
                 PrintMessage("Error in Register: " + ex.ToString(), LogLevels.LogError);
             }
         }
-        public static async void ReportProfile(string characterName, string characterWorld, string reporterAccountName, string reportInfo)
+        public static async void ReportProfile(string reporterAccount, string reporterPassword, string reportInfo)
         {
             try
             {
                 var buffer = new ByteBuffer();
                 buffer.WriteInteger((int)ClientPackets.CReportProfile);
-                buffer.WriteString(characterName);
-                buffer.WriteString(characterWorld);
-                buffer.WriteString(reporterAccountName);
+                buffer.WriteString(plugin.clientState.LocalPlayer.Name.ToString());
+                buffer.WriteString(plugin.clientState.LocalPlayer.HomeWorld.GameData.Name.ToString());
+                buffer.WriteString(reporterAccount);
+                buffer.WriteString(reporterPassword);
                 buffer.WriteString(reportInfo);
                 await ClientTCP.SendData(buffer.ToArray());
                 buffer.Dispose();
@@ -264,7 +247,6 @@ namespace Networking
             {
                 var buffer = new ByteBuffer();
                 buffer.WriteInteger((int)ClientPackets.CSendPlayerBookmark);
-                buffer.WriteString(username);
                 buffer.WriteString(playerName);
                 buffer.WriteString(playerWorld);
                 await ClientTCP.SendData(buffer.ToArray());
@@ -282,7 +264,6 @@ namespace Networking
             {
                 var buffer = new ByteBuffer();
                 buffer.WriteInteger((int)ClientPackets.CSendRemovePlayerBookmark);
-                buffer.WriteString(username);
                 buffer.WriteString(playerName);
                 buffer.WriteString(playerWorld);
                 await ClientTCP.SendData(buffer.ToArray());
@@ -386,9 +367,9 @@ namespace Networking
             }
 
         }
-       
-        
-     
+
+
+
         public static async void AddProfileNotes(string username, string characterNameVal, string characterWorldVal, string notes)
         {
             try
@@ -397,6 +378,8 @@ namespace Networking
                 var buffer = new ByteBuffer();
                 buffer.WriteInteger((int)ClientPackets.CSendProfileNotes);
                 buffer.WriteString(username);
+                buffer.WriteString(plugin.clientState.LocalPlayer.Name.ToString());
+                buffer.WriteString(plugin.clientState.LocalPlayer.HomeWorld.GameData.Name.ToString());
                 buffer.WriteString(characterNameVal);
                 buffer.WriteString(characterWorldVal);
                 buffer.WriteString(notes);

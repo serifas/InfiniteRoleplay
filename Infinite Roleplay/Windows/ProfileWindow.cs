@@ -485,6 +485,8 @@ namespace InfiniteRoleplay.Windows
         }
         public void DrawChapter(int i, Plugin plugin)
         {
+            if (TabOpen[TabValue.Story])
+            {
             if (storyChapterExists[i] == true && viewChapter[i] == true)
             {
                 if(i > -1)
@@ -528,6 +530,8 @@ namespace InfiniteRoleplay.Windows
                         }
                     }
                     ImGui.EndChild();
+                    }
+
                 }
 
             }
@@ -594,10 +598,13 @@ namespace InfiniteRoleplay.Windows
             }
         }
         public void DrawHooksUI(Plugin plugin, int hookCount)
-        {           
-            for (int i = 0; i < hookCount; i++)
+        {
+            if (TabOpen[TabValue.Hooks])
             {
-                DrawHook(i, plugin);
+                for (int i = 0; i < hookCount; i++)
+                {
+                    DrawHook(i, plugin);
+                }
             }
         }
 
