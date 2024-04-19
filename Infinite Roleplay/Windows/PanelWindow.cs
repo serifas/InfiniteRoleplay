@@ -213,7 +213,6 @@ namespace InfiniteRoleplay.Windows
                     viewMainWindow = true;
                 }
             }
-            ImGui.SameLine();
             ImGui.TextColored(statusCol, status);
 
         }

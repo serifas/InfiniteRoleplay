@@ -379,6 +379,8 @@ namespace Networking
             {
                 plugin.loginWindow.IsOpen = false;
                 plugin.panelWindow.IsOpen = true;
+                PanelWindow.status = "Logged In";
+                PanelWindow.statusCol = new Vector4(0,255,0,255);
                 plugin.loggedIn = true;
             }
           

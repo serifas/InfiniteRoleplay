@@ -15,6 +15,7 @@ using System.Timers;
 using System;
 using Dalamud.Game.Text.SeStringHandling;
 using System.Threading.Tasks;
+using InfiniteRoleplay.Network;
 
 namespace InfiniteRoleplay
 {
@@ -103,13 +104,6 @@ namespace InfiniteRoleplay
 
         private static void UnobservedTaskExceptionHandler(object sender, UnobservedTaskExceptionEventArgs e)
         {
-            // Log or handle the unobserved task exception here
-            foreach (Exception ex in e.Exception.InnerExceptions)
-            {
-                DataSender.PrintMessage("Unhandled Exception in Task handled " + ex.ToString(), LogLevels.LogError);
-                // Optionally, handle or log the exception
-            }
-
             // Mark the exception as observed to prevent it from being thrown by the finalizer thread
             e.SetObserved();
         }
@@ -350,6 +344,7 @@ namespace InfiniteRoleplay
        
         public void DrawLoginUI()
         {
+
             if(clientState.IsLoggedIn && clientState.LocalPlayer != null)
             {
                 ReloadClient();
