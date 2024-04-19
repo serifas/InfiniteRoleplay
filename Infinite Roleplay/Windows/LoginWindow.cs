@@ -137,8 +137,6 @@ public class LoginWindow : Window, IDisposable
                     {
                         plugin.Configuration.username = registerUser;
                         DataSender.Register(registerUser, registerPassword, email);
-                        login = true;
-                        register = false;
                     }
 
                 }
@@ -152,9 +150,5 @@ public class LoginWindow : Window, IDisposable
         }
         ImGui.TextColored(statusColor, status);
     }
-    public override void Update()
-    {
-    }
-
 
 }

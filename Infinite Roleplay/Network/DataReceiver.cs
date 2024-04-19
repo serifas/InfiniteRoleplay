@@ -427,6 +427,11 @@ namespace Networking
             {
                 VerificationWindow.verificationCol = new Vector4(0, 255, 0, 255);
                 VerificationWindow.verificationStatus = "Account Verified! you may now log in.";
+                LoginWindow.statusColor = new Vector4(0, 255, 0, 255);
+                LoginWindow.status = "Connected to Server...";
+                plugin.loginWindow.login = true;
+                plugin.loginWindow.register = false;
+
             }
             if (status == (int)Constants.StatusMessages.VERIFICATION_INCORRECT_KEY)
             {
@@ -775,6 +780,8 @@ namespace Networking
             buffer.WriteBytes(data);
             var packetID = buffer.ReadInt();
             plugin.verificationWindow.IsOpen = true;
+            LoginWindow.status = "Successfully Registered!";
+            LoginWindow.statusColor = new Vector4(0, 255, 0, 255);
             buffer.Dispose();
         }
         public static void ReceivePasswordModificationForm(byte[] data)

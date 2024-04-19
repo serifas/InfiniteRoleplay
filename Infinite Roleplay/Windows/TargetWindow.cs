@@ -142,17 +142,17 @@ namespace InfiniteRoleplay.Windows
                         if (ImGui.Button("Story", new Vector2(100, 20))) { ClearUI(); viewStory = true; }
                         if (ImGui.IsItemHovered()) { ImGui.SetTooltip("View story section to your profile."); }
                     }
-                    if (ExistingGallery == true)
-                    {
-                        ImGui.SameLine();
-                        if (ImGui.Button("Gallery", new Vector2(100, 20))) { ClearUI(); viewGallery = true; }
-                        if (ImGui.IsItemHovered()) { ImGui.SetTooltip("View gallery section of this profile."); }
-                    }
                     if (ExistingOOC == true)
                     {
                         ImGui.SameLine();
                         if (ImGui.Button("OOC Info", new Vector2(100, 20))) { ClearUI(); viewOOC = true; }
                         if (ImGui.IsItemHovered()) { ImGui.SetTooltip("View OOC section of this profile."); }
+                    }
+                    if (ExistingGallery == true)
+                    {
+                        ImGui.SameLine();
+                        if (ImGui.Button("Gallery", new Vector2(100, 20))) { ClearUI(); viewGallery = true; }
+                        if (ImGui.IsItemHovered()) { ImGui.SetTooltip("View gallery section of this profile."); }
                     }
 
                     ImGui.Text("Controls");
