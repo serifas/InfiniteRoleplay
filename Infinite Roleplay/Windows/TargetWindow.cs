@@ -390,8 +390,6 @@ namespace InfiniteRoleplay.Windows
             personalityImg1.Dispose();
             personalityImg2.Dispose();
             personalityImg3.Dispose();
-            Array.Clear(galleryThumbs);
-            Array.Clear(galleryImages);
             for (int gt = 0; gt < galleryThumbsList.Count; gt++)
             {
                 galleryThumbsList[gt].Dispose();
@@ -408,6 +406,8 @@ namespace InfiniteRoleplay.Windows
             {
                 galleryThumbs[t].Dispose();
             }
+            Array.Clear(galleryThumbs);
+            Array.Clear(galleryImages);
         }
        
        

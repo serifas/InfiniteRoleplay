@@ -16,6 +16,8 @@ using InfiniteRoleplay.Scripts.Misc;
 using OtterGui;
 using System.Linq;
 using FFXIVClientStructs.Havok;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Drawing.Printing;
 
 namespace InfiniteRoleplay.Windows
 {
@@ -30,6 +32,7 @@ namespace InfiniteRoleplay.Windows
     //changed
     public class ProfileWindow : Window, IDisposable
     {
+        public static bool firstChapterLoad = true;
         public static string loading;
         public static float percentage = 0f;
         private Plugin plugin;
@@ -54,7 +57,7 @@ namespace InfiniteRoleplay.Windows
         public static bool editAvatar, addProfile, editProfile, Reorder, addGalleryImageGUI, alignmentHidden, personalityHidden, loadPreview = false;
         public static string oocInfo, storyTitle = string.Empty;
         public bool ExistingProfile, ExistingStory, ExistingOOC, ExistingHooks, ExistingGallery, ExistingBio, ReorderHooks, ReorderChapters, AddHooks, AddStoryChapter;
-        public static int chapterCount, currentAlignment, currentPersonality_1, currentPersonality_2, currentPersonality_3, hookCount, storyChapterCount = 0;
+        public static int chapterCount, currentAlignment, currentPersonality_1, currentPersonality_2, currentPersonality_3, hookCount = 0;
         public byte[] avatarBytes;
         public static float _modVersionWidth, loaderInd;
         public static IDalamudTextureWrap avatarHolder, currentAvatarImg;
@@ -65,7 +68,10 @@ namespace InfiniteRoleplay.Windows
         private IDalamudTextureWrap persistAvatarHolder;
         private IDalamudTextureWrap[] otherImages;
         public static bool drawChapter;
+        public static int storyChapterCount = -1;
         public static int currentChapter;
+
+        public bool RedrawChapters { get; private set; }
 
         public ProfileWindow(Plugin plugin,
                              DalamudPluginInterface Interface,
@@ -422,7 +428,7 @@ namespace InfiniteRoleplay.Windows
                             hookExists[hookCount] = false;
 
                         }
-                        if (ReorderChapters== true)
+                        if (ReorderChapters == true)
                         {
                             ReorderChapters = false;
                             bool nextChapterExists = storyChapterExists[NextAvailableChapterIndex() + 1];
@@ -437,10 +443,11 @@ namespace InfiniteRoleplay.Windows
                                     DrawChapter(i, plugin);
                                 }
                             }
-                           
+
 
                         }
-                        
+
+
 
                     }
                 }
@@ -460,7 +467,7 @@ namespace InfiniteRoleplay.Windows
                 currentChapter = storyChapterCount;
                 viewChapter[storyChapterCount] = true;
             }
-            
+           
         }
         public void RemoveChapter(int index)
         {
@@ -485,55 +492,50 @@ namespace InfiniteRoleplay.Windows
         }
         public void DrawChapter(int i, Plugin plugin)
         {
-            if (TabOpen[TabValue.Story])
-            {
-            if (storyChapterExists[i] == true && viewChapter[i] == true)
-            {
-                if(i > -1)
+            
+            if (TabOpen[TabValue.Story] == true && i >= 0)
+            { 
+               
+                if (storyChapterExists[i] == true && viewChapter[i] == true)
                 {
-                   
-                    if (ImGui.BeginChild("##Chapter" + i, new Vector2(550, 250)))
-                    {
-                        ImGui.InputTextWithHint("##ChapterName" + i, "Chapter Name", ref ChapterNames[i], 300);
-                        ImGui.InputTextMultiline("##ChapterContent" + i, ref ChapterContents[i], 5000, new Vector2(500, 200));
-                        try
+                        if (ImGui.BeginChild("##Chapter" + i, new Vector2(550, 250)))
                         {
-                        
-                            if(i > 0)
+                            ImGui.InputTextWithHint("##ChapterName" + i, "Chapter Name", ref ChapterNames[i], 300);
+                            ImGui.InputTextMultiline("##ChapterContent" + i, ref ChapterContents[i], 5000, new Vector2(500, 200));
+                            try
                             {
-                                if (ImGui.BeginChild("##ChapterControls" + i))
-                                {
-                                    using (OtterGui.Raii.ImRaii.Disabled(!Plugin.CtrlPressed()))
+
+                                    if (ImGui.BeginChild("##ChapterControls" + i))
                                     {
-                                        if (ImGui.Button("Remove##" + "chapter" + i))
+                                        using (OtterGui.Raii.ImRaii.Disabled(!Plugin.CtrlPressed()))
                                         {
-                                            RemoveChapter(i);
-                                           
+                                            if (ImGui.Button("Remove##" + "chapter" + i))
+                                            {
+                                                RemoveChapter(i);
+
+                                            }
+
+                                        }
+                                        if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
+                                        {
+                                            ImGui.SetTooltip("Ctrl Click to Enable");
                                         }
 
-                                    }
-                                    if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
-                                    {
-                                        ImGui.SetTooltip("Ctrl Click to Enable");
+
                                     }
 
 
-                                }
 
-
-
+                                ImGui.EndChild();
                             }
-                            ImGui.EndChild();
+                            catch (Exception ex)
+                            {
+                            }
                         }
-                        catch (Exception ex)
-                        {
-                        }
-                    }
-                    ImGui.EndChild();
-                    }
-
+                        ImGui.EndChild();
+                    
+                        
                 }
-
             }
         }
         public void DrawHook(int i, Plugin plugin)
@@ -778,12 +780,13 @@ namespace InfiniteRoleplay.Windows
                 ChapterNames[s] = string.Empty;
                 ChapterContents[s] = string.Empty;
                 chapterCount = 0;
+                storyChapterExists[s] = false;
             }
 
 
-
+            currentChapter = 0;
             chapterCount = 0;
-            storyChapterCount = 0;
+            storyChapterCount = -1;
             storyTitle = string.Empty;
         }
        
@@ -820,6 +823,7 @@ namespace InfiniteRoleplay.Windows
                 gt.Dispose();
             }
         }
+
         public void AddChapterSelection()
         {
             string chapterName = ChapterNames[currentChapter];
@@ -827,21 +831,18 @@ namespace InfiniteRoleplay.Windows
             if (!combo)
                 return;
             foreach (var (newText, idx) in ChapterNames.WithIndex())
-            {
+            { 
                 string label = newText;
-                if (storyChapterExists[currentChapter])
+                if (label == string.Empty)
                 {
-                    if(label == string.Empty)
-                    {
-                        label = "New Chapter";
-                    }
+                    label = "New Chapter";
                 }
                 if (newText != string.Empty)
                 {
-                    if (ImGui.Selectable(label+ "##"+ idx, idx == currentChapter))
+                    if (ImGui.Selectable(label + "##" + idx, idx == currentChapter))
                     {
                         currentChapter = idx;
-                        storyChapterExists[currentChapter] = true;                      
+                        storyChapterExists[currentChapter] = true;
                         viewChapter[currentChapter] = true;
                         drawChapter = true;
                     }

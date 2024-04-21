@@ -648,7 +648,7 @@ namespace Networking
             buffer.Dispose();
             HooksLoadStatus = 1;
         }
-      
+
         public static void ReceiveProfileStory(byte[] data)
         {
             var buffer = new ByteBuffer();
@@ -656,9 +656,9 @@ namespace Networking
             var packetID = buffer.ReadInt();
             int chapterCount = buffer.ReadInt();
             string storyTitle = buffer.ReadString();
+            plugin.profileWindow.ResetStory();
             plugin.profileWindow.ExistingStory = true;
             ProfileWindow.storyTitle = storyTitle;
-
             for (int i = 0; i < chapterCount; i++)
             {
                 string chapterName = buffer.ReadString();
