@@ -9,15 +9,40 @@ namespace Networking
 {
     public class ClientTCP
     {
-        public static bool loadCallback;
         public static bool Connected;
         public static TcpClient clientSocket;
         private static NetworkStream myStream;
         private static byte[] recBuffer;
         private static string server = "185.33.84.184";
         private static int port = 25565;
-        private static int bufferSize = 1048576;
+        private static int bufferSize = 8192;
         public static Plugin plugin;
+
+        public static void StartReceiving()
+        {
+            Task.Run(() => ReceiveData());
+        }
+
+        private static void ReceiveData()
+        {
+            try
+            {
+                while (Connected)
+                {
+                    int length = myStream.Read(recBuffer, 0, recBuffer.Length);
+                    if (length <= 0) break;
+
+                    var newBytes = new byte[length];
+                    Array.Copy(recBuffer, newBytes, length);
+                    ClientHandleData.HandleData(newBytes);
+                }
+            }
+            catch (Exception ex)
+            {
+                DataSender.PrintMessage("Error receiving data: " + ex.ToString(), LogLevels.LogError);
+                Connected = false;
+            }
+        }
 
         public static bool IsConnectedToServer(TcpClient _tcpClient)
         {
@@ -30,46 +55,37 @@ namespace Networking
                         byte[] buff = new byte[1];
                         if (_tcpClient.Client.Receive(buff, SocketFlags.Peek) == 0)
                         {
-                            LoginWindow.status = "Could not connect to server";
+                            LoginWindow.status = "Not connected to server";
                             LoginWindow.statusColor = new System.Numerics.Vector4(255, 0, 0, 255);
                             return false;
                         }
-                        else
-                        {
-                            LoginWindow.status = "Connected to server";
-                            LoginWindow.statusColor = new System.Numerics.Vector4(0, 255, 0, 255);
-                            return true;
-                        }
+                        LoginWindow.status = "Connected to server";
+                        LoginWindow.statusColor = new System.Numerics.Vector4(0, 255, 0, 255);
+                        return true;
                     }
-
+                    LoginWindow.status = "Connected to server";
+                    LoginWindow.statusColor = new System.Numerics.Vector4(0, 255, 0, 255);
                     return true;
                 }
-                else
-                {
-                    LoginWindow.status = "Could not connect to server";
-                    LoginWindow.statusColor = new System.Numerics.Vector4(255, 0, 0, 255);
-                    return false;
-                }
+                LoginWindow.status = "Not connected to server";
+                LoginWindow.statusColor = new System.Numerics.Vector4(255, 0, 0, 255);
+                return false;
             }
             catch (Exception ex)
             {
-                DataSender.PrintMessage("Could not check IsConnectedToServer " + ex.Message, LogLevels.LogWarning);
+                LoginWindow.status = "Not connected to server";
+                LoginWindow.statusColor = new System.Numerics.Vector4(255, 0, 0, 255);
+                DataSender.PrintMessage("Error checking server connection: " + ex.ToString(), LogLevels.LogWarning);
                 return false;
             }
         }
 
-        public static Task CheckStatus()
+        public static void CheckStatus()
         {
             try
             {
-                DataSender.PrintMessage("Checking connection status", LogLevels.Log);
                 if (IsConnectedToServer(clientSocket))
                 {
-                    if (loadCallback)
-                    {
-                        ClientConnectionCallback();
-                        loadCallback = false;
-                    }
                     if (!plugin.uiLoaded)
                     {
                         plugin.LoadUI();
@@ -77,18 +93,16 @@ namespace Networking
                 }
                 else
                 {
-                    ConnectToServer().Wait();
+                    ConnectToServer();
                 }
             }
             catch (Exception ex)
             {
-                DataSender.PrintMessage("Could not check status" + ex.ToString(), LogLevels.LogWarning);
+                DataSender.PrintMessage("Error checking status: " + ex.ToString(), LogLevels.LogWarning);
             }
-
-            return Task.FromResult(true);
         }
 
-        public static Task ConnectToServer()
+        public static void ConnectToServer()
         {
             try
             {
@@ -96,130 +110,64 @@ namespace Networking
                 {
                     ClientHandleData.InitializePackets(true);
                 }
-                InitializingNetworking(true).Wait();
-                loadCallback = true;
-                LoginWindow.status = "Connected to Server...";
-                LoginWindow.statusColor = new System.Numerics.Vector4(0, 255, 0, 255);
-                CheckStatus().Wait();
+                EstablishConnection();
+                myStream = clientSocket.GetStream();
+                recBuffer = new byte[bufferSize];
+
+                Connected = true;
+                StartReceiving();
             }
             catch (Exception ex)
             {
-                LoginWindow.status = "Could not connect to server.";
-                LoginWindow.statusColor = new System.Numerics.Vector4(255, 0, 0, 255);
-                DataSender.PrintMessage("Could not connect to server " + ex.ToString(), LogLevels.LogError);
+                DataSender.PrintMessage("Could not connect to server: " + ex.ToString(), LogLevels.LogError);
+                Disconnect();
             }
-
-            return Task.FromResult(true);
         }
 
-        public static Task InitializingNetworking(bool start)
-        {
-            try
-            {
-                if (start == true)
-                {
-                    EstablishConnection().Wait();
-                }
-                else
-                {
-                    if (clientSocket.Connected == true)
-                    {
-                        Disconnect();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                DataSender.PrintMessage("Could not Initialize Networking " + ex.ToString(), LogLevels.LogError);
-            }
-
-            return Task.FromResult(true);
-        }
-
-        public static Task EstablishConnection()
+        public static void EstablishConnection()
         {
             try
             {
                 clientSocket = new TcpClient();
                 clientSocket.ReceiveBufferSize = bufferSize;
                 clientSocket.SendBufferSize = bufferSize;
-                recBuffer = new byte[bufferSize];
                 clientSocket.Connect(server, port);
             }
             catch (Exception ex)
             {
+                DataSender.PrintMessage("Could not establish connection: " + ex.ToString(), LogLevels.LogError);
                 clientSocket.Dispose();
-                DataSender.PrintMessage("Could not establish connection " + ex.ToString(), LogLevels.LogError);
             }
-
-            return Task.FromResult(true);
         }
 
-        public static void ClientConnectionCallback()
+        public static void Disconnect()
         {
-            try
+            Connected = false;
+            if (myStream != null)
             {
-                Connected = true;
-                myStream = clientSocket.GetStream();
-                myStream.BeginRead(recBuffer, 0, recBuffer.Length, ReceiveCallback, null);
+                myStream.Close();
+                myStream.Dispose();
             }
-            catch (Exception ex)
+            if (clientSocket != null)
             {
-                DataSender.PrintMessage("ClientConnectionCallback failed " + ex.ToString(), LogLevels.LogError);
-            }
-        }
-
-        private static void ReceiveCallback(IAsyncResult result)
-        {
-            try
-            {
-                var length = myStream.EndRead(result);
-                if (length <= 0)
-                {
-                    return;
-                }
-                var newBytes = new byte[length];
-                Array.Copy(recBuffer, newBytes, length);
-                ClientHandleData.HandleData(newBytes);
-                myStream.BeginRead(recBuffer, 0, recBuffer.Length, ReceiveCallback, null);
-            }
-            catch (Exception ex)
-            {
-                DataSender.PrintMessage("Could not receive callback " + ex.ToString(), LogLevels.LogError);
+                clientSocket.Close();
+                clientSocket.Dispose();
             }
         }
 
-        public static Task SendData(byte[] data)
+        public static void SendData(byte[] data)
         {
             try
             {
                 var buffer = new ByteBuffer();
-                buffer.WriteInteger(data.GetUpperBound(0) - data.GetLowerBound(0) + 1);
+                buffer.WriteInt(data.GetUpperBound(0) - data.GetLowerBound(0) + 1);
                 buffer.WriteBytes(data);
                 myStream.Write(buffer.ToArray(), 0, buffer.ToArray().Length);
                 buffer.Dispose();
             }
             catch (Exception ex)
             {
-                DataSender.PrintMessage("Could not send data " + ex.ToString(), LogLevels.LogError);
-            }
-
-            return Task.FromResult(true);
-        }
-
-        public static void Disconnect()
-        {
-            try
-            {
-                Connected = false;
-                myStream.Close();
-                myStream.Dispose();
-                clientSocket.Close();
-                clientSocket.Dispose();
-            }
-            catch (Exception ex)
-            {
-                DataSender.PrintMessage("Could not disconnect " + ex.ToString(), LogLevels.LogError);
+                DataSender.PrintMessage("Error sending data: " + ex.ToString(), LogLevels.LogError);
             }
         }
     }

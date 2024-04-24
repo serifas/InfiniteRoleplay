@@ -440,6 +440,7 @@ namespace Networking
             }
         }
 
+
         public static void ReceiveTargetGalleryImage(byte[] data)
         {
             var buffer = new ByteBuffer();
@@ -501,7 +502,7 @@ namespace Networking
                 ProfileWindow.loaderInd = i;
             }
             plugin.profileWindow.ExistingGallery = true;
-       
+
             GalleryLoadStatus = 1;
             buffer.Dispose();
 

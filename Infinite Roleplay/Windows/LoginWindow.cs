@@ -29,7 +29,7 @@ public class LoginWindow : Window, IDisposable
     public bool Agree18 = false;
     public static IDalamudTextureWrap kofiBtnImg, discoBtn;
     private PlayerCharacter playerCharacter;
-    public static string status = "status...";
+    public static string status = "Connection Status...";
     public static Vector4 statusColor = new Vector4(255, 255, 255, 255);
     public Plugin plugin;
     public LoginWindow(Plugin plugin, PlayerCharacter playerCharacter) : base(

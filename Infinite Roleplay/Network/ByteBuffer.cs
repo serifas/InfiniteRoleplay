@@ -54,7 +54,7 @@ namespace Networking
             Buff.AddRange(BitConverter.GetBytes(input));
             buffUpdated = true;
         }
-        public void WriteInteger(int input)
+        public void WriteInt(int input)
         {
             Buff.AddRange(BitConverter.GetBytes(input));
             buffUpdated = true;

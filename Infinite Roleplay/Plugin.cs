@@ -42,6 +42,7 @@ namespace InfiniteRoleplay
         public RestorationWindow restorationWindow;
         public TOS termsWindow;
         public static Misc misc = new Misc();
+        public static Timer timer = new Timer(3000);
         public string Name => "Infinite Roleplay";
         private const string CommandName = "/infinite";
         private DalamudPluginInterface pluginInterface { get; init; }
@@ -91,15 +92,20 @@ namespace InfiniteRoleplay
             {
                 HelpMessage = "to open the plugin panel window"
             });
-
+            LoadUI();
             this.pluginInterface.UiBuilder.Draw += DrawUI;
             this.pluginInterface.UiBuilder.OpenConfigUi += LoadOptions;
             this.pluginInterface.UiBuilder.OpenMainUi += DrawLoginUI;
             this.ct.OnMenuOpened += AddContextMenu;
             DataReceiver.plugin = this;
-            this.clientState.Login += CheckConnection;
+            timer.Elapsed += CheckStatus;
+            timer.Start();
         }
 
+        private void CheckStatus(object? sender, ElapsedEventArgs e)
+        {
+            ClientTCP.CheckStatus();
+        }
 
         private static void UnobservedTaskExceptionHandler(object sender, UnobservedTaskExceptionEventArgs e)
         {
@@ -170,7 +176,7 @@ namespace InfiniteRoleplay
             ProfileWindow.playerCharacter = this.clientState.LocalPlayer;
             PanelWindow.playerCharacter = this.clientState.LocalPlayer;
             PanelWindow.targetManager = this.targetManager;
-            await ClientTCP.CheckStatus();
+            ClientTCP.CheckStatus();
         }
         public void ReloadTarget()
         {
@@ -242,30 +248,59 @@ namespace InfiniteRoleplay
                 }
             }
         }
+
         public void Dispose()
         {
             try
             {
-                this.pluginInterface.UiBuilder.Draw -= DrawUI;
-                this.pluginInterface.UiBuilder.OpenConfigUi -= LoadOptions;
-                this.pluginInterface.UiBuilder.OpenMainUi -= DrawLoginUI;
-                this.ct.OnMenuOpened -= AddContextMenu;
-                this.CommandManager.RemoveHandler(CommandName);
-                this.WindowSystem.RemoveAllWindows();
+                if(timer != null)
+                {
+                    timer.Stop();
+                    timer.Dispose();
+                }
+                // Unsubscribe from Dalamud events
+                if (this.pluginInterface != null)
+                {
+                    this.pluginInterface.UiBuilder.Draw -= DrawUI;
+                    this.pluginInterface.UiBuilder.OpenConfigUi -= LoadOptions;
+                    this.pluginInterface.UiBuilder.OpenMainUi -= DrawLoginUI;
+
+                }
+
+                // Unsubscribe from custom events
+                if (this.ct != null)
+                {
+                    this.ct.OnMenuOpened -= AddContextMenu;
+                }
+                if(this.clientState != null)
+                {
+                    this.clientState.Login -= ClientTCP.CheckStatus;
+                }
+                // Remove command handlers
+                if (this.CommandManager != null)
+                {
+                    this.CommandManager.RemoveHandler(CommandName);
+                }
+
+                // Remove all windows managed by the window system
+                this.WindowSystem?.RemoveAllWindows();
+
+                // Disconnect the network client
                 ClientTCP.Disconnect();
+
+                // Clear packets if any are present
                 if (ClientHandleData.packets.Count > 0)
                 {
                     ClientHandleData.InitializePackets(false);
                 }
 
-
+                // Remove all loaded images associated with this plugin
                 Imaging.RemoveAllImages(this);
             }
             catch (Exception ex)
             {
-                DataSender.PrintMessage("Unable to Dispose " + ex.ToString(), LogLevels.LogError);
+                DataSender.PrintMessage($"Error disposing resources: {ex}", LogLevels.LogError);
             }
-
         }
         public void CloseAllWindows()
         { 
@@ -290,31 +325,7 @@ namespace InfiniteRoleplay
         }
 
 
-        public void CheckConnection()
-        {
-            if (clientState.IsLoggedIn == true && clientState.LocalPlayer != null)
-            {
-                if (!ClientTCP.IsConnectedToServer(ClientTCP.clientSocket))
-                {
-                    try
-                    {
-                        LoginWindow.status = "Connecting to Infinite Roleplay...";
-                        LoginWindow.statusColor = new System.Numerics.Vector4(96, 163, 175, 255);
-                        DataSender.PrintMessage("Connecting to Infinite Roleplay", LogLevels.Log);
-                        ReloadClient();
-                    }
-                    catch (Exception ex)
-                    {
-                        LoginWindow.status = "Could not connect to Infinite Roleplay";
-                        LoginWindow.statusColor = new System.Numerics.Vector4(255, 0, 0, 255);
-                        DataSender.PrintMessage("Could not connect to Infinite Roleplay", LogLevels.LogError);
-                        chatGUI.Print("Could not connect to Infinite Roleplay");
-                    }
-
-                }
-            }
-        }
-
+       
         private void OnCommand(string command, string args)
         {
             DrawLoginUI();
@@ -327,19 +338,6 @@ namespace InfiniteRoleplay
             
         }
 
-        
-
-        public async void DisconnectFromServer()
-        {
-            try
-            {
-                await ClientTCP.InitializingNetworking(false);
-            }
-            catch(Exception ex)
-            {
-                DataSender.PrintMessage("Unable to disconnect DisconnectFromServer failed!" + ex.ToString(), LogLevels.LogError);
-            }
-        }
        
         public void DrawLoginUI()
         {
@@ -347,7 +345,6 @@ namespace InfiniteRoleplay
             if(clientState.IsLoggedIn && clientState.LocalPlayer != null)
             {
                 ReloadClient();
-                AttemptLogin();
                 if (loggedIn == true)
                 {
                     panelWindow.IsOpen = true;

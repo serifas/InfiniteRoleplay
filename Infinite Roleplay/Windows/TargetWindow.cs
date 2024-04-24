@@ -10,7 +10,7 @@ using OtterGui.Raii;
 using Networking;
 using Dalamud.Plugin.Services;
 using Dalamud.Interface.Internal;
-using InfiniteRoleplay.Helpers; 
+using InfiniteRoleplay.Helpers;
 using InfiniteRoleplay.Scripts.Misc;
 
 namespace InfiniteRoleplay.Windows
@@ -47,22 +47,22 @@ namespace InfiniteRoleplay.Windows
         public static IDalamudTextureWrap[] galleryImages, galleryThumbs = new IDalamudTextureWrap[30];
         public static List<IDalamudTextureWrap> galleryThumbsList = new List<IDalamudTextureWrap>();
         public static List<IDalamudTextureWrap> galleryImagesList = new List<IDalamudTextureWrap>();
-       
+
         public static IDalamudTextureWrap currentAvatarImg, pictureTab;
-        public static string    characterEditName,
+        public static string characterEditName,
                                 characterEditRace,
                                 characterEditGender,
                                 characterEditAge,
                                 characterEditAfg,
                                 characterEditHeight,
                                 characterEditWeight,
-                                fileName, 
-                                reportInfo, 
+                                fileName,
+                                reportInfo,
                                 profileNotes,
-                                alignmentTooltip, 
-                                personality1Tooltip, 
-                                personality2Tooltip, 
-                                personality3Tooltip, 
+                                alignmentTooltip,
+                                personality1Tooltip,
+                                personality2Tooltip,
+                                personality3Tooltip,
                                 oocInfo = string.Empty;
         private bool AllLoaded;
 
@@ -82,8 +82,8 @@ namespace InfiniteRoleplay.Windows
             this.nameFont = pg.UiBuilder.GetGameFontHandle(new GameFontStyle(GameFontFamilyAndSize.Jupiter23));
             pictureTab = Constants.UICommonImage(Interface, Constants.CommonImageTypes.blankPictureTab);
             //alignment icons
-             this.chatGui = chatGui;
-            for (int i =0; i < 30; i++)
+            this.chatGui = chatGui;
+            for (int i = 0; i < 30; i++)
             {
                 StoryContent[i] = string.Empty;
                 ChapterContent[i] = string.Empty;
@@ -93,8 +93,8 @@ namespace InfiniteRoleplay.Windows
                 HookNames[i] = string.Empty;
                 galleryImagesList.Add(pictureTab);
                 galleryThumbsList.Add(pictureTab);
-                
-            }       
+
+            }
             galleryImages = galleryImagesList.ToArray();
             galleryThumbs = galleryThumbsList.ToArray();
         }
@@ -106,7 +106,7 @@ namespace InfiniteRoleplay.Windows
                 return ms.ToArray();
             }
         }
-        
+
         public override void Draw()
         {
             if (DataReceiver.TargetStoryLoadStatus != -1 &&
@@ -159,13 +159,14 @@ namespace InfiniteRoleplay.Windows
                     if (ImGui.Button("Notes", new Vector2(100, 20))) { ClearUI(); addNotes = true; }
                     if (ImGui.IsItemHovered()) { ImGui.SetTooltip("Add personal notes about this profile or the user."); }
                     ImGui.SameLine();
-                    if (ImGui.Button("Report!", new Vector2(100, 20))) {
+                    if (ImGui.Button("Report!", new Vector2(100, 20)))
+                    {
                         ReportWindow.reportCharacterName = characterNameVal;
                         ReportWindow.reportCharacterWorld = characterWorldVal;
                         plugin.reportWindow.IsOpen = true;
                     }
                     if (ImGui.IsItemHovered()) { ImGui.SetTooltip("Report this profile for inappropriate use.\n(Repeat false reports may result in your report ability being revoked.)"); }
-                    
+
                 }
 
 
@@ -202,24 +203,24 @@ namespace InfiniteRoleplay.Windows
                             ImGui.Spacing();
                             ImGui.Text("AT FIRST GLANCE: \n" + characterEditAfg);
                             ImGui.Spacing();
-                            if(showAlignment == true)
+                            if (showAlignment == true)
                             {
 
                                 ImGui.TextColored(new Vector4(1, 1, 1, 1), "ALIGNMENT:");
 
                                 ImGui.Image(alignmentImg.ImGuiHandle, new Vector2(32, 32));
-                            
+
                                 if (ImGui.IsItemHovered())
                                 {
                                     ImGui.SetTooltip(alignmentTooltip);
                                 }
                             }
-                            if(showPersonality == true)
+                            if (showPersonality == true)
                             {
                                 ImGui.Spacing();
 
                                 ImGui.TextColored(new Vector4(1, 1, 1, 1), "PERSONALITY TRAITS:");
-                            
+
                                 ImGui.Image(personalityImg1.ImGuiHandle, new Vector2(32, 42));
 
                                 if (ImGui.IsItemHovered())
@@ -244,7 +245,7 @@ namespace InfiniteRoleplay.Windows
                             }
 
 
-                        }   
+                        }
 
 
 
@@ -277,7 +278,7 @@ namespace InfiniteRoleplay.Windows
 
 
                         }
-                        if(viewOOC == true)
+                        if (viewOOC == true)
                         {
                             Misc.SetTitle(plugin, true, "OOC Information");
                             ImGui.Text(oocInfo);
@@ -297,7 +298,7 @@ namespace InfiniteRoleplay.Windows
 
                                         // you might normally want to embed resources and load them from the manifest stream
                                         //this.imageTextures.Add(goatImage);
-                                        
+
 
                                         ImGui.Image(galleryThumbs[i].ImGuiHandle, new Vector2(galleryThumbs[i].Width, galleryThumbs[i].Height));
                                         if (ImGui.IsItemHovered()) { ImGui.SetTooltip("Click to enlarge"); }
@@ -316,7 +317,7 @@ namespace InfiniteRoleplay.Windows
 
                                         // you might normally want to embed resources and load them from the manifest stream
                                         //this.imageTextures.Add(goatImage);
-                                   
+
 
                                         ImGui.Image(galleryThumbs[i].ImGuiHandle, new Vector2(galleryThumbs[i].Width, galleryThumbs[i].Height));
                                         if (ImGui.IsItemHovered()) { ImGui.SetTooltip("Click to enlarge"); }
@@ -338,15 +339,15 @@ namespace InfiniteRoleplay.Windows
 
                             }
                         }
-                   
-                        if(addNotes == true)
+
+                        if (addNotes == true)
                         {
 
                             Misc.SetTitle(plugin, true, "Personal Notes");
 
                             ImGui.Text("Here you can add personal notes about this player or profile");
                             ImGui.InputTextMultiline("##info", ref profileNotes, 500, new Vector2(400, 100));
-                            if(ImGui.Button("Add Notes"))
+                            if (ImGui.Button("Add Notes"))
                             {
                                 DataSender.AddProfileNotes(plugin.Configuration.username, characterNameVal, characterWorldVal, profileNotes);
                             }
@@ -372,44 +373,60 @@ namespace InfiniteRoleplay.Windows
 
         }
 
-       
+
         public static void ClearUI()
         {
             viewBio = false;
-            viewHooks = false; 
+            viewHooks = false;
             viewStory = false;
-            viewOOC= false;
+            viewOOC = false;
             viewGallery = false;
             addNotes = false;
         }
         public void Dispose()
         {
-            currentAvatarImg.Dispose();
-            pictureTab.Dispose();
-            alignmentImg.Dispose();
-            personalityImg1.Dispose();
-            personalityImg2.Dispose();
-            personalityImg3.Dispose();
-            for (int gt = 0; gt < galleryThumbsList.Count; gt++)
-            {
-                galleryThumbsList[gt].Dispose();
-            }
-            for (int gi = 0; gi < galleryThumbsList.Count; gi++)
-            {
-                galleryImagesList[gi].Dispose();
-            }
-            for(int i = 0; i < galleryImages.Length; i++)
-            {
-                galleryImages[i].Dispose();
-            }
-            for(int t = 0; t < galleryThumbs.Length; t++)
-            {
-                galleryThumbs[t].Dispose();
-            }
-            Array.Clear(galleryThumbs);
-            Array.Clear(galleryImages);
+            // Properly dispose of IDisposable resources
+            DisposeResource(ref currentAvatarImg);
+            DisposeResource(ref pictureTab);
+            DisposeResource(ref alignmentImg);
+            DisposeResource(ref personalityImg1);
+            DisposeResource(ref personalityImg2);
+            DisposeResource(ref personalityImg3);
+
+            // Dispose gallery images and thumbs
+            DisposeListResources(galleryImagesList);
+            DisposeListResources(galleryThumbsList);
+
+            // Manually set IDisposable resources to null after disposal to avoid double disposal and null reference issues
+            galleryImages = null;
+            galleryThumbs = null;
         }
-       
-       
+
+        // Helper method to dispose individual IDisposable resources
+        private void DisposeResource(ref IDalamudTextureWrap resource)
+        {
+            if (resource != null)
+            {
+                resource.Dispose();
+                resource = null;
+            }
+        }
+
+        // Helper method to dispose resources in a list
+        private void DisposeListResources(List<IDalamudTextureWrap> resources)
+        {
+            if (resources != null)
+            {
+                foreach (var resource in resources)
+                {
+                    if (resource != null)
+                    {
+                        resource.Dispose();
+                    }
+                }
+                resources.Clear();
+            }
+        }
+
     }
 }
