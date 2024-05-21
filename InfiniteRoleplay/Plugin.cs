@@ -9,6 +9,11 @@ using Dalamud.Game.ClientState.Objects;
 using System.Runtime.InteropServices;
 using System.Timers;
 using Networking;
+using FFXIVClientStructs.FFXIV.Client.UI;
+using Dalamud.Game.ClientState.Objects.SubKinds;
+using Dalamud.Game.Gui.ContextMenu;
+using Dalamud.Game.Text;
+using System;
 namespace InfiniteRoleplay;
 
 public partial class Plugin : IDalamudPlugin
@@ -17,6 +22,7 @@ public partial class Plugin : IDalamudPlugin
     public bool loggedIn;
     public DalamudPluginInterface PluginInterface { get; init; }
     private ICommandManager CommandManager { get; init; }
+    private IContextMenu ContextMenu { get; init; }
 
     [LibraryImport("user32")]
     internal static partial short GetKeyState(int nVirtKey);
@@ -42,12 +48,14 @@ public partial class Plugin : IDalamudPlugin
         [RequiredVersion("1.0")] ICommandManager commandManager,
         [RequiredVersion("1.0")] ITextureProvider textureProvider,
         [RequiredVersion("1.0")] IClientState clientState,
+        [RequiredVersion("1.0")] IContextMenu contextMenu,
         [RequiredVersion("1.0")] ITargetManager targetManager)
     {
         PluginInterface = pluginInterface;
         CommandManager = commandManager;
         ClientState = clientState;
         TargetManager = targetManager;
+        ContextMenu = contextMenu;
         Configuration = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
         Configuration.Initialize(PluginInterface);
         DataReceiver.plugin = this;
@@ -72,6 +80,7 @@ public partial class Plugin : IDalamudPlugin
         WindowSystem.AddWindow(RestorationWindow);
         WindowSystem.AddWindow(ReportWindow);
 
+        this.ContextMenu.OnMenuOpened += AddContextMenu;
         CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
         {
             HelpMessage = "Type /infinite to open the plugin window."
@@ -92,6 +101,53 @@ public partial class Plugin : IDalamudPlugin
     {
         ClientTCP.CheckStatus();
     }
+    public void AddContextMenu(MenuOpenedArgs args)
+    {
+        var targetPlayer = TargetManager.Target as PlayerCharacter;
+        if (args.AddonPtr == (nint)0 && targetPlayer != null && loggedIn == true)
+        {
+            MenuItem view = new MenuItem();
+            MenuItem bookmark = new MenuItem();
+            view.Name = "View Infinite Profile";
+            view.PrefixColor = 56;
+            view.Prefix = SeIconChar.BoxedQuestionMark;
+            bookmark.Name = "Bookmark Infinite Profile";
+            bookmark.PrefixColor = 56;
+            bookmark.Prefix = SeIconChar.BoxedPlus;
+            view.OnClicked += ViewProfile;
+            bookmark.OnClicked += BookmarkProfile;
+            args.AddMenuItem(view);
+            args.AddMenuItem(bookmark);
+
+        }
+    }
+
+    private void ViewProfile(MenuItemClickedArgs args)
+    {
+        try
+        {
+            var targetPlayer = TargetManager.Target as PlayerCharacter;
+            string characterName = targetPlayer.Name.ToString();
+            string characterWorld = targetPlayer.HomeWorld.GameData.Name.ToString();
+            ReportWindow.reportCharacterName = characterName;
+            ReportWindow.reportCharacterWorld = characterWorld;
+            TargetWindow.characterNameVal = characterName;
+            TargetWindow.characterWorldVal = characterWorld;
+            TargetWindow.ReloadTarget();
+            TargetWindow.IsOpen = true;
+            DataSender.RequestTargetProfile(characterName, characterWorld, Configuration.username);
+        }
+        catch (Exception ex)
+        {
+            DataSender.PrintMessage("Error when viewing profile from context " + ex.ToString(), LogLevels.LogError);
+        }
+    }
+
+    private void BookmarkProfile(MenuItemClickedArgs args)
+    {
+        var targetPlayer = TargetManager.Target as PlayerCharacter;
+        DataSender.BookmarkPlayer(Configuration.username.ToString(), targetPlayer.Name.ToString(), targetPlayer.HomeWorld.GameData.Name.ToString());
+    }
 
     public void Dispose()
     {
@@ -99,6 +155,7 @@ public partial class Plugin : IDalamudPlugin
         timer.Dispose();
         WindowSystem.RemoveAllWindows();
         CommandManager.RemoveHandler(CommandName);
+        ContextMenu.OnMenuOpened -= AddContextMenu;
     }
 
     private void OnCommand(string command, string args)

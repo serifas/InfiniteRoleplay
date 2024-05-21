@@ -377,6 +377,14 @@ namespace InfiniteRoleplay.Windows
             viewGallery = false;
             addNotes = false;
         }
+        public void ReloadTarget()
+        {
+            DataReceiver.TargetBioLoadStatus = -1;
+            DataReceiver.TargetGalleryLoadStatus = -1;
+            DataReceiver.TargetHooksLoadStatus = -1;
+            DataReceiver.TargetStoryLoadStatus = -1;
+            DataReceiver.TargetNotesLoadStatus = -1;
+        }
         public void Dispose()
         {
             // Properly dispose of IDisposable resources
