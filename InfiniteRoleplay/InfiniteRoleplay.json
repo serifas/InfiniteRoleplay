@@ -1,0 +1,13 @@
+{
+    "Author": "Lynie",
+    "Name": "Infinite Roleplay",
+    "Punchline": "A plugin for creating profiles and sharing them, with more to come!",
+    "Description": "Use /infinite or the settings button to open.",
+    "InternalName": "Infinite Roleplay",
+    "ApplicableVersion": "any",
+    "Tags": [
+        "Infinite",
+        "Roleplay",
+        "RP"
+    ]
+}
