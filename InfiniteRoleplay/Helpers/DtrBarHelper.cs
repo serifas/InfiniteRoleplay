@@ -19,29 +19,24 @@ namespace InfiniteRoleplay
     {
         private static DtrBarEntry? dtrBarEntry;
         private static IDtrBar dtrBar;
-        private static Timer timer = new Timer(3000);
+        public static bool BarAdded = false;
         public static void AddIconToDtrBar(Plugin plugin, IDtrBar dtrService)
         {
+            BarAdded = true;
             dtrBar = dtrService;
-            if (dtrBar.Get("Who Am I Again?") is not { } entry) return;
-            timer.Elapsed += CheckStatus;
+            if (dtrBar.Get("Infinite Roleplay") is not { } entry) return;
             dtrBarEntry = entry;
             string text = "\uE03E";
             dtrBarEntry.Text = text;
-            timer.Start();
             entry.OnClick = () => plugin.MainPanel.Toggle();
+            string connectionStatus = ClientTCP.GetConnectionStatus(ClientTCP.clientSocket);
+            dtrBarEntry.Tooltip = new SeStringBuilder().AddText($"Infinite Rolepaly: {connectionStatus}").Build();
         }
 
-        private static void CheckStatus(object? sender, ElapsedEventArgs e)
-        {
-            string connectionStatus = ClientTCP.GetConnectionStatus(ClientTCP.clientSocket);
-            dtrBarEntry.Tooltip = new SeStringBuilder().AddText($"{connectionStatus}").Build();
-        }
 
         public static void DisposeBar()
         {
-            dtrBarEntry?.Remove();
-            dtrBarEntry = null;
+            BarAdded = false;
         }
        
     }

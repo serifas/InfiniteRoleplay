@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using InfiniteRoleplay.Windows;
 using InfiniteRoleplay;
+using Dalamud.Plugin.Services;
 
 namespace Networking
 {
@@ -102,13 +103,17 @@ namespace Networking
             }
         }
 
-        public static void CheckStatus()
+        public static void CheckStatus(Plugin plugin, IDtrBar DtBar)
         {
             try
             {
                 if (!IsConnectedToServer(clientSocket))
                 {
                     ConnectToServer();
+                }
+                if (DtrBarHelper.BarAdded == false)
+                {                   
+                    DtrBarHelper.AddIconToDtrBar(plugin, DtBar);
                 }
             }
             catch (Exception ex)

@@ -25,7 +25,7 @@ public partial class Plugin : IDalamudPlugin
     public bool loggedIn;
     public DalamudPluginInterface PluginInterface { get; init; }
     private ICommandManager CommandManager { get; init; }
-    private IDtrBar DtrBar { get; init; }
+    public static IDtrBar DtrBar;
     private IContextMenu ContextMenu { get; init; }
 
     [LibraryImport("user32")]
@@ -99,14 +99,20 @@ public partial class Plugin : IDalamudPlugin
 
         // Adds another button that is doing the same but for the main ui of the plugin
         PluginInterface.UiBuilder.OpenMainUi += ToggleMainUI;
+        this.ClientState.Logout += Logout;
         timer.Elapsed += CheckConnectionStatus;
         timer.Start();
-        DtrBarHelper.AddIconToDtrBar(this, DtrBar);
 
     }
-    private void CheckConnectionStatus(object? sender, ElapsedEventArgs e)
+
+    private void Logout()
     {
-        ClientTCP.CheckStatus();
+        DtrBarHelper.DisposeBar();
+    }
+
+    private void CheckConnectionStatus(object? sender, ElapsedEventArgs e)
+    {   
+        ClientTCP.CheckStatus(this, DtrBar);
     }
     public void AddContextMenu(MenuOpenedArgs args)
     {
@@ -162,8 +168,6 @@ public partial class Plugin : IDalamudPlugin
         timer.Dispose();
         WindowSystem.RemoveAllWindows();
         CommandManager.RemoveHandler(CommandName);
-        DtrBarHelper.DisposeBar();
-        ContextMenu.OnMenuOpened -= AddContextMenu; 
     }
 
     private void OnCommand(string command, string args)
