@@ -14,6 +14,9 @@ using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.Gui.ContextMenu;
 using Dalamud.Game.Text;
 using System;
+using ImGuiNET;
+using System.Numerics;
+using Dalamud.Game.Gui.Dtr;
 namespace InfiniteRoleplay;
 
 public partial class Plugin : IDalamudPlugin
@@ -22,6 +25,7 @@ public partial class Plugin : IDalamudPlugin
     public bool loggedIn;
     public DalamudPluginInterface PluginInterface { get; init; }
     private ICommandManager CommandManager { get; init; }
+    private IDtrBar DtrBar { get; init; }
     private IContextMenu ContextMenu { get; init; }
 
     [LibraryImport("user32")]
@@ -49,7 +53,9 @@ public partial class Plugin : IDalamudPlugin
         [RequiredVersion("1.0")] ITextureProvider textureProvider,
         [RequiredVersion("1.0")] IClientState clientState,
         [RequiredVersion("1.0")] IContextMenu contextMenu,
-        [RequiredVersion("1.0")] ITargetManager targetManager)
+        [RequiredVersion("1.0")] ITargetManager targetManager,
+        [RequiredVersion("1.0")] IDtrBar dtrBar
+        )
     {
         PluginInterface = pluginInterface;
         CommandManager = commandManager;
@@ -79,7 +85,7 @@ public partial class Plugin : IDalamudPlugin
         WindowSystem.AddWindow(VerificationWindow);
         WindowSystem.AddWindow(RestorationWindow);
         WindowSystem.AddWindow(ReportWindow);
-
+        DtrBar = dtrBar;
         this.ContextMenu.OnMenuOpened += AddContextMenu;
         CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
         {
@@ -95,8 +101,9 @@ public partial class Plugin : IDalamudPlugin
         PluginInterface.UiBuilder.OpenMainUi += ToggleMainUI;
         timer.Elapsed += CheckConnectionStatus;
         timer.Start();
-    }
+        DtrBarHelper.AddIconToDtrBar(this, DtrBar);
 
+    }
     private void CheckConnectionStatus(object? sender, ElapsedEventArgs e)
     {
         ClientTCP.CheckStatus();
@@ -155,7 +162,8 @@ public partial class Plugin : IDalamudPlugin
         timer.Dispose();
         WindowSystem.RemoveAllWindows();
         CommandManager.RemoveHandler(CommandName);
-        ContextMenu.OnMenuOpened -= AddContextMenu;
+        DtrBarHelper.DisposeBar();
+        ContextMenu.OnMenuOpened -= AddContextMenu; 
     }
 
     private void OnCommand(string command, string args)
@@ -173,7 +181,7 @@ public partial class Plugin : IDalamudPlugin
             }
         }
     }
-
+   
     private void DrawUI() => WindowSystem.Draw();
 
     public void ToggleConfigUI() => OptionsWindow.Toggle();

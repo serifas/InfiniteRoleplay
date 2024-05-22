@@ -182,6 +182,7 @@ namespace Networking
                 TargetWindow.ExistingProfile = true;
                 TargetWindow.ClearUI();
                 ReportWindow.reportStatus = "";
+                plugin.TargetWindow.ReloadTarget();
             }
             catch(Exception ex) 
             {
@@ -222,6 +223,7 @@ namespace Networking
             ProfileWindow.editProfile = false;
             ProfileWindow.ClearUI();
             plugin.ProfileWindow.ExistingProfile = false;
+
         }
         public static void NoTargetProfile(byte[] data)
         {
@@ -401,8 +403,8 @@ namespace Networking
             {
                 VerificationWindow.verificationCol = new Vector4(0, 255, 0, 255);
                 VerificationWindow.verificationStatus = "Account Verified! you may now log in.";
-                MainPanel.statusColor = new Vector4(0, 255, 0, 255);
-                MainPanel.status = "Connected to Server...";
+                MainPanel.statusColor = new Vector4(255, 0, 0, 255);
+                MainPanel.status = "Logged Out";
                 plugin.MainPanel.login = true;
                 plugin.MainPanel.register = false;
 
@@ -470,7 +472,7 @@ namespace Networking
                 bool nsfw = buffer.ReadBool();
                 bool trigger = buffer.ReadBool();
                 Imaging.DownloadProfileImage(true, url, profileID, nsfw, trigger, plugin, i);
-                ProfileWindow.imageIndex = i + 2;
+                ProfileWindow.imageIndex = i + 1;
                 ProfileWindow.ImageExists[i] = true;
                 ProfileWindow.loading = "Gallery Image: " + i;
                 ProfileWindow.loaderInd = i;
@@ -601,6 +603,7 @@ namespace Networking
             buffer.Dispose();
             plugin.ProfileWindow.IsOpen = true;
             plugin.ProfileWindow.ExistingProfile = true;
+            plugin.ProfileWindow.ReloadProfile();
 
         }
         public static void ReceiveProfileHooks(byte[] data)

@@ -927,6 +927,13 @@ namespace InfiniteRoleplay.Windows
             }, 0, null, this.configuration.AlwaysOpenDefaultImport);
 
         }
+        public void ReloadProfile()
+        {
+            DataReceiver.BioLoadStatus = -1;
+            DataReceiver.GalleryLoadStatus = -1;
+            DataReceiver.HooksLoadStatus = -1;
+            DataReceiver.StoryLoadStatus = -1;
+        }
 
     }
 }

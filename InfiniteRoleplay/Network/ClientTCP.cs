@@ -42,7 +42,30 @@ namespace Networking
                 Connected = false;
             }
         }
-
+        public static string GetConnectionStatus(TcpClient _tcpClient)
+        {
+            try
+            {
+                if (_tcpClient != null && _tcpClient.Client != null && _tcpClient.Client.Connected)
+                {
+                    if (_tcpClient.Client.Poll(0, SelectMode.SelectRead))
+                    {
+                        byte[] buff = new byte[1];
+                        if (_tcpClient.Client.Receive(buff, SocketFlags.Peek) == 0)
+                        {
+                            return "Connected";
+                        }
+                        return "Connected";
+                    }
+                    return "Connected";
+                }
+                return "Disconnected";
+            }
+            catch (Exception ex)
+            {
+                return "Disconnected";
+            }
+        }
         public static bool IsConnectedToServer(TcpClient _tcpClient)
         {
             try

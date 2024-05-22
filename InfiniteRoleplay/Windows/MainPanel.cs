@@ -36,7 +36,7 @@ public class MainPanel : Window, IDisposable
     //server status label stuff
     public static string serverStatus = "Connection Status...";
     public static Vector4 serverStatusColor = new Vector4(255, 255, 255, 255);
-    public static string status = "Status...";
+    public static string status = "";
     public static Vector4 statusColor = new Vector4(255, 255, 255, 255);
     //button images
     private IDalamudTextureWrap kofiBtnImg, discoBtn, profileSectionImage, eventsSectionImage, systemsSectionImage, connectionsSectionImage,
@@ -265,6 +265,8 @@ public class MainPanel : Window, IDisposable
                 plugin.MainPanel.IsOpen = true;
                 viewMainWindow = false;
                 login = true;
+                status = "Logged Out";
+                statusColor = new Vector4(255, 0, 0, 255);
             }
         }
         if (viewProfile == true)
