@@ -621,7 +621,6 @@ namespace Networking
                 ProfileWindow.hookExists[i] = true;
                 ProfileWindow.HookNames[i] = hookName;
                 ProfileWindow.HookContents[i] = hookContent;
-
             }
             ProfileWindow.hookCount = hookCount;
             buffer.Dispose();

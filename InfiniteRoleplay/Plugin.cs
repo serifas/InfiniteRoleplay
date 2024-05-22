@@ -17,15 +17,19 @@ using System;
 using ImGuiNET;
 using System.Numerics;
 using Dalamud.Game.Gui.Dtr;
+using Dalamud.Game.Text.SeStringHandling;
 namespace InfiniteRoleplay;
 
 public partial class Plugin : IDalamudPlugin
 {
     private const string CommandName = "/infinite";
     public bool loggedIn;
+    private readonly IDtrBar dtrBar;
+
+    private DtrBarEntry? dtrBarEntry;
+    public static bool BarAdded = false;
     public DalamudPluginInterface PluginInterface { get; init; }
     private ICommandManager CommandManager { get; init; }
-    public static IDtrBar DtrBar;
     private IContextMenu ContextMenu { get; init; }
 
     [LibraryImport("user32")]
@@ -85,7 +89,7 @@ public partial class Plugin : IDalamudPlugin
         WindowSystem.AddWindow(VerificationWindow);
         WindowSystem.AddWindow(RestorationWindow);
         WindowSystem.AddWindow(ReportWindow);
-        DtrBar = dtrBar;
+        this.dtrBar = dtrBar;
         this.ContextMenu.OnMenuOpened += AddContextMenu;
         CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
         {
@@ -96,23 +100,23 @@ public partial class Plugin : IDalamudPlugin
         // This adds a button to the plugin installer entry of this plugin which allows
         // to toggle the display status of the configuration ui
         PluginInterface.UiBuilder.OpenConfigUi += ToggleConfigUI;
-
+        this.ClientState.Logout += OnLogout;
         // Adds another button that is doing the same but for the main ui of the plugin
         PluginInterface.UiBuilder.OpenMainUi += ToggleMainUI;
-        this.ClientState.Logout += Logout;
         timer.Elapsed += CheckConnectionStatus;
         timer.Start();
 
     }
 
-    private void Logout()
-    {
-        DtrBarHelper.DisposeBar();
-    }
 
     private void CheckConnectionStatus(object? sender, ElapsedEventArgs e)
     {   
-        ClientTCP.CheckStatus(this, DtrBar);
+        ClientTCP.CheckStatus();
+        UpdateStatus();
+        if(ClientState.IsLoggedIn && ClientState.LocalPlayer != null)
+        {
+            LoadDtrBar();
+        }
     }
     public void AddContextMenu(MenuOpenedArgs args)
     {
@@ -161,6 +165,20 @@ public partial class Plugin : IDalamudPlugin
         var targetPlayer = TargetManager.Target as PlayerCharacter;
         DataSender.BookmarkPlayer(Configuration.username.ToString(), targetPlayer.Name.ToString(), targetPlayer.HomeWorld.GameData.Name.ToString());
     }
+    public void LoadDtrBar()
+    {
+        if (dtrBar.Get("Infinite Roleplay") is not { } entry) return;
+        dtrBarEntry = entry;
+        string text = "\uE03E";
+        dtrBarEntry.Text = text;
+        entry.OnClick = () => this.MainPanel.Toggle();
+    }
+    private void OnLogout()
+    {
+        timer.Stop();
+        dtrBarEntry?.Remove();
+        dtrBarEntry = null;
+    }
 
     public void Dispose()
     {
@@ -168,8 +186,14 @@ public partial class Plugin : IDalamudPlugin
         timer.Dispose();
         WindowSystem.RemoveAllWindows();
         CommandManager.RemoveHandler(CommandName);
+        ClientState.Logout -= OnLogout;
+        PluginInterface.UiBuilder.OpenConfigUi -= ToggleConfigUI;
     }
-
+    public void UpdateStatus()
+    {
+        string connectionStatus = ClientTCP.GetConnectionStatus(ClientTCP.clientSocket);
+        dtrBarEntry.Tooltip = new SeStringBuilder().AddText($"Infinite Rolepaly: {connectionStatus}").Build();
+    }
     private void OnCommand(string command, string args)
     {
         // in response to the slash command, just toggle the display status of our main ui

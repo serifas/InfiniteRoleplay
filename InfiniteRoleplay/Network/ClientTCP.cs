@@ -103,7 +103,7 @@ namespace Networking
             }
         }
 
-        public static void CheckStatus(Plugin plugin, IDtrBar DtBar)
+        public static void CheckStatus()
         {
             try
             {
@@ -111,10 +111,7 @@ namespace Networking
                 {
                     ConnectToServer();
                 }
-                if (DtrBarHelper.BarAdded == false)
-                {                   
-                    DtrBarHelper.AddIconToDtrBar(plugin, DtBar);
-                }
+               
             }
             catch (Exception ex)
             {
