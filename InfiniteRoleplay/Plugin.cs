@@ -74,7 +74,7 @@ public partial class Plugin : IDalamudPlugin
         OptionsWindow = new OptionsWindow(this);
         MainPanel = new MainPanel(this);
         TermsWindow = new TOS(this);
-        ProfileWindow = new ProfileWindow(this);
+        ProfileWindow = new ProfileWindow(this, this.ClientState.LocalPlayer);
         ImagePreview = new ImagePreview(this);
         BookmarksWindow = new BookmarksWindow(this);
         TargetWindow = new TargetWindow(this);
@@ -92,23 +92,23 @@ public partial class Plugin : IDalamudPlugin
         WindowSystem.AddWindow(RestorationWindow);
         WindowSystem.AddWindow(ReportWindow);
         this.dtrBar = dtrBar;
-        this.ContextMenu.OnMenuOpened += AddContextMenu;
         CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
         {
             HelpMessage = "Type /infinite to open the plugin window."
         });
-
+       
         PluginInterface.UiBuilder.Draw += DrawUI;
         // This adds a button to the plugin installer entry of this plugin which allows
         // to toggle the display status of the configuration ui
         PluginInterface.UiBuilder.OpenConfigUi += ToggleConfigUI;
-        ClientState.Logout += OnLogout;
-        ClientState.Login += OnLogin;
-
+        ClientState.Logout += Stop;
+        ClientState.Login += Start;
+        if(this.ClientState.IsLoggedIn == true && this.ClientState.LocalPlayer != null)
+        {
+            Start();
+        }
         // Adds another button that is doing the same but for the main ui of the plugin
         PluginInterface.UiBuilder.OpenMainUi += ToggleMainUI;
-        timer.Elapsed += CheckConnectionStatus;
-        timer.Start();
 
     }
 
@@ -182,13 +182,18 @@ public partial class Plugin : IDalamudPlugin
         entry.OnClick = () => this.MainPanel.Toggle();
         barLoaded = true;
     }
-    private void OnLogout()
+    private void Stop()
     {
-        timer.Stop();
+        dtrBarEntry?.Remove();
+        dtrBarEntry = null;
         barLoaded = false;
+        this.ContextMenu.OnMenuOpened -= AddContextMenu;
+        timer.Stop();
     }
-    private void OnLogin()
+    private void Start()
     {
+        this.ContextMenu.OnMenuOpened += AddContextMenu;
+        timer.Elapsed += CheckConnectionStatus;
         timer.Start();
     }
     public void Dispose()
@@ -197,11 +202,9 @@ public partial class Plugin : IDalamudPlugin
         timer.Dispose();
         WindowSystem.RemoveAllWindows();
         CommandManager.RemoveHandler(CommandName);
-        ClientState.Logout -= OnLogout;
+        ClientState.Logout -= Stop;
+        ClientState.Login -= Start;
         PluginInterface.UiBuilder.OpenConfigUi -= ToggleConfigUI;
-        barLoaded = false;
-        dtrBarEntry?.Remove();
-        dtrBarEntry = null;
     }
     public void UpdateStatus()
     {

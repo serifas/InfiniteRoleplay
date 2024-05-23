@@ -118,16 +118,15 @@ namespace Networking
                 PrintMessage("Error in Register: " + ex.ToString(), LogLevels.LogError);
             }
         }
-        public static async void ReportProfile(string reporterAccount, string reporterPassword, string reportInfo)
+        public static async void ReportProfile(string reporterAccount, string playerName, string playerWorld, string reportInfo)
         {
             try
             {
                 var buffer = new ByteBuffer();
                 buffer.WriteInt((int)ClientPackets.CReportProfile);
-                buffer.WriteString(plugin.ClientState.LocalPlayer.Name.ToString());
-                buffer.WriteString(plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString());
+                buffer.WriteString(playerName);
+                buffer.WriteString(playerWorld);
                 buffer.WriteString(reporterAccount);
-                buffer.WriteString(reporterPassword);
                 buffer.WriteString(reportInfo);
                 ClientTCP.SendData(buffer.ToArray());
                 buffer.Dispose();
@@ -221,14 +220,12 @@ namespace Networking
                 PrintMessage("Error in FetchProfile: " + ex.ToString(), LogLevels.LogError);
             }
         }
-        public static async void CreateProfile(string username, string playerName, string playerServer)
+        public static async void CreateProfile(string playerName, string playerServer)
         {
             try
             {
                 var buffer = new ByteBuffer();
                 buffer.WriteInt((int)ClientPackets.CCreateProfile);
-                buffer.WriteString(plugin.Configuration.username);
-                buffer.WriteString(plugin.Configuration.password);
                 buffer.WriteString(playerName);
                 buffer.WriteString(playerServer);
                 ClientTCP.SendData(buffer.ToArray());
@@ -296,8 +293,6 @@ namespace Networking
             {
                 var buffer = new ByteBuffer();
                 buffer.WriteInt((int)ClientPackets.CCreateProfileBio);
-                buffer.WriteString(plugin.Configuration.username);
-                buffer.WriteString(plugin.Configuration.password);
                 buffer.WriteString(playerName);
                 buffer.WriteString(playerServer);
                 buffer.WriteInt(avatarBytes.Length);
@@ -377,8 +372,6 @@ namespace Networking
                 var buffer = new ByteBuffer();
                 buffer.WriteInt((int)ClientPackets.CSendProfileNotes);
                 buffer.WriteString(username);
-                buffer.WriteString(plugin.ClientState.LocalPlayer.Name.ToString());
-                buffer.WriteString(plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString());
                 buffer.WriteString(characterNameVal);
                 buffer.WriteString(characterWorldVal);
                 buffer.WriteString(notes);

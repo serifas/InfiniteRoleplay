@@ -50,7 +50,7 @@ namespace InfiniteRoleplay.Windows
             {
                 if (reportInfo.Length > 15)
                 {
-                    DataSender.ReportProfile(pg.Configuration.username, pg.Configuration.password, reportInfo);
+                    DataSender.ReportProfile(pg.Configuration.username, reportCharacterName, reportCharacterWorld, reportInfo);
                 }
                 else
                 {

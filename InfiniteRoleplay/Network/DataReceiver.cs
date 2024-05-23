@@ -222,6 +222,7 @@ namespace Networking
             ProfileWindow.addProfile = false;
             ProfileWindow.editProfile = false;
             ProfileWindow.ClearUI();
+            plugin.ProfileWindow.IsOpen = true;
             plugin.ProfileWindow.ExistingProfile = false;
 
         }
@@ -621,6 +622,7 @@ namespace Networking
                 ProfileWindow.hookExists[i] = true;
                 ProfileWindow.HookNames[i] = hookName;
                 ProfileWindow.HookContents[i] = hookContent;
+
             }
             ProfileWindow.hookCount = hookCount;
             buffer.Dispose();

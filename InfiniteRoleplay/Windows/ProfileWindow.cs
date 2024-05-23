@@ -74,7 +74,7 @@ namespace InfiniteRoleplay.Windows
         public static int currentChapter;
         public bool RedrawChapters { get; private set; }
 
-        public ProfileWindow(Plugin plugin) : base(
+        public ProfileWindow(Plugin plugin, PlayerCharacter localPlayer) : base(
        "PROFILE", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)
         {
             this.SizeConstraints = new WindowSizeConstraints
@@ -84,9 +84,9 @@ namespace InfiniteRoleplay.Windows
                 MaximumSize = new Vector2(750, 950)
             };
 
+            playerCharacter = localPlayer;
             this.plugin = plugin;
             pg = plugin.PluginInterface;
-            playerCharacter = plugin.ClientState.LocalPlayer;
             this.configuration = plugin.Configuration;
             this._fileDialogManager = new FileDialogManager();
             avatarHolder = Constants.UICommonImage(plugin.PluginInterface, Constants.CommonImageTypes.avatarHolder);
@@ -156,7 +156,7 @@ namespace InfiniteRoleplay.Windows
                     }
                     if (this.ExistingProfile == false)
                     {
-                        if (ImGui.Button("Add Profile", new Vector2(100, 20))) { addProfile = true; DataSender.CreateProfile(configuration.username, playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString()); }
+                        if (ImGui.Button("Add Profile", new Vector2(100, 20))) { addProfile = true; DataSender.CreateProfile(playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString()); }
                     }
 
 

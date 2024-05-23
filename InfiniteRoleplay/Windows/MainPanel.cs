@@ -273,7 +273,7 @@ public class MainPanel : Window, IDisposable
         {
             if (ImGui.ImageButton(this.profileImage.ImGuiHandle, new Vector2(100, 50)))
             {
-                if (plugin.ClientState.LocalPlayer!= null)
+                if (plugin.ClientState.IsLoggedIn)
                 {
                     //FETCH USER AND PASS ASEWLL
                     DataSender.FetchProfile(plugin.ClientState.LocalPlayer.Name.ToString(), plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString());
