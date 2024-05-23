@@ -18,24 +18,32 @@ using ImGuiNET;
 using System.Numerics;
 using Dalamud.Game.Gui.Dtr;
 using Dalamud.Game.Text.SeStringHandling;
+using Lumina.Excel.GeneratedSheets;
+using System.Threading.Tasks;
+using FFXIVClientStructs.FFXIV.Client.System.Framework;
+using FFXIVClientStructs.FFXIV.Client.Game;
+using Dalamud.Game.ClientState.Conditions;
+using InfiniteRoleplay.Helpers;
 namespace InfiniteRoleplay;
 
 public partial class Plugin : IDalamudPlugin
 {
     private const string CommandName = "/infinite";
     public bool loggedIn;
+    public bool PluginLoaded = false;
     private readonly IDtrBar dtrBar;
 
     private DtrBarEntry? dtrBarEntry;
     public static bool BarAdded = false;
     public DalamudPluginInterface PluginInterface { get; init; }
     private ICommandManager CommandManager { get; init; }
+    public IFramework Framework { get; init; }
     private IContextMenu ContextMenu { get; init; }
-
+    public ICondition Condition { get; init; }
     [LibraryImport("user32")]
     internal static partial short GetKeyState(int nVirtKey);
     public static bool CtrlPressed() => (GetKeyState(0xA2) & 0x8000) != 0 || (GetKeyState(0xA3) & 0x8000) != 0;
-    public ITargetManager TargetManager { get; init; }
+    private ITargetManager TargetManager { get; init; }
     public Configuration Configuration { get; init; }
 
     public readonly WindowSystem WindowSystem = new("Infinite Roleplay");
@@ -50,8 +58,7 @@ public partial class Plugin : IDalamudPlugin
     public ImagePreview ImagePreview { get; init; }
     public TOS TermsWindow { get; init; }
     public IClientState ClientState { get; init; }
-    public Timer timer = new Timer(3000);
-    private bool barLoaded = false;
+    public bool barLoaded = false;
 
     public Plugin(
         [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
@@ -60,17 +67,32 @@ public partial class Plugin : IDalamudPlugin
         [RequiredVersion("1.0")] IClientState clientState,
         [RequiredVersion("1.0")] IContextMenu contextMenu,
         [RequiredVersion("1.0")] ITargetManager targetManager,
+        [RequiredVersion("1.0")] IFramework framework,
+        [RequiredVersion("1.0")] ICondition condition,
         [RequiredVersion("1.0")] IDtrBar dtrBar
         )
     {
+        TaskScheduler.UnobservedTaskException += UnobservedTaskExceptionHandler;
         PluginInterface = pluginInterface;
         CommandManager = commandManager;
         ClientState = clientState;
         TargetManager = targetManager;
         ContextMenu = contextMenu;
+        this.dtrBar = dtrBar;
+        this.Condition = condition;
+
+        // Subscribe to condition change events
+        framework = framework;
         Configuration = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
-        Configuration.Initialize(PluginInterface);
         DataReceiver.plugin = this;
+        CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
+        {
+            HelpMessage = "Type /infinite to open the plugin window."
+        });
+        // This adds a button to the plugin installer entry of this plugin which allows
+        // to toggle the display status of the configuration ui
+        Configuration.Initialize(PluginInterface);
+        PluginInterface.UiBuilder.Draw += DrawUI;
         OptionsWindow = new OptionsWindow(this);
         MainPanel = new MainPanel(this);
         TermsWindow = new TOS(this);
@@ -81,6 +103,51 @@ public partial class Plugin : IDalamudPlugin
         VerificationWindow = new VerificationWindow(this);
         RestorationWindow = new RestorationWindow(this);
         ReportWindow = new ReportWindow(this);
+        PluginInterface.UiBuilder.OpenConfigUi += ToggleConfigUI;
+        PluginInterface.UiBuilder.OpenMainUi += ToggleMainUI;
+        ContextMenu.OnMenuOpened += AddContextMenu;
+        Condition.ConditionChange += OnConditionChange;
+        ClientState.Logout += UnloadPlugin;
+        ClientState.Login += CheckPlugin;
+        ClientState.Login += ClientTCP.CheckStatus;
+        if (ClientState.IsLoggedIn && ClientState.LocalPlayer != null)
+        {
+            CheckPlugin();
+            ClientTCP.CheckStatus();
+        }
+
+    }
+
+    private void OnConditionChange(ConditionFlag flag, bool value)
+    {
+        if (value && ClientState.IsLoggedIn && ClientState.LocalPlayer != null)
+        {
+            CheckPlugin();
+            ClientTCP.CheckStatus();
+        }
+    }
+
+    public void CheckPlugin()
+    {       
+        if (!PluginLoaded)
+        {
+            LoadPluginUI();
+            ClientTCP.CheckStatus();
+        }
+    }
+    private void UnloadPlugin()
+    {
+        if (PluginLoaded)
+        {
+            WindowSystem.RemoveAllWindows();
+            ContextMenu.OnMenuOpened -= AddContextMenu;
+            dtrBarEntry?.Remove();
+            dtrBarEntry = null;
+            PluginLoaded = false;
+        }
+    }
+    private void LoadPluginUI()
+    {
         WindowSystem.AddWindow(OptionsWindow);
         WindowSystem.AddWindow(MainPanel);
         WindowSystem.AddWindow(TermsWindow);
@@ -91,40 +158,16 @@ public partial class Plugin : IDalamudPlugin
         WindowSystem.AddWindow(VerificationWindow);
         WindowSystem.AddWindow(RestorationWindow);
         WindowSystem.AddWindow(ReportWindow);
-        this.dtrBar = dtrBar;
-        CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
-        {
-            HelpMessage = "Type /infinite to open the plugin window."
-        });
-       
-        PluginInterface.UiBuilder.Draw += DrawUI;
-        // This adds a button to the plugin installer entry of this plugin which allows
-        // to toggle the display status of the configuration ui
-        PluginInterface.UiBuilder.OpenConfigUi += ToggleConfigUI;
-        ClientState.Logout += Stop;
-        ClientState.Login += Start;
-        if(this.ClientState.IsLoggedIn == true && this.ClientState.LocalPlayer != null)
-        {
-            Start();
-        }
-        // Adds another button that is doing the same but for the main ui of the plugin
-        PluginInterface.UiBuilder.OpenMainUi += ToggleMainUI;
-
+        LoadDtrBar();
+        PluginLoaded = true;
     }
 
-
-    private void CheckConnectionStatus(object? sender, ElapsedEventArgs e)
-    {   
-        ClientTCP.CheckStatus();
-        if(ClientState.IsLoggedIn)
-        {
-            if (!barLoaded)
-            {
-                LoadDtrBar();
-            }            
-            UpdateStatus();
-        }
+    private static void UnobservedTaskExceptionHandler(object sender, UnobservedTaskExceptionEventArgs e)
+    {
+        // Mark the exception as observed to prevent it from being thrown by the finalizer thread
+        e.SetObserved();
     }
+   
     public void AddContextMenu(MenuOpenedArgs args)
     {
         var targetPlayer = TargetManager.Target as PlayerCharacter;
@@ -166,7 +209,6 @@ public partial class Plugin : IDalamudPlugin
             DataSender.PrintMessage("Error when viewing profile from context " + ex.ToString(), LogLevels.LogError);
         }
     }
-
     private void BookmarkProfile(MenuItemClickedArgs args)
     {
         var targetPlayer = TargetManager.Target as PlayerCharacter;
@@ -178,36 +220,26 @@ public partial class Plugin : IDalamudPlugin
         dtrBarEntry = entry;
         string text = "\uE03E";
         dtrBarEntry.Text = text;
-        dtrBarEntry.Tooltip = "Checking Connection";
+        dtrBarEntry.Tooltip = "Infinite Roleplay";
         entry.OnClick = () => this.MainPanel.Toggle();
         barLoaded = true;
     }
-    private void Stop()
-    {
-        dtrBarEntry?.Remove();
-        dtrBarEntry = null;
-        barLoaded = false;
-        this.ContextMenu.OnMenuOpened -= AddContextMenu;
-        timer.Stop();
-    }
-    private void Start()
-    {
-        this.ContextMenu.OnMenuOpened += AddContextMenu;
-        timer.Elapsed += CheckConnectionStatus;
-        timer.Start();
-    }
     public void Dispose()
     {
-        timer.Stop();
-        timer.Dispose();
-        WindowSystem.RemoveAllWindows();
+        // timer.Stop();
+        //  timer.Dispose();
+        UnloadPlugin();
         CommandManager.RemoveHandler(CommandName);
-        ClientState.Logout -= Stop;
-        ClientState.Login -= Start;
+        Condition.ConditionChange -= OnConditionChange;
         PluginInterface.UiBuilder.OpenConfigUi -= ToggleConfigUI;
+        PluginInterface.UiBuilder.OpenMainUi -= ToggleMainUI;
+        ClientState.Logout -= UnloadPlugin;
+        ClientState.Login -= CheckPlugin;
+        Imaging.RemoveAllImages(this);
+        PluginLoaded = false;
     }
     public void UpdateStatus()
-    {
+    {        
         string connectionStatus = ClientTCP.GetConnectionStatus(ClientTCP.clientSocket);
         dtrBarEntry.Tooltip = new SeStringBuilder().AddText($"Infinite Rolepaly: {connectionStatus}").Build();
     }
