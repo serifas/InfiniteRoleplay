@@ -24,7 +24,8 @@ namespace InfiniteRoleplay
         public static GameFontHandle _nameFont;
         public static int loaderIndex = 0;
         public static IDalamudTextureWrap loaderAnimInd;
-        public static Plugin pg; 
+        public static Plugin pg;
+        private static Random random = new Random();
         public static float ConvertToPercentage(float value)
         {
             // Clamp the value between 0 and 100
@@ -32,6 +33,16 @@ namespace InfiniteRoleplay
 
             // Return the percentage
             return value / 100f * 100f;
+        }
+        public static string GenerateRandomString(int length = 30)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+            StringBuilder result = new StringBuilder(length);
+            for (int i = 0; i < length; i++)
+            {
+                result.Append(chars[random.Next(chars.Length)]);
+            }
+            return result.ToString();
         }
         public static void SetCenter(Plugin plugin, string name)
         {

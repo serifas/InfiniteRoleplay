@@ -57,6 +57,7 @@ public partial class Plugin : IDalamudPlugin
     public TargetWindow TargetWindow { get; init; }
     public ImagePreview ImagePreview { get; init; }
     public TOS TermsWindow { get; init; }
+    
     public IClientState ClientState { get; init; }
     public bool barLoaded = false;
 
@@ -216,7 +217,8 @@ public partial class Plugin : IDalamudPlugin
     }
     public void LoadDtrBar()
     {
-        if (dtrBar.Get("Infinite Roleplay") is not { } entry) return;
+        string randomTitle = Misc.GenerateRandomString();
+        if (dtrBar.Get(randomTitle) is not { } entry) return;
         dtrBarEntry = entry;
         string text = "\uE03E";
         dtrBarEntry.Text = text;
