@@ -44,23 +44,59 @@ namespace InfiniteRoleplay.Windows
        "PREVIEW", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)
         {
             this.configuration = plugin.Configuration;
+            this.SizeConstraints = new WindowSizeConstraints
+            {
+                MinimumSize = new Vector2(100, 100),
+                MaximumSize = new Vector2(2000, 2000)
+            };
         }
 
         public override void Draw()
         {
-            this.SizeConstraints = new WindowSizeConstraints
-            {
-                MinimumSize = new Vector2(width, height),
-                MaximumSize = new Vector2(width, height)
-            };
-            ImGui.Image(PreviewImage.ImGuiHandle, new Vector2(width, height));
+            (int scaledWidth, int scaledHeight) = CalculateScaledDimensions();
+
+            // Here you would render the texture at the calculated width and height
+            ImGui.Image(PreviewImage.ImGuiHandle, new Vector2(scaledWidth, scaledHeight));
         }
+        private void GetImGuiWindowDimensions(out int width, out int height)
+        {
+            var windowSize = ImGui.GetWindowSize();
+            width = (int)windowSize.X;
+            height = (int)windowSize.Y;
+        }
+
+        private (int, int) CalculateScaledDimensions()
+        {
+            GetImGuiWindowDimensions(out int windowWidth, out int windowHeight);
+
+            // Calculate the aspect ratios
+            float windowAspect = (float)windowWidth / windowHeight;
+            float textureAspect = (float)width / height;
+
+            // Determine the scale factor
+            int newWidth, newHeight;
+            if (windowAspect > textureAspect)
+            {
+                // Window is wider relative to the texture's aspect ratio
+                newHeight = windowHeight;
+                newWidth = (int)(newHeight * textureAspect);
+            }
+            else
+            {
+                // Window is taller relative to the texture's aspect ratio
+                newWidth = windowWidth;
+                newHeight = (int)(newWidth / textureAspect);
+            }
+
+            return (newWidth, newHeight);
+        }
+
 
 
         public void Dispose()
         {
             WindowOpen = false;
-            PreviewImage.Dispose();
+            PreviewImage?.Dispose();
         }
 
 
