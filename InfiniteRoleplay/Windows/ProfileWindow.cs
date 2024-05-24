@@ -58,9 +58,9 @@ namespace InfiniteRoleplay.Windows
         public static SortedList<TabValue, bool> TabOpen = new SortedList<TabValue, bool>();
         public static bool editAvatar, addProfile, editProfile, Reorder, addGalleryImageGUI, alignmentHidden, personalityHidden, loadPreview = false;
         public static string oocInfo, storyTitle = string.Empty;
-        public bool ExistingProfile, ExistingStory, ExistingOOC, ExistingHooks, ExistingGallery, ExistingBio, ReorderHooks, ReorderChapters, AddHooks, AddStoryChapter;
+        public static bool ExistingProfile, ExistingStory, ExistingOOC, ExistingHooks, ExistingGallery, ExistingBio, ReorderHooks, ReorderChapters, AddHooks, AddStoryChapter;
         public static int chapterCount, currentAlignment, currentPersonality_1, currentPersonality_2, currentPersonality_3, hookCount = 0;
-        public byte[] avatarBytes;
+        public static byte[] avatarBytes;
         public static float _modVersionWidth, loaderInd;
         public static IDalamudTextureWrap avatarHolder, currentAvatarImg;
         public static List<IDalamudTextureWrap> galleryThumbsList = new List<IDalamudTextureWrap>();
@@ -124,7 +124,7 @@ namespace InfiniteRoleplay.Windows
             }
             if (plugin.PluginInterface is { AssemblyLocation.Directory.FullName: { } path })
             {
-                this.avatarBytes = File.ReadAllBytes(Path.Combine(path, "UI/common/profiles/avatar_holder.png"));
+                avatarBytes = File.ReadAllBytes(Path.Combine(path, "UI/common/profiles/avatar_holder.png"));
             }
         }
 
@@ -150,11 +150,11 @@ namespace InfiniteRoleplay.Windows
                     _fileDialogManager.Draw();
 
 
-                    if (this.ExistingProfile == true)
+                    if (ExistingProfile == true)
                     {
                         if (ImGui.Button("Edit Profile", new Vector2(100, 20))) { editProfile = true; }
                     }
-                    if (this.ExistingProfile == false)
+                    if (ExistingProfile == false)
                     {
                         if (ImGui.Button("Add Profile", new Vector2(100, 20))) { addProfile = true; DataSender.CreateProfile(playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString()); }
                     }
@@ -360,7 +360,7 @@ namespace InfiniteRoleplay.Windows
                         #endregion
                         if (loadPreview == true)
                         {
-                            plugin.ImagePreview.IsOpen = true;
+                            plugin.OpenImagePreview();
                             loadPreview = false;
                         }
                         if (addGalleryImageGUI == true)
@@ -779,7 +779,7 @@ namespace InfiniteRoleplay.Windows
             }
             hookCount = 0;
         }
-        public void ResetStory()
+        public static void ResetStory()
         {
             for (int s = 0; s < storyChapterCount; s++)
             {
@@ -920,14 +920,14 @@ namespace InfiniteRoleplay.Windows
                 byte[] imageBytes = File.ReadAllBytes(image);
                 if (avatar == true)
                 {
-                    this.avatarBytes = File.ReadAllBytes(imagePath);
-                    DataReceiver.currentAvatar = this.avatarBytes;
+                    avatarBytes = File.ReadAllBytes(imagePath);
+                    DataReceiver.currentAvatar = avatarBytes;
                     currentAvatarImg = pg.UiBuilder.LoadImage(avatarBytes);
                 }
             }, 0, null, this.configuration.AlwaysOpenDefaultImport);
 
         }
-        public void ReloadProfile()
+        public static void ReloadProfile()
         {
             DataReceiver.BioLoadStatus = -1;
             DataReceiver.GalleryLoadStatus = -1;
