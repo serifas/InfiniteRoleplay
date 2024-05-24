@@ -28,7 +28,7 @@ namespace InfiniteRoleplay
             dtrBarEntry = entry;
             string text = "\uE03E";
             dtrBarEntry.Text = text;
-            entry.OnClick = () => plugin.MainPanel.Toggle();
+            entry.OnClick = () => plugin.ToggleMainUI();
             string connectionStatus = ClientTCP.GetConnectionStatus(ClientTCP.clientSocket);
             dtrBarEntry.Tooltip = new SeStringBuilder().AddText($"Infinite Rolepaly: {connectionStatus}").Build();
         }

@@ -24,6 +24,7 @@ using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using Dalamud.Game.ClientState.Conditions;
 using InfiniteRoleplay.Helpers;
+using System.Security.Principal;
 namespace InfiniteRoleplay;
 
 public partial class Plugin : IDalamudPlugin
@@ -46,21 +47,33 @@ public partial class Plugin : IDalamudPlugin
     private ITargetManager TargetManager { get; init; }
     public Configuration Configuration { get; init; }
 
-    public readonly WindowSystem WindowSystem = new("Infinite Roleplay");
-    public OptionsWindow OptionsWindow { get; init; }
-    public VerificationWindow VerificationWindow { get; init; }
-    public RestorationWindow RestorationWindow { get; init; }
-    public ReportWindow ReportWindow { get; init; }
-    public MainPanel MainPanel { get; init; }
-    public ProfileWindow ProfileWindow { get; init; }
-    public BookmarksWindow BookmarksWindow { get; init; }
-    public TargetWindow TargetWindow { get; init; }
-    public ImagePreview ImagePreview { get; init; }
-    public TOS TermsWindow { get; init; }
-    
+    private readonly WindowSystem WindowSystem = new("Infinite Roleplay");
+    private OptionsWindow OptionsWindow { get; init; }
+    private VerificationWindow VerificationWindow { get; init; }
+    private RestorationWindow RestorationWindow { get; init; }
+    private ReportWindow ReportWindow { get; init; }
+    private MainPanel MainPanel { get; init; }
+    private ProfileWindow ProfileWindow { get; init; }
+    private BookmarksWindow BookmarksWindow { get; init; }
+    private TargetWindow TargetWindow { get; init; }
+    private ImagePreview ImagePreview { get; init; }
+    private TOS TermsWindow { get; init; }
+
     public IClientState ClientState { get; init; }
     public bool barLoaded = false;
-
+    public enum WindowType
+    {
+         OptionsWindow = 1,
+         MainPanel = 2,
+         TermsWindow = 3,
+         ProfileWindow = 4,
+         ImagePreview = 5,
+         BookmarksWindow = 6,
+         TargetWindow = 7,
+         VerificationWindow = 8,
+         RestorationWindow = 9,
+         ReportWindow = 10,
+    }
     public Plugin(
         [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
         [RequiredVersion("1.0")] ICommandManager commandManager,
@@ -104,6 +117,16 @@ public partial class Plugin : IDalamudPlugin
         VerificationWindow = new VerificationWindow(this);
         RestorationWindow = new RestorationWindow(this);
         ReportWindow = new ReportWindow(this);
+        WindowSystem.AddWindow(OptionsWindow);
+        WindowSystem.AddWindow(MainPanel);
+        WindowSystem.AddWindow(TermsWindow);
+        WindowSystem.AddWindow(ImagePreview);
+        WindowSystem.AddWindow(ProfileWindow);
+        WindowSystem.AddWindow(TargetWindow);
+        WindowSystem.AddWindow(BookmarksWindow);
+        WindowSystem.AddWindow(VerificationWindow);
+        WindowSystem.AddWindow(RestorationWindow);
+        WindowSystem.AddWindow(ReportWindow);
         PluginInterface.UiBuilder.OpenConfigUi += ToggleConfigUI;
         PluginInterface.UiBuilder.OpenMainUi += ToggleMainUI;
         ContextMenu.OnMenuOpened += AddContextMenu;
@@ -149,16 +172,6 @@ public partial class Plugin : IDalamudPlugin
     }
     private void LoadPluginUI()
     {
-        WindowSystem.AddWindow(OptionsWindow);
-        WindowSystem.AddWindow(MainPanel);
-        WindowSystem.AddWindow(TermsWindow);
-        WindowSystem.AddWindow(ImagePreview);
-        WindowSystem.AddWindow(ProfileWindow);
-        WindowSystem.AddWindow(TargetWindow);
-        WindowSystem.AddWindow(BookmarksWindow);
-        WindowSystem.AddWindow(VerificationWindow);
-        WindowSystem.AddWindow(RestorationWindow);
-        WindowSystem.AddWindow(ReportWindow);
         LoadDtrBar();
         PluginLoaded = true;
     }
@@ -228,8 +241,6 @@ public partial class Plugin : IDalamudPlugin
     }
     public void Dispose()
     {
-        // timer.Stop();
-        //  timer.Dispose();
         UnloadPlugin();
         CommandManager.RemoveHandler(CommandName);
         Condition.ConditionChange -= OnConditionChange;
@@ -237,6 +248,16 @@ public partial class Plugin : IDalamudPlugin
         PluginInterface.UiBuilder.OpenMainUi -= ToggleMainUI;
         ClientState.Logout -= UnloadPlugin;
         ClientState.Login -= CheckPlugin;
+        OptionsWindow.Dispose();
+        MainPanel.Dispose();
+        TermsWindow.Dispose();
+        ImagePreview.Dispose();
+        ProfileWindow.Dispose();
+        TargetWindow.Dispose();
+        BookmarksWindow.Dispose();
+        VerificationWindow.Dispose();
+        RestorationWindow.Dispose();
+        ReportWindow.Dispose();
         Imaging.RemoveAllImages(this);
         PluginLoaded = false;
     }
@@ -260,9 +281,20 @@ public partial class Plugin : IDalamudPlugin
             }
         }
     }
-   
-    private void DrawUI() => WindowSystem.Draw();
 
+
+
+    private void DrawUI() => WindowSystem.Draw();
     public void ToggleConfigUI() => OptionsWindow.Toggle();
     public void ToggleMainUI() => MainPanel.Toggle();
+    public void OpenMainPanel() => MainPanel.IsOpen = true;
+    public void OpenTermsWindow() => TermsWindow.IsOpen = true;
+    public void OpenImagePreview() => ImagePreview.IsOpen = true;
+    public void OpenProfileWIndow() => ProfileWindow.IsOpen = true;
+    public void OpenTargetWindow() => TargetWindow.IsOpen = true;
+    public void OpenBookmarksWIndow() => BookmarksWindow.IsOpen = true;
+    public void OpenVerificationWindow() => VerificationWindow.IsOpen = true;
+    public void OpenRestorationWindow() => RestorationWindow.IsOpen = true;
+    public void OpenReportWindow() => ReportWindow.IsOpen = true;
+    public void OpenOptionsWIndow() => OptionsWindow.IsOpen = true;
 }

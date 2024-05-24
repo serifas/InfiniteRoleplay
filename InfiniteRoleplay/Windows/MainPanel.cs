@@ -25,9 +25,9 @@ public class MainPanel : Window, IDisposable
     public string restorationEmail = string.Empty;
     //window state toggles
     private bool viewProfile, viewSystems, viewEvents, viewConnections;
-    public bool login = true;
-    public bool forgot = false;
-    public bool register = false;
+    public static bool login = true;
+    public static bool forgot = false;
+    public static bool register = false;
     public static bool viewMainWindow = false;
     //registration agreement
     public bool AgreeTOS = false;
@@ -166,7 +166,7 @@ public class MainPanel : Window, IDisposable
             ImGui.Checkbox("I agree to the TOS.", ref AgreeTOS);
             if (ImGui.Button("View ToS & Rules"))
             {
-                plugin.TermsWindow.IsOpen = true;
+                plugin.OpenTermsWindow();
             }
             if (Agree18 == true && AgreeTOS == true)
             {
@@ -256,13 +256,12 @@ public class MainPanel : Window, IDisposable
 
             if (ImGui.Button("Options", new Vector2(225, 25)))
             {
-
-                plugin.OptionsWindow.IsOpen = true;
+                plugin.OpenOptionsWIndow();
             }
             if (ImGui.Button("Logout", new Vector2(225, 25)))
             {
                 plugin.CloseAllWindows();
-                plugin.MainPanel.IsOpen = true;
+                plugin.OpenMainPanel();
                 viewMainWindow = false;
                 login = true;
                 status = "Logged Out";
