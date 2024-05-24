@@ -68,7 +68,7 @@ namespace InfiniteRoleplay.Windows
                         TargetWindow.characterNameVal = profiles.Keys[i];
                         TargetWindow.characterWorldVal = profiles.Values[i];
                         //DisableBookmarkSelection = true;
-                        plugin.TargetWindow.IsOpen = true;
+                        plugin.OpenTargetWindow();
                         DataSender.RequestTargetProfile(profiles.Keys[i], profiles.Values[i], plugin.Configuration.username);
 
                     }

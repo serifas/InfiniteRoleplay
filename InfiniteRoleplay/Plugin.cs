@@ -248,16 +248,16 @@ public partial class Plugin : IDalamudPlugin
         PluginInterface.UiBuilder.OpenMainUi -= ToggleMainUI;
         ClientState.Logout -= UnloadPlugin;
         ClientState.Login -= CheckPlugin;
-        OptionsWindow.Dispose();
-        MainPanel.Dispose();
-        TermsWindow.Dispose();
-        ImagePreview.Dispose();
-        ProfileWindow.Dispose();
-        TargetWindow.Dispose();
-        BookmarksWindow.Dispose();
-        VerificationWindow.Dispose();
-        RestorationWindow.Dispose();
-        ReportWindow.Dispose();
+        OptionsWindow?.Dispose();
+        MainPanel?.Dispose();
+        TermsWindow?.Dispose();
+        ImagePreview?.Dispose();
+        ProfileWindow?.Dispose();
+        TargetWindow?.Dispose();
+        BookmarksWindow?.Dispose();
+        VerificationWindow?.Dispose();
+        RestorationWindow?.Dispose();
+        ReportWindow?.Dispose();
         Imaging.RemoveAllImages(this);
         PluginLoaded = false;
     }

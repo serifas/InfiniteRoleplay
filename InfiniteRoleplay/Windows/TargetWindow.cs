@@ -42,7 +42,7 @@ namespace InfiniteRoleplay.Windows
         public static bool ExistingGallery;
         public static bool ExistingProfile;
         public static string storyTitle = "";
-        public byte[] existingAvatarBytes;
+        public static byte[] existingAvatarBytes;
         //BIO VARS
         public static IDalamudTextureWrap alignmentImg, personalityImg1, personalityImg2, personalityImg3;
         public static IDalamudTextureWrap[] galleryImages, galleryThumbs = new IDalamudTextureWrap[30];
@@ -157,7 +157,7 @@ namespace InfiniteRoleplay.Windows
                     {
                         ReportWindow.reportCharacterName = characterNameVal;
                         ReportWindow.reportCharacterWorld = characterWorldVal;
-                        plugin.ReportWindow.IsOpen = true;
+                        plugin.OpenReportWindow();
                     }
                     if (ImGui.IsItemHovered()) { ImGui.SetTooltip("Report this profile for inappropriate use.\n(Repeat false reports may result in your report ability being revoked.)"); }
 
@@ -349,7 +349,7 @@ namespace InfiniteRoleplay.Windows
                         }
                         if (loadPreview == true)
                         {
-                            plugin.ImagePreview.IsOpen = true;
+                            plugin.OpenImagePreview();
                             loadPreview = false;
                         }
                     }
@@ -377,7 +377,7 @@ namespace InfiniteRoleplay.Windows
             viewGallery = false;
             addNotes = false;
         }
-        public void ReloadTarget()
+        public static void ReloadTarget()
         {
             DataReceiver.TargetBioLoadStatus = -1;
             DataReceiver.TargetGalleryLoadStatus = -1;
