@@ -80,21 +80,16 @@ namespace Networking
                         byte[] buff = new byte[1];
                         if (await tcpClient.Client.ReceiveAsync(new ArraySegment<byte>(buff), SocketFlags.Peek) == 0)
                         {
-                            UpdateServerStatus("Not connected to server", new System.Numerics.Vector4(255, 0, 0, 255));
                             return false;
                         }
-                        UpdateServerStatus("Connected to server", new System.Numerics.Vector4(0, 255, 0, 255));
                         return true;
                     }
-                    UpdateServerStatus("Connected to server", new System.Numerics.Vector4(0, 255, 0, 255));
                     return true;
                 }
-                UpdateServerStatus("Not connected to server", new System.Numerics.Vector4(255, 0, 0, 255));
                 return false;
             }
             catch (Exception ex)
             {
-                UpdateServerStatus("Not connected to server", new System.Numerics.Vector4(255, 0, 0, 255));
                 DataSender.PrintMessage("Error checking server connection: " + ex.ToString(), LogLevels.LogWarning);
                 return false;
             }

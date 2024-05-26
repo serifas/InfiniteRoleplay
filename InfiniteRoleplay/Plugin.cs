@@ -252,7 +252,9 @@ public partial class Plugin : IDalamudPlugin
     {
         try
         {
+            
             string connectionStatus = await ClientTCP.GetConnectionStatusAsync(ClientTCP.clientSocket);
+            MainPanel.serverStatus = connectionStatus;            
             dtrBarEntry.Tooltip = new SeStringBuilder().AddText($"Infinite Roleplay: {connectionStatus}").Build();
         }
         catch (Exception ex)
