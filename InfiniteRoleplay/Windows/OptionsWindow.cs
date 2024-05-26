@@ -12,7 +12,7 @@ namespace InfiniteRoleplay.Windows
     {
         private GameFontHandle _nameFont;
         private float _modVersionWidth;
-        public static InfiniteRoleplay.Plugin pg;
+        public static Plugin pg;
         public static bool showTargetOptions;
         public static bool showKofi;
         public static bool showDisc;
@@ -52,10 +52,6 @@ namespace InfiniteRoleplay.Windows
         public void Dispose()
         {
 
-        }
-        public override void Update()
-        {
-            
         }
     }
 

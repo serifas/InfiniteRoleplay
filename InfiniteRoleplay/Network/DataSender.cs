@@ -92,7 +92,7 @@ namespace Networking
                 buffer.WriteString(password);
                 buffer.WriteString(playerName);
                 buffer.WriteString(playerWorld);
-                ClientTCP.SendData(buffer.ToArray());
+                await ClientTCP.SendDataAsync(buffer.ToArray());
                 buffer.Dispose();
             }
             catch (Exception ex)
@@ -110,7 +110,7 @@ namespace Networking
                 buffer.WriteString(username);
                 buffer.WriteString(password);
                 buffer.WriteString(email);
-                ClientTCP.SendData(buffer.ToArray());
+                await ClientTCP.SendDataAsync(buffer.ToArray());
                 buffer.Dispose();
             }
             catch (Exception ex)
@@ -128,7 +128,7 @@ namespace Networking
                 buffer.WriteString(playerWorld);
                 buffer.WriteString(reporterAccount);
                 buffer.WriteString(reportInfo);
-                ClientTCP.SendData(buffer.ToArray());
+                await ClientTCP.SendDataAsync(buffer.ToArray());
                 buffer.Dispose();
             }
             catch (Exception ex)
@@ -152,7 +152,7 @@ namespace Networking
                 buffer.WriteBool(TRIGGER);
                 buffer.WriteInt(index);
 
-                ClientTCP.SendData(buffer.ToArray());
+                await ClientTCP.SendDataAsync(buffer.ToArray());
                 buffer.Dispose();
             }
             catch (Exception ex)
@@ -172,7 +172,7 @@ namespace Networking
                 buffer.WriteInt(index);
                 buffer.WriteInt(imageCount);
 
-                ClientTCP.SendData(buffer.ToArray());
+                await ClientTCP.SendDataAsync(buffer.ToArray());
                 buffer.Dispose();
             }
             catch (Exception ex)
@@ -195,7 +195,7 @@ namespace Networking
                     buffer.WriteString(storyChapters[i].Item1);
                     buffer.WriteString(storyChapters[i].Item2);
                 }
-                ClientTCP.SendData(buffer.ToArray());
+                await ClientTCP.SendDataAsync(buffer.ToArray());
                 buffer.Dispose();
             }
             catch (Exception ex)
@@ -212,7 +212,7 @@ namespace Networking
                 buffer.WriteInt((int)ClientPackets.CFetchProfiles);
                 buffer.WriteString(characterName);
                 buffer.WriteString(world);
-                ClientTCP.SendData(buffer.ToArray());
+                await ClientTCP.SendDataAsync(buffer.ToArray());
                 buffer.Dispose();
             }
             catch (Exception ex)
@@ -228,7 +228,7 @@ namespace Networking
                 buffer.WriteInt((int)ClientPackets.CCreateProfile);
                 buffer.WriteString(playerName);
                 buffer.WriteString(playerServer);
-                ClientTCP.SendData(buffer.ToArray());
+                await ClientTCP.SendDataAsync(buffer.ToArray());
                 buffer.Dispose();
             }
             catch (Exception ex)
@@ -244,7 +244,7 @@ namespace Networking
                 buffer.WriteInt((int)ClientPackets.CSendPlayerBookmark);
                 buffer.WriteString(playerName);
                 buffer.WriteString(playerWorld);
-                ClientTCP.SendData(buffer.ToArray());
+                await ClientTCP.SendDataAsync(buffer.ToArray());
                 buffer.Dispose();
             }
             catch (Exception ex)
@@ -261,7 +261,7 @@ namespace Networking
                 buffer.WriteInt((int)ClientPackets.CSendRemovePlayerBookmark);
                 buffer.WriteString(playerName);
                 buffer.WriteString(playerWorld);
-                ClientTCP.SendData(buffer.ToArray());
+                await ClientTCP.SendDataAsync(buffer.ToArray());
                 buffer.Dispose();
             }
             catch (Exception ex)
@@ -276,7 +276,7 @@ namespace Networking
                 var buffer = new ByteBuffer();
                 buffer.WriteInt((int)ClientPackets.CSendBookmarkRequest);
                 buffer.WriteString(username);
-                ClientTCP.SendData(buffer.ToArray());
+                await ClientTCP.SendDataAsync(buffer.ToArray());
                 buffer.Dispose();
             }
             catch (Exception ex)
@@ -308,7 +308,7 @@ namespace Networking
                 buffer.WriteInt(personality_1);
                 buffer.WriteInt(personality_2);
                 buffer.WriteInt(personality_3);
-                ClientTCP.SendData(buffer.ToArray());
+                await ClientTCP.SendDataAsync(buffer.ToArray());
                 buffer.Dispose();
             }
             catch (Exception ex)
@@ -328,7 +328,7 @@ namespace Networking
                 buffer.WriteString(requesterUsername);
                 buffer.WriteString(targetPlayerName);
                 buffer.WriteString(targetPlayerWorld);
-                ClientTCP.SendData(buffer.ToArray());
+                await ClientTCP.SendDataAsync(buffer.ToArray());
                 buffer.Dispose();
             }
             catch (Exception ex)
@@ -352,7 +352,7 @@ namespace Networking
                     buffer.WriteString(hooks[i].Item2);
                     buffer.WriteString(hooks[i].Item3);
                 }
-                ClientTCP.SendData(buffer.ToArray());
+                await ClientTCP.SendDataAsync(buffer.ToArray());
                 buffer.Dispose();
             }
             catch (Exception ex)
@@ -375,7 +375,7 @@ namespace Networking
                 buffer.WriteString(characterNameVal);
                 buffer.WriteString(characterWorldVal);
                 buffer.WriteString(notes);
-                ClientTCP.SendData(buffer.ToArray());
+                await ClientTCP.SendDataAsync(buffer.ToArray());
                 buffer.Dispose();
             }
             catch (Exception ex)
@@ -392,7 +392,7 @@ namespace Networking
                 buffer.WriteInt((int)ClientPackets.SSubmitVerificationKey);
                 buffer.WriteString(username);
                 buffer.WriteString(verificationKey);
-                ClientTCP.SendData(buffer.ToArray());
+                await ClientTCP.SendDataAsync(buffer.ToArray());
                 buffer.Dispose();
             }
             catch (Exception ex)
@@ -409,7 +409,7 @@ namespace Networking
                 var buffer = new ByteBuffer();
                 buffer.WriteInt((int)ClientPackets.SSubmitRestorationRequest);
                 buffer.WriteString(restorationEmail);
-                ClientTCP.SendData(buffer.ToArray());
+                await ClientTCP.SendDataAsync(buffer.ToArray());
                 buffer.Dispose();
             }
             catch (Exception ex)
@@ -427,7 +427,7 @@ namespace Networking
                 buffer.WriteString(password);
                 buffer.WriteString(restorationKey);
                 buffer.WriteString(email);
-                ClientTCP.SendData(buffer.ToArray());
+                await ClientTCP.SendDataAsync(buffer.ToArray());
                 buffer.Dispose();
             }
             catch (Exception ex)
@@ -445,7 +445,7 @@ namespace Networking
                 buffer.WriteString(charactername);
                 buffer.WriteString(characterworld);
                 buffer.WriteString(OOC);
-                ClientTCP.SendData(buffer.ToArray());
+                await ClientTCP.SendDataAsync(buffer.ToArray());
                 buffer.Dispose();
             }
             catch (Exception ex)

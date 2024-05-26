@@ -30,9 +30,6 @@ namespace InfiniteRoleplay.Windows
     public class BookmarksWindow : Window, IDisposable
     {
         private Plugin plugin;
-        private GameFontHandle _nameFont;
-        private GameFontHandle _infoFont;
-        private float _modVersionWidth;
         public static SortedList<string, string> profiles = new SortedList<string, string>();
         private DalamudPluginInterface pg;
         public static bool DisableBookmarkSelection = false;
@@ -101,10 +98,6 @@ namespace InfiniteRoleplay.Windows
         }
 
         public void Dispose()
-        {
-
-        }
-        public override void Update()
         {
 
         }

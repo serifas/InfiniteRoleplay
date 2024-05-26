@@ -174,7 +174,6 @@ namespace InfiniteRoleplay
             return commonImage;
         }
 
-
         public static string AlignmentName(int alignment)
         {
             string alignmentName = string.Empty;

@@ -388,28 +388,40 @@ namespace InfiniteRoleplay.Windows
         public void Dispose()
         {
             // Properly dispose of IDisposable resources
-            DisposeResource(ref currentAvatarImg);
-            DisposeResource(ref pictureTab);
-            DisposeResource(ref alignmentImg);
-            DisposeResource(ref personalityImg1);
-            DisposeResource(ref personalityImg2);
-            DisposeResource(ref personalityImg3);
+            currentAvatarImg?.Dispose();
+            currentAvatarImg = null;
+
+            currentAvatarImg?.Dispose();
+            currentAvatarImg = null;
+            pictureTab?.Dispose();
+            pictureTab = null;
+            alignmentImg?.Dispose();
+            alignmentImg = null;
+            personalityImg1?.Dispose();
+            personalityImg1 = null;
+            personalityImg2?.Dispose();
+            personalityImg2 = null;
+            personalityImg3?.Dispose();
+            personalityImg3 = null;
 
             // Dispose gallery images and thumbs
             DisposeListResources(galleryImagesList);
             DisposeListResources(galleryThumbsList);
-
+            for(int i = 0; i < galleryImages.Length; i++)
+            {
+                galleryImages[i]?.Dispose();
+                galleryImages[i] = null;
+            }
+            for(int i = 0; i < galleryThumbs.Length; i++)
+            {
+                galleryThumbs[i]?.Dispose();
+                galleryThumbs[i] = null;
+            }
             // Manually set IDisposable resources to null after disposal to avoid double disposal and null reference issues
             galleryImages = null;
             galleryThumbs = null;
         }
 
-        // Helper method to dispose individual IDisposable resources
-        private void DisposeResource(ref IDalamudTextureWrap resource)
-        {
-            resource?.Dispose();
-            resource = null;
-        }
 
         // Helper method to dispose resources in a list
         private void DisposeListResources(List<IDalamudTextureWrap> resources)

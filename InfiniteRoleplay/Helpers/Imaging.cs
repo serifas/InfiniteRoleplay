@@ -33,8 +33,8 @@ namespace InfiniteRoleplay.Helpers
                         }
                         webClient.DownloadFile(url, imagePath);
 
-                        System.Drawing.Image baseImage = System.Drawing.Image.FromFile(imagePath);
-                        System.Drawing.Image scaledImage = ScaleImage(baseImage, 1000, 800);
+                        Image baseImage = Image.FromFile(imagePath);
+                        Image scaledImage = ScaleImage(baseImage, 1000, 800);
                         SaveImage(scaledImage, GalleryPath, "gallery_scaled_" + profileID + "_" + index + "." + extension);
                         string scaledImagePath = Path.Combine(path, "UI/Galleries/" + profileID + "/" + "gallery_scaled_" + profileID + "_" + index + "." + extension);
 
@@ -90,8 +90,8 @@ namespace InfiniteRoleplay.Helpers
 
                         if (nsfw == false && trigger == false)
                         {
-                            System.Drawing.Image thumb = System.Drawing.Image.FromFile(imagePath);
-                            System.Drawing.Image img = ScaleImage(thumb, 120, 120);
+                            Image thumb = Image.FromFile(imagePath);
+                            Image img = ScaleImage(thumb, 120, 120);
                             SaveImage(img, GalleryPath, "gallery_thumb_" + profileID + "_" + index + "." + extension);
                             if (self == true)
                             {
@@ -189,7 +189,7 @@ namespace InfiniteRoleplay.Helpers
         }
        
 
-        static void SaveImage(System.Drawing.Image image, string directoryPath, string fileName)
+        static void SaveImage(Image image, string directoryPath, string fileName)
         {
             // Check if the directory exists, if not, create it
             if (!System.IO.Directory.Exists(directoryPath))

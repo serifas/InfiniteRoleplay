@@ -9,17 +9,9 @@ using System.Numerics;
 using Dalamud.Utility;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using Networking;
-using InfiniteRoleplay.Helpers;
 using Dalamud.Interface.Internal;
-using Dalamud.Plugin.Services;
 using OtterGui;
 using System.Linq;
-using FFXIVClientStructs.Havok;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Drawing.Printing;
-using InfiniteRoleplay.Helpers;
-using InfiniteRoleplay;
-using Microsoft.VisualBasic;
 
 namespace InfiniteRoleplay.Windows
 {
@@ -38,7 +30,6 @@ namespace InfiniteRoleplay.Windows
         public static string loading;
         public static float percentage = 0f;
         private Plugin plugin;
-        public static PlayerCharacter playerCharacter;
         private DalamudPluginInterface pg;
         private FileDialogManager _fileDialogManager;
         public Configuration configuration;
@@ -68,13 +59,12 @@ namespace InfiniteRoleplay.Windows
         public static IDalamudTextureWrap[] galleryImages, galleryThumbs;
         public static string[] bioFieldsArr = new string[7];
         private IDalamudTextureWrap persistAvatarHolder;
-        private IDalamudTextureWrap[] otherImages;
         public static bool drawChapter;
         public static int storyChapterCount = -1;
         public static int currentChapter;
         public bool RedrawChapters { get; private set; }
 
-        public ProfileWindow(Plugin plugin, PlayerCharacter localPlayer) : base(
+        public ProfileWindow(Plugin plugin) : base(
        "PROFILE", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)
         {
             this.SizeConstraints = new WindowSizeConstraints
@@ -84,7 +74,6 @@ namespace InfiniteRoleplay.Windows
                 MaximumSize = new Vector2(750, 950)
             };
 
-            playerCharacter = localPlayer;
             this.plugin = plugin;
             pg = plugin.PluginInterface;
             this.configuration = plugin.Configuration;
@@ -141,14 +130,12 @@ namespace InfiniteRoleplay.Windows
         }
         public override void Draw()
         {
-            if (playerCharacter != null)
+            PlayerCharacter player = plugin.ClientState.LocalPlayer;
+            if (player != null)
             {
-
-
                 if (AllLoaded() == true)
                 {
                     _fileDialogManager.Draw();
-
 
                     if (ExistingProfile == true)
                     {
@@ -156,7 +143,7 @@ namespace InfiniteRoleplay.Windows
                     }
                     if (ExistingProfile == false)
                     {
-                        if (ImGui.Button("Add Profile", new Vector2(100, 20))) { addProfile = true; DataSender.CreateProfile(playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString()); }
+                        if (ImGui.Button("Add Profile", new Vector2(100, 20))) { addProfile = true; DataSender.CreateProfile(player.Name.ToString(), player.HomeWorld.GameData.Name.ToString()); }
                     }
 
 
@@ -175,8 +162,6 @@ namespace InfiniteRoleplay.Windows
                         if (ImGui.Button("Edit Gallery", new Vector2(100, 20))) { ClearUI(); TabOpen[TabValue.Gallery] = true; }
 
                     }
-                    bool warning = false;
-                    bool success = false;
                     if (ImGui.BeginChild("PROFILE"))
                     {
                         #region BIO
@@ -241,7 +226,7 @@ namespace InfiniteRoleplay.Windows
                             }
                             if (ImGui.Button("Save Bio"))
                             {
-                                DataSender.SubmitProfileBio(playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString(),
+                                DataSender.SubmitProfileBio(player.Name.ToString(), player.HomeWorld.GameData.Name.ToString(),
                                                         avatarBytes,
                                                         bioFieldsArr[(int)Constants.BioFieldTypes.name].Replace("'", "''"),
                                                         bioFieldsArr[(int)Constants.BioFieldTypes.race].Replace("'", "''"),
@@ -274,7 +259,7 @@ namespace InfiniteRoleplay.Windows
                                     Tuple<int, string, string> hook = Tuple.Create(i, HookNames[i], HookContents[i]);
                                     hooks.Add(hook);
                                 }
-                                DataSender.SendHooks(playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString(), hooks);
+                                DataSender.SendHooks(player.Name.ToString(), player.HomeWorld.GameData.Name.ToString(), hooks);
 
                             }
                             ImGui.NewLine();
@@ -310,7 +295,7 @@ namespace InfiniteRoleplay.Windows
                                         Tuple<string, string> chapter = Tuple.Create(chapterName, chapterContent);
                                         storyChapters.Add(chapter);
                                     }
-                                    DataSender.SendStory(playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString(), storyTitle, storyChapters);
+                                    DataSender.SendStory(player.Name.ToString(), player.HomeWorld.GameData.Name.ToString(), storyTitle, storyChapters);
                                 }
                             }
                             if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
@@ -336,7 +321,7 @@ namespace InfiniteRoleplay.Windows
                             {
                                 for (int i = 0; i < imageIndex; i++)
                                 {
-                                    DataSender.SendGalleryImage(configuration.username, playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString(),
+                                    DataSender.SendGalleryImage(configuration.username, player.Name.ToString(), player.HomeWorld.GameData.Name.ToString(),
                                                       NSFW[i], TRIGGER[i], imageURLs[i], i);
 
                                 }
@@ -354,7 +339,7 @@ namespace InfiniteRoleplay.Windows
                             ImGui.InputTextMultiline("##OOC", ref oocInfo, 50000, new Vector2(500, 600));
                             if (ImGui.Button("Submit OOC"))
                             {
-                                DataSender.SendOOCInfo(playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString(), oocInfo);
+                                DataSender.SendOOCInfo(player.Name.ToString(), player.HomeWorld.GameData.Name.ToString(), oocInfo);
                             }
                         }
                         #endregion
@@ -658,6 +643,7 @@ namespace InfiniteRoleplay.Windows
 
         public void DrawGalleryImage(int i)
         {
+            PlayerCharacter player = plugin.ClientState.LocalPlayer;
             if (ImageExists[i] == true)
             {
 
@@ -668,7 +654,7 @@ namespace InfiniteRoleplay.Windows
                     {
                         for (int g = 0; g < imageIndex; g++)
                         {
-                            DataSender.SendGalleryImage(configuration.username, playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString(),
+                            DataSender.SendGalleryImage(configuration.username, player.Name.ToString(), player.HomeWorld.GameData.Name.ToString(),
                                               NSFW[g], TRIGGER[g], imageURLs[g], g);
 
                         }
@@ -678,7 +664,7 @@ namespace InfiniteRoleplay.Windows
                     {
                         for (int g = 0; g < imageIndex; g++)
                         {
-                            DataSender.SendGalleryImage(configuration.username, playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString(),
+                            DataSender.SendGalleryImage(configuration.username, player.Name.ToString(), player.HomeWorld.GameData.Name.ToString(),
                                               NSFW[g], TRIGGER[g], imageURLs[g], g);
                         }
                     }
@@ -707,7 +693,7 @@ namespace InfiniteRoleplay.Windows
                                 {
                                     ImageExists[i] = false;
                                     Reorder = true;
-                                    DataSender.RemoveGalleryImage(playerCharacter.Name.ToString(), playerCharacter.HomeWorld.GameData.Name.ToString(), i, imageIndex);
+                                    DataSender.RemoveGalleryImage(player.Name.ToString(), player.HomeWorld.GameData.Name.ToString(), i, imageIndex);
                                 }
                             }
                             if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
@@ -808,15 +794,34 @@ namespace InfiniteRoleplay.Windows
         public void Dispose()
         {
             avatarHolder?.Dispose();
+            avatarHolder = null;
             pictureTab?.Dispose();
+            pictureTab = null;
             currentAvatarImg?.Dispose();
+            currentAvatarImg = null;
             persistAvatarHolder?.Dispose();
+            persistAvatarHolder = null;
 
-            foreach (var img in galleryImagesList)
-                img?.Dispose();
-
-            foreach (var thumb in galleryThumbsList)
-                thumb?.Dispose();
+            for (int i = 0; i < galleryImages.Length; i++)
+            {
+                galleryImages[i]?.Dispose();
+                galleryImages[i] = null;
+            }
+            for (int i = 0; i < galleryThumbs.Length; i++)
+            {
+                galleryThumbs[i]?.Dispose();
+                galleryThumbs[i] = null;
+            }
+            for (int i = 0; i < galleryImagesList.Count; i++)
+            {
+                galleryImagesList[i]?.Dispose();
+                galleryImagesList[i] = null;
+            }
+            for (int i = 0; i < galleryThumbsList.Count; i++)
+            {
+                galleryThumbsList[i]?.Dispose();
+                galleryThumbsList[i] = null;
+            }
         }
         public void AddChapterSelection()
         {
@@ -921,7 +926,6 @@ namespace InfiniteRoleplay.Windows
                 if (avatar == true)
                 {
                     avatarBytes = File.ReadAllBytes(imagePath);
-                    DataReceiver.currentAvatar = avatarBytes;
                     currentAvatarImg = pg.UiBuilder.LoadImage(avatarBytes);
                 }
             }, 0, null, this.configuration.AlwaysOpenDefaultImport);

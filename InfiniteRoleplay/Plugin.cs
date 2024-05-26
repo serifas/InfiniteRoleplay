@@ -3,8 +3,9 @@ using Dalamud.IoC;
 using Dalamud.Plugin;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin.Services;
-using Dalamud.Utility;
 using InfiniteRoleplay.Windows;
+using Dalamud.Utility;
+using InfiniteRoleplay;
 using Dalamud.Game.ClientState.Objects;
 using System.Runtime.InteropServices;
 using System.Timers;
@@ -25,6 +26,7 @@ using FFXIVClientStructs.FFXIV.Client.Game;
 using Dalamud.Game.ClientState.Conditions;
 using InfiniteRoleplay.Helpers;
 using System.Security.Principal;
+
 namespace InfiniteRoleplay;
 
 public partial class Plugin : IDalamudPlugin
@@ -33,7 +35,6 @@ public partial class Plugin : IDalamudPlugin
     public bool loggedIn;
     public bool PluginLoaded = false;
     private readonly IDtrBar dtrBar;
-
     private DtrBarEntry? dtrBarEntry;
     public static bool BarAdded = false;
     public DalamudPluginInterface PluginInterface { get; init; }
@@ -63,16 +64,16 @@ public partial class Plugin : IDalamudPlugin
     public bool barLoaded = false;
     public enum WindowType
     {
-         OptionsWindow = 1,
-         MainPanel = 2,
-         TermsWindow = 3,
-         ProfileWindow = 4,
-         ImagePreview = 5,
-         BookmarksWindow = 6,
-         TargetWindow = 7,
-         VerificationWindow = 8,
-         RestorationWindow = 9,
-         ReportWindow = 10,
+        OptionsWindow = 1,
+        MainPanel = 2,
+        TermsWindow = 3,
+        ProfileWindow = 4,
+        ImagePreview = 5,
+        BookmarksWindow = 6,
+        TargetWindow = 7,
+        VerificationWindow = 8,
+        RestorationWindow = 9,
+        ReportWindow = 10,
     }
     public Plugin(
         [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
@@ -110,7 +111,7 @@ public partial class Plugin : IDalamudPlugin
         OptionsWindow = new OptionsWindow(this);
         MainPanel = new MainPanel(this);
         TermsWindow = new TOS(this);
-        ProfileWindow = new ProfileWindow(this, this.ClientState.LocalPlayer);
+        ProfileWindow = new ProfileWindow(this);
         ImagePreview = new ImagePreview(this);
         BookmarksWindow = new BookmarksWindow(this);
         TargetWindow = new TargetWindow(this);
@@ -133,13 +134,11 @@ public partial class Plugin : IDalamudPlugin
         Condition.ConditionChange += OnConditionChange;
         ClientState.Logout += UnloadPlugin;
         ClientState.Login += CheckPlugin;
-        ClientState.Login += ClientTCP.CheckStatus;
+
         if (ClientState.IsLoggedIn && ClientState.LocalPlayer != null)
         {
             CheckPlugin();
-            ClientTCP.CheckStatus();
         }
-
     }
 
     private void OnConditionChange(ConditionFlag flag, bool value)
@@ -152,7 +151,7 @@ public partial class Plugin : IDalamudPlugin
     }
 
     public void CheckPlugin()
-    {       
+    {
         if (!PluginLoaded)
         {
             LoadPluginUI();
@@ -181,7 +180,7 @@ public partial class Plugin : IDalamudPlugin
         // Mark the exception as observed to prevent it from being thrown by the finalizer thread
         e.SetObserved();
     }
-   
+
     public void AddContextMenu(MenuOpenedArgs args)
     {
         var targetPlayer = TargetManager.Target as PlayerCharacter;
@@ -248,6 +247,8 @@ public partial class Plugin : IDalamudPlugin
         PluginInterface.UiBuilder.OpenMainUi -= ToggleMainUI;
         ClientState.Logout -= UnloadPlugin;
         ClientState.Login -= CheckPlugin;
+        ContextMenu.OnMenuOpened -= AddContextMenu;
+        // Dispose all windows
         OptionsWindow?.Dispose();
         MainPanel?.Dispose();
         TermsWindow?.Dispose();
@@ -258,13 +259,21 @@ public partial class Plugin : IDalamudPlugin
         VerificationWindow?.Dispose();
         RestorationWindow?.Dispose();
         ReportWindow?.Dispose();
+        Misc._nameFont?.Dispose();
         Imaging.RemoveAllImages(this);
         PluginLoaded = false;
     }
-    public void UpdateStatus()
-    {        
-        string connectionStatus = ClientTCP.GetConnectionStatus(ClientTCP.clientSocket);
-        dtrBarEntry.Tooltip = new SeStringBuilder().AddText($"Infinite Rolepaly: {connectionStatus}").Build();
+    public async void UpdateStatus()
+    {
+        try
+        {
+            string connectionStatus = await ClientTCP.GetConnectionStatusAsync(ClientTCP.clientSocket);
+            dtrBarEntry.Tooltip = new SeStringBuilder().AddText($"Infinite Roleplay: {connectionStatus}").Build();
+        }
+        catch (Exception ex)
+        {
+            DataSender.PrintMessage("Error updating status: " + ex.ToString(), LogLevels.LogError);
+        }
     }
     private void OnCommand(string command, string args)
     {
@@ -275,14 +284,12 @@ public partial class Plugin : IDalamudPlugin
     {
         foreach (Window window in WindowSystem.Windows)
         {
-            if(window.IsOpen)
+            if (window.IsOpen)
             {
                 window.Toggle();
             }
         }
     }
-
-
 
     private void DrawUI() => WindowSystem.Draw();
     public void ToggleConfigUI() => OptionsWindow.Toggle();
@@ -290,11 +297,11 @@ public partial class Plugin : IDalamudPlugin
     public void OpenMainPanel() => MainPanel.IsOpen = true;
     public void OpenTermsWindow() => TermsWindow.IsOpen = true;
     public void OpenImagePreview() => ImagePreview.IsOpen = true;
-    public void OpenProfileWIndow() => ProfileWindow.IsOpen = true;
+    public void OpenProfileWindow() => ProfileWindow.IsOpen = true;
     public void OpenTargetWindow() => TargetWindow.IsOpen = true;
-    public void OpenBookmarksWIndow() => BookmarksWindow.IsOpen = true;
+    public void OpenBookmarksWindow() => BookmarksWindow.IsOpen = true;
     public void OpenVerificationWindow() => VerificationWindow.IsOpen = true;
     public void OpenRestorationWindow() => RestorationWindow.IsOpen = true;
     public void OpenReportWindow() => ReportWindow.IsOpen = true;
-    public void OpenOptionsWIndow() => OptionsWindow.IsOpen = true;
+    public void OpenOptionsWindow() => OptionsWindow.IsOpen = true;
 }

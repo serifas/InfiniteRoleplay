@@ -256,7 +256,7 @@ public class MainPanel : Window, IDisposable
 
             if (ImGui.Button("Options", new Vector2(225, 25)))
             {
-                plugin.OpenOptionsWIndow();
+                plugin.OpenOptionsWindow();
             }
             if (ImGui.Button("Logout", new Vector2(225, 25)))
             {
