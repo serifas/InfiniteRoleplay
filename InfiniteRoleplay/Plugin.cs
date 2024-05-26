@@ -31,6 +31,7 @@ namespace InfiniteRoleplay;
 
 public partial class Plugin : IDalamudPlugin
 {
+    private Timer timer = new Timer(3000);
     private const string CommandName = "/infinite";
     public bool loggedIn;
     public bool PluginLoaded = false;
@@ -131,33 +132,24 @@ public partial class Plugin : IDalamudPlugin
         PluginInterface.UiBuilder.OpenConfigUi += ToggleConfigUI;
         PluginInterface.UiBuilder.OpenMainUi += ToggleMainUI;
         ContextMenu.OnMenuOpened += AddContextMenu;
-        Condition.ConditionChange += OnConditionChange;
-        ClientState.Logout += UnloadPlugin;
-        ClientState.Login += CheckPlugin;
+        timer.Elapsed += CheckConnection;
+        timer.Start();
+    }
 
+    private void CheckConnection(object? sender, ElapsedEventArgs e)
+    {
         if (ClientState.IsLoggedIn && ClientState.LocalPlayer != null)
         {
-            CheckPlugin();
+            if (!PluginLoaded)
+            {
+                LoadDtrBar();
+                PluginLoaded = true;
+            }
+            ClientTCP.CheckStatus();
+            UpdateStatus();
         }
     }
 
-    private void OnConditionChange(ConditionFlag flag, bool value)
-    {
-        if (value && ClientState.IsLoggedIn && ClientState.LocalPlayer != null)
-        {
-            CheckPlugin();
-            ClientTCP.CheckStatus();
-        }
-    }
-
-    public void CheckPlugin()
-    {
-        if (!PluginLoaded)
-        {
-            LoadPluginUI();
-            ClientTCP.CheckStatus();
-        }
-    }
     private void UnloadPlugin()
     {
         if (PluginLoaded)
@@ -169,12 +161,6 @@ public partial class Plugin : IDalamudPlugin
             PluginLoaded = false;
         }
     }
-    private void LoadPluginUI()
-    {
-        LoadDtrBar();
-        PluginLoaded = true;
-    }
-
     private static void UnobservedTaskExceptionHandler(object sender, UnobservedTaskExceptionEventArgs e)
     {
         // Mark the exception as observed to prevent it from being thrown by the finalizer thread
@@ -240,13 +226,12 @@ public partial class Plugin : IDalamudPlugin
     }
     public void Dispose()
     {
+        timer?.Stop();
+        timer?.Dispose();
         UnloadPlugin();
         CommandManager.RemoveHandler(CommandName);
-        Condition.ConditionChange -= OnConditionChange;
         PluginInterface.UiBuilder.OpenConfigUi -= ToggleConfigUI;
         PluginInterface.UiBuilder.OpenMainUi -= ToggleMainUI;
-        ClientState.Logout -= UnloadPlugin;
-        ClientState.Login -= CheckPlugin;
         ContextMenu.OnMenuOpened -= AddContextMenu;
         // Dispose all windows
         OptionsWindow?.Dispose();
