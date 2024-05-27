@@ -26,12 +26,13 @@ using FFXIVClientStructs.FFXIV.Client.Game;
 using Dalamud.Game.ClientState.Conditions;
 using InfiniteRoleplay.Helpers;
 using System.Security.Principal;
+using System.Diagnostics;
 
 namespace InfiniteRoleplay;
 
 public partial class Plugin : IDalamudPlugin
 {
-    private Timer connectionTimer;
+    public static Stopwatch stopwatch = new Stopwatch();
     private const string CommandName = "/infinite";
     public bool loggedIn;
     public bool PluginLoaded = false;
@@ -132,29 +133,36 @@ public partial class Plugin : IDalamudPlugin
         PluginInterface.UiBuilder.OpenConfigUi += ToggleConfigUI;
         PluginInterface.UiBuilder.OpenMainUi += ToggleMainUI;
         ContextMenu.OnMenuOpened += AddContextMenu;
-        connectionTimer = new System.Timers.Timer(5000); // 5000ms = 5 seconds interval
-        connectionTimer.Elapsed += CheckConnection;
-        connectionTimer.AutoReset = true;
-        connectionTimer.Enabled = true;
+        this.Framework.Update += Framework_Update;
+        stopwatch.Start();
     }
 
-    private void CheckConnection(object? sender, ElapsedEventArgs e)
+    private void Framework_Update(IFramework framework)
     {
-        if (ClientState.IsLoggedIn && ClientState.LocalPlayer != null)
+        if (stopwatch.Elapsed < TimeSpan.FromSeconds(5))
         {
-            if (!PluginLoaded)
-            {
-                this.Framework.RunOnFrameworkThread(() =>
-                {
-                    LoadDtrBar();
-                    PluginLoaded = true;
-                });
-            }
-            ClientTCP.CheckStatus();
-            this.Framework.RunOnFrameworkThread(UpdateStatus);
+            return;
         }
-    }
+        else
+        {
+            if (ClientState.IsLoggedIn && ClientState.LocalPlayer != null)
+            {
+                if (!PluginLoaded)
+                {
+                    this.Framework.RunOnFrameworkThread(() =>
+                    {
+                        LoadDtrBar();
+                        PluginLoaded = true;
+                    });
+                }
+                ClientTCP.CheckStatus();
+                this.Framework.RunOnFrameworkThread(UpdateStatus);
+                }
 
+        }
+        // do stuff
+        stopwatch.Restart();
+    }   
     private void UnloadPlugin()
     {
         if (PluginLoaded)
@@ -231,9 +239,7 @@ public partial class Plugin : IDalamudPlugin
     }
     public void Dispose()
     {
-        connectionTimer.Elapsed -= CheckConnection;
-        connectionTimer?.Stop();
-        connectionTimer?.Dispose();
+        Framework.Update -= Framework_Update;
         UnloadPlugin();
         CommandManager.RemoveHandler(CommandName);
         PluginInterface.UiBuilder.OpenConfigUi -= ToggleConfigUI;
