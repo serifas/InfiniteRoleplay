@@ -31,7 +31,7 @@ namespace InfiniteRoleplay;
 
 public partial class Plugin : IDalamudPlugin
 {
-    private Timer timer = new Timer(3000);
+    private Timer connectionTimer;
     private const string CommandName = "/infinite";
     public bool loggedIn;
     public bool PluginLoaded = false;
@@ -98,7 +98,7 @@ public partial class Plugin : IDalamudPlugin
         this.Condition = condition;
 
         // Subscribe to condition change events
-        framework = framework;
+        this.Framework = framework;
         Configuration = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
         DataReceiver.plugin = this;
         CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
@@ -132,8 +132,10 @@ public partial class Plugin : IDalamudPlugin
         PluginInterface.UiBuilder.OpenConfigUi += ToggleConfigUI;
         PluginInterface.UiBuilder.OpenMainUi += ToggleMainUI;
         ContextMenu.OnMenuOpened += AddContextMenu;
-        timer.Elapsed += CheckConnection;
-        timer.Start();
+        connectionTimer = new System.Timers.Timer(5000); // 5000ms = 5 seconds interval
+        connectionTimer.Elapsed += CheckConnection;
+        connectionTimer.AutoReset = true;
+        connectionTimer.Enabled = true;
     }
 
     private void CheckConnection(object? sender, ElapsedEventArgs e)
@@ -142,11 +144,14 @@ public partial class Plugin : IDalamudPlugin
         {
             if (!PluginLoaded)
             {
-                LoadDtrBar();
-                PluginLoaded = true;
+                this.Framework.RunOnFrameworkThread(() =>
+                {
+                    LoadDtrBar();
+                    PluginLoaded = true;
+                });
             }
             ClientTCP.CheckStatus();
-            UpdateStatus();
+            this.Framework.RunOnFrameworkThread(UpdateStatus);
         }
     }
 
@@ -226,8 +231,9 @@ public partial class Plugin : IDalamudPlugin
     }
     public void Dispose()
     {
-        timer?.Stop();
-        timer?.Dispose();
+        connectionTimer.Elapsed -= CheckConnection;
+        connectionTimer?.Stop();
+        connectionTimer?.Dispose();
         UnloadPlugin();
         CommandManager.RemoveHandler(CommandName);
         PluginInterface.UiBuilder.OpenConfigUi -= ToggleConfigUI;
