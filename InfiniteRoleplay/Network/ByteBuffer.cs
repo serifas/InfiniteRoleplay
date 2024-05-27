@@ -248,7 +248,7 @@ namespace Networking
             {
                 if (disposing)
                 {
-                    Buff.Clear();
+                    Buff?.Clear();
                     readPos = 0;
                 }
                 disposedValue = true;

@@ -86,14 +86,14 @@ namespace Networking
         {
             try
             {
-                var buffer = new ByteBuffer();
+                using (var buffer = new ByteBuffer()){
                 buffer.WriteInt((int)ClientPackets.CLogin);
                 buffer.WriteString(username);
                 buffer.WriteString(password);
                 buffer.WriteString(playerName);
                 buffer.WriteString(playerWorld);
                 await ClientTCP.SendDataAsync(buffer.ToArray());
-                buffer.Dispose();
+                }
             }
             catch (Exception ex)
             {
@@ -105,13 +105,13 @@ namespace Networking
             try
             {
 
-                var buffer = new ByteBuffer();
+                using (var buffer = new ByteBuffer()){
                 buffer.WriteInt((int)ClientPackets.CRegister);
                 buffer.WriteString(username);
                 buffer.WriteString(password);
                 buffer.WriteString(email);
                 await ClientTCP.SendDataAsync(buffer.ToArray());
-                buffer.Dispose();
+                }
             }
             catch (Exception ex)
             {
@@ -122,14 +122,14 @@ namespace Networking
         {
             try
             {
-                var buffer = new ByteBuffer();
+                using (var buffer = new ByteBuffer()){
                 buffer.WriteInt((int)ClientPackets.CReportProfile);
                 buffer.WriteString(playerName);
                 buffer.WriteString(playerWorld);
                 buffer.WriteString(reporterAccount);
                 buffer.WriteString(reportInfo);
                 await ClientTCP.SendDataAsync(buffer.ToArray());
-                buffer.Dispose();
+                }
             }
             catch (Exception ex)
             {
@@ -143,7 +143,7 @@ namespace Networking
             try
             {
 
-                var buffer = new ByteBuffer();
+                using (var buffer = new ByteBuffer()){
                 buffer.WriteInt((int)ClientPackets.CSendGallery);
                 buffer.WriteString(playername);
                 buffer.WriteString(playerworld);
@@ -153,7 +153,7 @@ namespace Networking
                 buffer.WriteInt(index);
 
                 await ClientTCP.SendDataAsync(buffer.ToArray());
-                buffer.Dispose();
+                }
             }
             catch (Exception ex)
             {
@@ -164,7 +164,7 @@ namespace Networking
         {
             try
             {
-                var buffer = new ByteBuffer();
+                using (var buffer = new ByteBuffer()){
                 buffer.WriteInt((int)ClientPackets.CSendGalleryRemoveRequest);
                 buffer.WriteString(playername);
                 buffer.WriteString(playerworld);
@@ -173,7 +173,7 @@ namespace Networking
                 buffer.WriteInt(imageCount);
 
                 await ClientTCP.SendDataAsync(buffer.ToArray());
-                buffer.Dispose();
+                }
             }
             catch (Exception ex)
             {
@@ -184,7 +184,7 @@ namespace Networking
         {
             try
             {
-                var buffer = new ByteBuffer();
+                using (var buffer = new ByteBuffer()){
                 buffer.WriteInt((int)ClientPackets.CSendStory);
                 buffer.WriteString(playername);
                 buffer.WriteString(worldname);
@@ -196,7 +196,7 @@ namespace Networking
                     buffer.WriteString(storyChapters[i].Item2);
                 }
                 await ClientTCP.SendDataAsync(buffer.ToArray());
-                buffer.Dispose();
+                }
             }
             catch (Exception ex)
             {
@@ -208,12 +208,12 @@ namespace Networking
         {
             try
             {
-                var buffer = new ByteBuffer();
+                using (var buffer = new ByteBuffer()){
                 buffer.WriteInt((int)ClientPackets.CFetchProfiles);
                 buffer.WriteString(characterName);
                 buffer.WriteString(world);
                 await ClientTCP.SendDataAsync(buffer.ToArray());
-                buffer.Dispose();
+                }
             }
             catch (Exception ex)
             {
@@ -224,12 +224,12 @@ namespace Networking
         {
             try
             {
-                var buffer = new ByteBuffer();
+                using (var buffer = new ByteBuffer()){
                 buffer.WriteInt((int)ClientPackets.CCreateProfile);
                 buffer.WriteString(playerName);
                 buffer.WriteString(playerServer);
                 await ClientTCP.SendDataAsync(buffer.ToArray());
-                buffer.Dispose();
+                }
             }
             catch (Exception ex)
             {
@@ -240,12 +240,12 @@ namespace Networking
         {
             try
             {
-                var buffer = new ByteBuffer();
+                using (var buffer = new ByteBuffer()){
                 buffer.WriteInt((int)ClientPackets.CSendPlayerBookmark);
                 buffer.WriteString(playerName);
                 buffer.WriteString(playerWorld);
                 await ClientTCP.SendDataAsync(buffer.ToArray());
-                buffer.Dispose();
+                }
             }
             catch (Exception ex)
             {
@@ -257,12 +257,12 @@ namespace Networking
         {
             try
             {
-                var buffer = new ByteBuffer();
+                using (var buffer = new ByteBuffer()){
                 buffer.WriteInt((int)ClientPackets.CSendRemovePlayerBookmark);
                 buffer.WriteString(playerName);
                 buffer.WriteString(playerWorld);
                 await ClientTCP.SendDataAsync(buffer.ToArray());
-                buffer.Dispose();
+                }
             }
             catch (Exception ex)
             {
@@ -273,11 +273,11 @@ namespace Networking
         {
             try
             {
-                var buffer = new ByteBuffer();
+                using (var buffer = new ByteBuffer()){
                 buffer.WriteInt((int)ClientPackets.CSendBookmarkRequest);
                 buffer.WriteString(username);
                 await ClientTCP.SendDataAsync(buffer.ToArray());
-                buffer.Dispose();
+                }
             }
             catch (Exception ex)
             {
@@ -291,7 +291,7 @@ namespace Networking
         {
             try
             {
-                var buffer = new ByteBuffer();
+                using (var buffer = new ByteBuffer()){
                 buffer.WriteInt((int)ClientPackets.CCreateProfileBio);
                 buffer.WriteString(playerName);
                 buffer.WriteString(playerServer);
@@ -309,7 +309,7 @@ namespace Networking
                 buffer.WriteInt(personality_2);
                 buffer.WriteInt(personality_3);
                 await ClientTCP.SendDataAsync(buffer.ToArray());
-                buffer.Dispose();
+                }
             }
             catch (Exception ex)
             {
@@ -323,13 +323,13 @@ namespace Networking
         {
             try
             {
-                var buffer = new ByteBuffer();
+                using (var buffer = new ByteBuffer()){
                 buffer.WriteInt((int)ClientPackets.SRequestTargetProfile);
                 buffer.WriteString(requesterUsername);
                 buffer.WriteString(targetPlayerName);
                 buffer.WriteString(targetPlayerWorld);
                 await ClientTCP.SendDataAsync(buffer.ToArray());
-                buffer.Dispose();
+                }
             }
             catch (Exception ex)
             {
@@ -341,7 +341,7 @@ namespace Networking
         {
             try
             {
-                var buffer = new ByteBuffer();
+                using (var buffer = new ByteBuffer()){
                 buffer.WriteInt((int)ClientPackets.CSendHooks);
                 buffer.WriteString(charactername);
                 buffer.WriteString(characterworld);
@@ -353,7 +353,7 @@ namespace Networking
                     buffer.WriteString(hooks[i].Item3);
                 }
                 await ClientTCP.SendDataAsync(buffer.ToArray());
-                buffer.Dispose();
+                }
             }
             catch (Exception ex)
             {
@@ -369,14 +369,14 @@ namespace Networking
             try
             {
 
-                var buffer = new ByteBuffer();
+                using (var buffer = new ByteBuffer()){
                 buffer.WriteInt((int)ClientPackets.CSendProfileNotes);
                 buffer.WriteString(username);
                 buffer.WriteString(characterNameVal);
                 buffer.WriteString(characterWorldVal);
                 buffer.WriteString(notes);
                 await ClientTCP.SendDataAsync(buffer.ToArray());
-                buffer.Dispose();
+                }
             }
             catch (Exception ex)
             {
@@ -388,12 +388,12 @@ namespace Networking
         {
             try
             {
-                var buffer = new ByteBuffer();
+                using (var buffer = new ByteBuffer()){
                 buffer.WriteInt((int)ClientPackets.SSubmitVerificationKey);
                 buffer.WriteString(username);
                 buffer.WriteString(verificationKey);
                 await ClientTCP.SendDataAsync(buffer.ToArray());
-                buffer.Dispose();
+                }
             }
             catch (Exception ex)
             {
@@ -406,11 +406,11 @@ namespace Networking
         {
             try
             {
-                var buffer = new ByteBuffer();
+                using (var buffer = new ByteBuffer()){
                 buffer.WriteInt((int)ClientPackets.SSubmitRestorationRequest);
                 buffer.WriteString(restorationEmail);
                 await ClientTCP.SendDataAsync(buffer.ToArray());
-                buffer.Dispose();
+                }
             }
             catch (Exception ex)
             {
@@ -422,13 +422,13 @@ namespace Networking
         {
             try
             {
-                var buffer = new ByteBuffer();
+                using (var buffer = new ByteBuffer()){
                 buffer.WriteInt((int)ClientPackets.SSubmitRestorationKey);
                 buffer.WriteString(password);
                 buffer.WriteString(restorationKey);
                 buffer.WriteString(email);
                 await ClientTCP.SendDataAsync(buffer.ToArray());
-                buffer.Dispose();
+                }
             }
             catch (Exception ex)
             {
@@ -440,13 +440,13 @@ namespace Networking
         {
             try
             {
-                var buffer = new ByteBuffer();
+                using (var buffer = new ByteBuffer()){
                 buffer.WriteInt((int)ClientPackets.SSendOOC);
                 buffer.WriteString(charactername);
                 buffer.WriteString(characterworld);
                 buffer.WriteString(OOC);
                 await ClientTCP.SendDataAsync(buffer.ToArray());
-                buffer.Dispose();
+                }
             }
             catch (Exception ex)
             {

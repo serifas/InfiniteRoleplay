@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using InfiniteRoleplay.Windows;
 using InfiniteRoleplay;
 using Dalamud.Plugin.Services;
+using System.Drawing;
+using System.Numerics;
 
 namespace Networking
 {
@@ -17,7 +19,8 @@ namespace Networking
         private static readonly int port = 25565;
         private static readonly int bufferSize = 8192;
         public static Plugin plugin;
-
+        public static Vector4 Green = new Vector4(0, 255, 0, 255);
+        public static Vector4 Red = new Vector4(255, 0, 0, 255);
         public static void StartReceiving()
         {
             Task.Run(ReceiveDataAsync);
@@ -46,6 +49,7 @@ namespace Networking
 
         public static async Task<string> GetConnectionStatusAsync(TcpClient _tcpClient)
         {
+
             try
             {
                 if (_tcpClient != null && _tcpClient.Client != null && _tcpClient.Client.Connected)
@@ -55,16 +59,21 @@ namespace Networking
                         byte[] buff = new byte[1];
                         if (await _tcpClient.Client.ReceiveAsync(new ArraySegment<byte>(buff), SocketFlags.Peek) == 0)
                         {
+                            MainPanel.serverStatusColor = Red;
                             return "Disconnected";
                         }
+                        MainPanel.serverStatusColor = Green;
                         return "Connected";
                     }
+                    MainPanel.serverStatusColor = Green;
                     return "Connected";
                 }
+                MainPanel.serverStatusColor = Red;
                 return "Disconnected";
             }
             catch
             {
+                MainPanel.serverStatusColor = Red;
                 return "Disconnected";
             }
         }
@@ -163,27 +172,24 @@ namespace Networking
         public static void Disconnect()
         {
             Connected = false;
-            if (myStream != null)
-            {
-                myStream.Close();
-                myStream.Dispose();
-            }
-            if (clientSocket != null)
-            {
-                clientSocket.Close();
-                clientSocket.Dispose();
-            }
+            myStream?.Close();
+            myStream?.Dispose();
+            clientSocket?.Close();
+            clientSocket?.Dispose();
+            MainPanel.serverStatus = "Disconnected";
+            MainPanel.serverStatusColor = new System.Numerics.Vector4(255, 0, 0, 255);
         }
 
         public static async Task SendDataAsync(byte[] data)
         {
             try
             {
-                var buffer = new ByteBuffer();
-                buffer.WriteInt(data.GetUpperBound(0) - data.GetLowerBound(0) + 1);
-                buffer.WriteBytes(data);
-                await myStream.WriteAsync(buffer.ToArray(), 0, buffer.ToArray().Length);
-                buffer.Dispose();
+                using (var buffer = new ByteBuffer())
+                {
+                    buffer.WriteInt(data.GetUpperBound(0) - data.GetLowerBound(0) + 1);
+                    buffer.WriteBytes(data);
+                    await myStream.WriteAsync(buffer.ToArray(), 0, buffer.ToArray().Length);
+                }
             }
             catch (Exception ex)
             {
