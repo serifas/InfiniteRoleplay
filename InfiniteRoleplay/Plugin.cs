@@ -239,6 +239,7 @@ public partial class Plugin : IDalamudPlugin
     }
     public void Dispose()
     {
+        stopwatch?.Stop();
         Framework.Update -= Framework_Update;
         UnloadPlugin();
         CommandManager.RemoveHandler(CommandName);
