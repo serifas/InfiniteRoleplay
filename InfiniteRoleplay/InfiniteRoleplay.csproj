@@ -200,9 +200,13 @@
       <None Update="UI\common\targets\group_invite.png">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="UI\common\targets\profile_view.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
+        <None Update="UI\common\targets\profile_view.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <!--Connection-->
+        <None Update="UI\common\connect.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
       
       
       

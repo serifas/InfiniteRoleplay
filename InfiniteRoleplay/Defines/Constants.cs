@@ -141,6 +141,8 @@ namespace InfiniteRoleplay
             NSFW = 21,
             TRIGGER = 22,
             NSFWTRIGGER = 23,
+            //Connection Button
+            reconnect = 24,
 
         }
         public static IDalamudTextureWrap UICommonImage(DalamudPluginInterface pluginInterface, CommonImageTypes imageType)
@@ -170,6 +172,7 @@ namespace InfiniteRoleplay
                 if (imageType == CommonImageTypes.targetBookmark) { commonImage = pluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/common/targets/bookmark.png")); }
                 if (imageType == CommonImageTypes.targetGroupInvite) { commonImage = pluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/common/targets/group_invite.png")); }
                 if (imageType == CommonImageTypes.targetViewProfile) { commonImage = pluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/common/targets/profile_view.png")); }
+                if (imageType == CommonImageTypes.reconnect) { commonImage = pluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/common/connect.png")); }
             }
             return commonImage;
         }

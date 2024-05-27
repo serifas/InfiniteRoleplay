@@ -77,7 +77,34 @@ namespace Networking
                 return "Disconnected";
             }
         }
+        public static async Task<bool> PingHostAsync(string host, int port, int timeout = 1000)
+        {
+            try
+            {
+                using (var tcpClient = new TcpClient())
+                {
+                    var connectTask = tcpClient.ConnectAsync(host, port);
+                    var delayTask = Task.Delay(timeout);
 
+                    var completedTask = await Task.WhenAny(connectTask, delayTask);
+
+                    if (completedTask == connectTask)
+                    {
+                        return tcpClient.Connected;
+                    }
+                    else
+                    {
+                        return false; // Timed out
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception if necessary
+                // PluginLog.LogError(ex, "Error pinging host");
+                return false;
+            }
+        }
         public static async Task<bool> IsConnectedToServerAsync(TcpClient tcpClient)
         {
             try
@@ -119,10 +146,14 @@ namespace Networking
         {
             try
             {
-                bool connected = await IsConnectedToServerAsync(clientSocket);
-                if (!connected)
+                bool pinged = await PingHostAsync(server, port);
+                if(pinged)
                 {
-                    ConnectToServer();
+                    bool connected = await IsConnectedToServerAsync(clientSocket);
+                    if (!connected)
+                    {
+                        ConnectToServer();
+                    }
                 }
             }
             catch (Exception ex)
@@ -179,7 +210,17 @@ namespace Networking
             MainPanel.serverStatus = "Disconnected";
             MainPanel.serverStatusColor = new System.Numerics.Vector4(255, 0, 0, 255);
         }
-
+        public static void AttemptConnect()
+        {
+            try
+            {
+                CheckStatus();
+            }
+            catch (Exception ex)
+            {
+                DataSender.PrintMessage("Could not establish reconnect: " + ex, LogLevels.LogWarning);
+            }
+        }
         public static async Task SendDataAsync(byte[] data)
         {
             try

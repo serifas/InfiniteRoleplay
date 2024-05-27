@@ -4,35 +4,22 @@ using Dalamud.Plugin;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin.Services;
 using InfiniteRoleplay.Windows;
-using Dalamud.Utility;
-using InfiniteRoleplay;
 using Dalamud.Game.ClientState.Objects;
 using System.Runtime.InteropServices;
-using System.Timers;
 using Networking;
-using FFXIVClientStructs.FFXIV.Client.UI;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.Gui.ContextMenu;
 using Dalamud.Game.Text;
 using System;
-using ImGuiNET;
-using System.Numerics;
 using Dalamud.Game.Gui.Dtr;
 using Dalamud.Game.Text.SeStringHandling;
-using Lumina.Excel.GeneratedSheets;
 using System.Threading.Tasks;
-using FFXIVClientStructs.FFXIV.Client.System.Framework;
-using FFXIVClientStructs.FFXIV.Client.Game;
-using Dalamud.Game.ClientState.Conditions;
 using InfiniteRoleplay.Helpers;
-using System.Security.Principal;
-using System.Diagnostics;
 
 namespace InfiniteRoleplay;
 
 public partial class Plugin : IDalamudPlugin
 {
-    public static Stopwatch stopwatch = new Stopwatch();
     private const string CommandName = "/infinite";
     public bool loggedIn;
     public bool PluginLoaded = false;
@@ -132,47 +119,29 @@ public partial class Plugin : IDalamudPlugin
         WindowSystem.AddWindow(ReportWindow);
         PluginInterface.UiBuilder.OpenConfigUi += ToggleConfigUI;
         PluginInterface.UiBuilder.OpenMainUi += ToggleMainUI;
-        ContextMenu.OnMenuOpened += AddContextMenu;
-        this.Framework.Update += Framework_Update;
-        stopwatch.Start();
+        ClientState.Login += Connect;
+        ClientState.Logout += Logout;
+        ContextMenu.OnMenuOpened += AddContextMenu;       
+        Connect();
+        UpdateStatus();
     }
-    private void Framework_Update(IFramework framework)
-    {
-        if (stopwatch.Elapsed < TimeSpan.FromSeconds(5))
-        {
-            return;
-        }
-        else
-        {
-            if (ClientState.IsLoggedIn && ClientState.LocalPlayer != null)
-            {
-                if (!PluginLoaded)
-                {
-                    this.Framework.RunOnFrameworkThread(() =>
-                    {
-                        LoadDtrBar();
-                        PluginLoaded = true;
-                    });
-                }
-                ClientTCP.CheckStatus();
-                this.Framework.RunOnFrameworkThread(UpdateStatus);
-            }
 
-        }
-        // do stuff
-        stopwatch.Restart();
-    }
-    private void UnloadPlugin()
+    public void Connect()
     {
-        if (PluginLoaded)
+        if(ClientState.IsLoggedIn && ClientState.LocalPlayer != null)
         {
-            WindowSystem.RemoveAllWindows();
-            ContextMenu.OnMenuOpened -= AddContextMenu;
-            dtrBarEntry?.Remove();
-            dtrBarEntry = null;
-            PluginLoaded = false;
+            LoadDtrBar();
+            ClientTCP.AttemptConnect();
         }
     }
+
+    private void Logout()
+    {
+        dtrBarEntry?.Dispose();
+        dtrBarEntry = null;
+        ClientTCP.Disconnect();
+    }
+
     private static void UnobservedTaskExceptionHandler(object sender, UnobservedTaskExceptionEventArgs e)
     {
         // Mark the exception as observed to prevent it from being thrown by the finalizer thread
@@ -227,24 +196,29 @@ public partial class Plugin : IDalamudPlugin
     }
     public void LoadDtrBar()
     {
-        string randomTitle = Misc.GenerateRandomString();
-        if (dtrBar.Get(randomTitle) is not { } entry) return;
-        dtrBarEntry = entry;
-        string text = "\uE03E";
-        dtrBarEntry.Text = text;
-        dtrBarEntry.Tooltip = "Infinite Roleplay";
-        entry.OnClick = () => this.MainPanel.Toggle();
-        barLoaded = true;
+        if(dtrBarEntry == null)
+        {
+            string randomTitle = Misc.GenerateRandomString();
+            if (dtrBar.Get(randomTitle) is not { } entry) return;
+            dtrBarEntry = entry;
+            string text = "\uE03E";
+            dtrBarEntry.Text = text;
+            dtrBarEntry.Tooltip = "Infinite Roleplay";
+            entry.OnClick = () => this.MainPanel.Toggle();
+            barLoaded = true;
+        }
     }
     public void Dispose()
     {
-        stopwatch?.Stop();
-        Framework.Update -= Framework_Update;
-        UnloadPlugin();
+        WindowSystem?.RemoveAllWindows();      
+        dtrBarEntry?.Remove();
+        dtrBarEntry = null;
         CommandManager.RemoveHandler(CommandName);
         PluginInterface.UiBuilder.OpenConfigUi -= ToggleConfigUI;
         PluginInterface.UiBuilder.OpenMainUi -= ToggleMainUI;
         ContextMenu.OnMenuOpened -= AddContextMenu;
+        ClientState.Login -= ClientTCP.AttemptConnect;
+        ClientState.Logout -= ClientTCP.Disconnect;
         // Dispose all windows
         OptionsWindow?.Dispose();
         MainPanel?.Dispose();
@@ -258,21 +232,6 @@ public partial class Plugin : IDalamudPlugin
         ReportWindow?.Dispose();
         Misc._nameFont?.Dispose();
         Imaging.RemoveAllImages(this);
-        PluginLoaded = false;
-    }
-    public async void UpdateStatus()
-    {
-        try
-        {
-
-            string connectionStatus = await ClientTCP.GetConnectionStatusAsync(ClientTCP.clientSocket);
-            MainPanel.serverStatus = connectionStatus;
-            dtrBarEntry.Tooltip = new SeStringBuilder().AddText($"Infinite Roleplay: {connectionStatus}").Build();
-        }
-        catch (Exception ex)
-        {
-            DataSender.PrintMessage("Error updating status: " + ex.ToString(), LogLevels.LogError);
-        }
     }
     private void OnCommand(string command, string args)
     {
@@ -303,4 +262,18 @@ public partial class Plugin : IDalamudPlugin
     public void OpenRestorationWindow() => RestorationWindow.IsOpen = true;
     public void OpenReportWindow() => ReportWindow.IsOpen = true;
     public void OpenOptionsWindow() => OptionsWindow.IsOpen = true;
+
+    internal async void UpdateStatus()
+    {
+        try
+        {
+            string connectionStatus = await ClientTCP.GetConnectionStatusAsync(ClientTCP.clientSocket);
+            MainPanel.serverStatus = connectionStatus;
+            dtrBarEntry.Tooltip = new SeStringBuilder().AddText($"Infinite Roleplay: {connectionStatus}").Build();
+        }
+        catch (Exception ex)
+        {
+            DataSender.PrintMessage("Error updating status: " + ex.ToString(), LogLevels.LogError);
+        }
+    }
 }

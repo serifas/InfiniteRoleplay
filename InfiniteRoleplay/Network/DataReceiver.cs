@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using InfiniteRoleplay.Helpers;
+using Dalamud.Game.Gui.Dtr;
 
 namespace Networking
 {
@@ -140,6 +141,8 @@ namespace Networking
                     buffer.WriteBytes(data);
                     var packetID = buffer.ReadInt();
                     var msg = buffer.ReadString();
+                    plugin.UpdateStatus();
+                    DataSender.PrintMessage(msg + " ", LogLevels.LogError);
                     // Handle the message as needed
                 }
             }

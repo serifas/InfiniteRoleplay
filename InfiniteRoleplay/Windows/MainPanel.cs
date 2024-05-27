@@ -45,7 +45,8 @@ public class MainPanel : Window, IDisposable
                                  //events and venues
                                  venueImage, eventImage, venueBookmarkImage, eventBookmarkImage,
                                  //systems
-                                 combatImage, statSystemImage;
+                                 combatImage, statSystemImage,
+                                 reconnectImg;
     public Plugin plugin;
     public MainPanel(Plugin plugin) : base(
         "INFINITE ROLEPLAY",
@@ -68,6 +69,7 @@ public class MainPanel : Window, IDisposable
         this.profileBookmarkImage = Constants.UICommonImage(plugin.PluginInterface, Constants.CommonImageTypes.profileBookmarkProfile);
         this.npcImage = Constants.UICommonImage(plugin.PluginInterface, Constants.CommonImageTypes.profileCreateNPC);
         this.npcBookmarkImage = Constants.UICommonImage(plugin.PluginInterface, Constants.CommonImageTypes.profileBookmarkNPC);
+        this.reconnectImg = Constants.UICommonImage(plugin.PluginInterface, Constants.CommonImageTypes.reconnect);
     }
 
     public void Dispose()
@@ -92,6 +94,8 @@ public class MainPanel : Window, IDisposable
         //systems
         combatImage?.Dispose();
         statSystemImage?.Dispose();
+        //connection
+        reconnectImg?.Dispose();
     }
 
     public override void Draw()
@@ -337,7 +341,15 @@ public class MainPanel : Window, IDisposable
             }
         }
         ImGui.TextColored(serverStatusColor, serverStatus);
+        ImGui.SameLine();
+        if (ImGui.ImageButton(reconnectImg.ImGuiHandle, new Vector2(18, 18)))
+        {
+            plugin.Connect();
+            plugin.UpdateStatus();
+            
+        }
         ImGui.TextColored(statusColor, status);
+
     }
     public void switchUI()
     {
