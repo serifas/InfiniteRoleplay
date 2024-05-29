@@ -22,11 +22,6 @@ using System.Numerics;
 namespace InfiniteRoleplay
 {
 
-
-  
-
-
-
     public partial class Plugin : IDalamudPlugin
     {
         public static Plugin plugin;
