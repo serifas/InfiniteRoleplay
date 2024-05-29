@@ -45,50 +45,54 @@ namespace InfiniteRoleplay.Windows
         }
         public override void Draw()
         {
-
+            
             Misc.SetTitle(plugin, false, "Profiles");
             using var defInfFontDen = ImRaii.DefaultFont();
             using var DefaultColor = ImRaii.DefaultColors();
 
             if (ImGui.BeginChild("Profiles", new Vector2(290, 380), true))
             {
-                for (int i = 1; i < profiles.Count; i++)
+                if (plugin.IsLoggedIn())
                 {
-                    if (DisableBookmarkSelection == true)
+                    for (int i = 1; i < profiles.Count; i++)
                     {
-                        ImGui.BeginDisabled();
-                    }
-                    if (ImGui.Button(profiles.Keys[i] + " @ " + profiles.Values[i]))
-                    {
-                        ReportWindow.reportCharacterName = profiles.Keys[i];
-                        ReportWindow.reportCharacterWorld = profiles.Values[i];
-                        TargetWindow.characterNameVal = profiles.Keys[i];
-                        TargetWindow.characterWorldVal = profiles.Values[i];
-                        //DisableBookmarkSelection = true;
-                        plugin.OpenTargetWindow();
-                        DataSender.RequestTargetProfile(profiles.Keys[i], profiles.Values[i], plugin.Configuration.username);
-
-                    }
-                    ImGui.SameLine();
-                    using (ImRaii.Disabled(!Plugin.CtrlPressed()))
-                    {
-                        if (ImGui.Button("Remove##Removal" + i))
+                        if (DisableBookmarkSelection == true)
                         {
-                            DataSender.RemoveBookmarkedPlayer(plugin.Configuration.username.ToString(), profiles.Keys[i], profiles.Values[i]);
+                            ImGui.BeginDisabled();
+                        }
+                        if (ImGui.Button(profiles.Keys[i] + " @ " + profiles.Values[i]))
+                        {
+                            ReportWindow.reportCharacterName = profiles.Keys[i];
+                            ReportWindow.reportCharacterWorld = profiles.Values[i];
+                            TargetWindow.characterNameVal = profiles.Keys[i];
+                            TargetWindow.characterWorldVal = profiles.Values[i];
+                            //DisableBookmarkSelection = true;
+                            plugin.OpenTargetWindow();
+                            DataSender.RequestTargetProfile(profiles.Keys[i], profiles.Values[i], plugin.Configuration.username);
+
+                        }
+                        ImGui.SameLine();
+                        using (ImRaii.Disabled(!Plugin.CtrlPressed()))
+                        {
+                            if (ImGui.Button("Remove##Removal" + i))
+                            {
+                                DataSender.RemoveBookmarkedPlayer(plugin.Configuration.username.ToString(), profiles.Keys[i], profiles.Values[i]);
+                            }
+                        }
+                        if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
+                        {
+                            ImGui.SetTooltip("Ctrl Click to Enable");
+                        }
+
+
+
+
+                        if (DisableBookmarkSelection == true)
+                        {
+                            ImGui.EndDisabled();
                         }
                     }
-                    if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
-                    {
-                        ImGui.SetTooltip("Ctrl Click to Enable");
-                    }
-
-
-
-
-                    if (DisableBookmarkSelection == true)
-                    {
-                        ImGui.EndDisabled();
-                    }
+               
 
                 }
 

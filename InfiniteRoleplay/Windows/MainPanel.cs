@@ -97,7 +97,6 @@ public class MainPanel : Window, IDisposable
         //connection
         reconnectImg?.Dispose();
     }
-
     public override void Draw()
     {
 
@@ -109,10 +108,13 @@ public class MainPanel : Window, IDisposable
 
             if (ImGui.Button("Login"))
             {
-                plugin.Configuration.username = username;
-                plugin.Configuration.password = password;
-                plugin.Configuration.Save();
-                DataSender.Login(this.username, this.password, plugin.ClientState.LocalPlayer.Name.ToString(), plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString());
+                if (plugin.IsLoggedIn())
+                {
+                    plugin.Configuration.username = username;
+                    plugin.Configuration.password = password;
+                    plugin.Configuration.Save();
+                    DataSender.Login(this.username, this.password, plugin.ClientState.LocalPlayer.Name.ToString(), plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString());
+                }
             }
             ImGui.SameLine();
             if (ImGui.Button("Forgot"))
@@ -148,7 +150,10 @@ public class MainPanel : Window, IDisposable
             ImGui.InputTextWithHint("##RegisteredEmail", $"Email", ref this.restorationEmail, 100);
             if (ImGui.Button("Submit Request"))
             {
-                DataSender.SendRestorationRequest(this.restorationEmail);
+                if (plugin.IsLoggedIn())
+                {
+                    DataSender.SendRestorationRequest(this.restorationEmail);
+                }
             }
 
             if (ImGui.Button("Back"))
@@ -179,7 +184,11 @@ public class MainPanel : Window, IDisposable
                     if (registerPassword == registerVerPassword)
                     {
                         plugin.Configuration.username = registerUser;
-                        DataSender.Register(registerUser, registerPassword, email);
+                        if (plugin.IsLoggedIn())
+                        {
+                            DataSender.Register(registerUser, registerPassword, email);
+                        }
+                       
                     }
 
                 }
@@ -276,7 +285,7 @@ public class MainPanel : Window, IDisposable
         {
             if (ImGui.ImageButton(this.profileImage.ImGuiHandle, new Vector2(100, 50)))
             {
-                if (plugin.ClientState.IsLoggedIn)
+                if (plugin.IsLoggedIn())
                 {
                     //FETCH USER AND PASS ASEWLL
                     DataSender.FetchProfile(plugin.ClientState.LocalPlayer.Name.ToString(), plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString());
@@ -289,7 +298,11 @@ public class MainPanel : Window, IDisposable
             ImGui.SameLine();
             if (ImGui.ImageButton(this.profileBookmarkImage.ImGuiHandle, new Vector2(100, 50)))
             {
-                DataSender.RequestBookmarks(plugin.Configuration.username);
+                if (plugin.IsLoggedIn())
+                {
+                    DataSender.RequestBookmarks(plugin.Configuration.username);
+                }
+               
             }
             if (ImGui.IsItemHovered())
             {
@@ -346,7 +359,6 @@ public class MainPanel : Window, IDisposable
         {
             plugin.Connect();
             plugin.UpdateStatus();
-            
         }
         ImGui.TextColored(statusColor, status);
 

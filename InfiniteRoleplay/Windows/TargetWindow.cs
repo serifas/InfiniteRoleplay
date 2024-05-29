@@ -103,6 +103,8 @@ namespace InfiniteRoleplay.Windows
 
         public override void Draw()
         {
+            if (plugin.IsLoggedIn())
+            {
             if (DataReceiver.TargetStoryLoadStatus != -1 &&
                DataReceiver.TargetHooksLoadStatus != -1 &&
                DataReceiver.TargetBioLoadStatus != -1 &&
@@ -343,7 +345,11 @@ namespace InfiniteRoleplay.Windows
                             ImGui.InputTextMultiline("##info", ref profileNotes, 500, new Vector2(400, 100));
                             if (ImGui.Button("Add Notes"))
                             {
-                                DataSender.AddProfileNotes(plugin.Configuration.username, characterNameVal, characterWorldVal, profileNotes);
+                                if (plugin.IsLoggedIn())
+                                {
+                                    DataSender.AddProfileNotes(plugin.Configuration.username, characterNameVal, characterWorldVal, profileNotes);
+                                }
+                                
                             }
 
                         }
@@ -365,6 +371,8 @@ namespace InfiniteRoleplay.Windows
                 Misc.StartLoader(currentInd, max, loading);
             }
 
+
+            }
         }
 
 

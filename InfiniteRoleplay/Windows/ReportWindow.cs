@@ -43,20 +43,25 @@ namespace InfiniteRoleplay.Windows
         }
         public override void Draw()
         {
-            ImGui.TextColored(new Vector4(100, 0, 0, 100), reportStatus);
-            ImGui.Text("Reason for report");
-            ImGui.InputTextMultiline("##info", ref reportInfo, 500, new Vector2(400, 100));
-            if (ImGui.Button("Report!"))
+            if (pg.IsLoggedIn())
             {
-                if (reportInfo.Length > 15)
+                ImGui.TextColored(new Vector4(100, 0, 0, 100), reportStatus);
+                ImGui.Text("Reason for report");
+                ImGui.InputTextMultiline("##info", ref reportInfo, 500, new Vector2(400, 100));
+           
+                if (ImGui.Button("Report!"))
                 {
-                    DataSender.ReportProfile(pg.Configuration.username, reportCharacterName, reportCharacterWorld, reportInfo);
-                }
-                else
-                {
-                    reportStatus = "Please give a reason for the report.";
+                    if (reportInfo.Length > 15)
+                    {
+                        DataSender.ReportProfile(pg.Configuration.username, reportCharacterName, reportCharacterWorld, reportInfo);
+                    }
+                    else
+                    {
+                        reportStatus = "Please give a reason for the report.";
+                    }
                 }
             }
+           
         }
         public void Dispose()
         {

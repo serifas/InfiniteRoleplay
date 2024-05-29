@@ -38,7 +38,11 @@ namespace InfiniteRoleplay.Windows
             ImGui.InputText("Key", ref verificationKey, 10);
             if (ImGui.Button("Submit"))
             {
-                DataSender.SendVerification(pg.Configuration.username.ToString(), verificationKey);
+                if(pg.IsLoggedIn())
+                {
+                    DataSender.SendVerification(pg.Configuration.username.ToString(), verificationKey);
+                }
+                
             }
             ImGui.TextColored(verificationCol, verificationStatus);
         }

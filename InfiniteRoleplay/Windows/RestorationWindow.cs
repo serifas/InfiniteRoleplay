@@ -59,7 +59,11 @@ namespace InfiniteRoleplay.Windows
                 {
                     if (restorationPass == restorationPassConfirm)
                     {
-                        DataSender.SendRestoration(restorationEmail, restorationPass, restorationKey);
+                        if (pg.IsLoggedIn())
+                        {
+                            DataSender.SendRestoration(restorationEmail, restorationPass, restorationKey);
+                        }
+                        
                     }
                    
 

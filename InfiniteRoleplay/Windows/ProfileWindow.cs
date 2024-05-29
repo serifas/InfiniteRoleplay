@@ -133,8 +133,9 @@ namespace InfiniteRoleplay.Windows
             PlayerCharacter player = plugin.ClientState.LocalPlayer;
             if (player != null)
             {
-                if (AllLoaded() == true)
+                if (AllLoaded() == true && plugin.IsLoggedIn())
                 {
+
                     _fileDialogManager.Draw();
 
                     if (ExistingProfile == true)
@@ -143,7 +144,7 @@ namespace InfiniteRoleplay.Windows
                     }
                     if (ExistingProfile == false)
                     {
-                        if (ImGui.Button("Add Profile", new Vector2(100, 20))) { addProfile = true; DataSender.CreateProfile(player.Name.ToString(), player.HomeWorld.GameData.Name.ToString()); }
+                         if (ImGui.Button("Add Profile", new Vector2(100, 20))) { addProfile = true; DataSender.CreateProfile(player.Name.ToString(), player.HomeWorld.GameData.Name.ToString()); }
                     }
 
 
@@ -644,9 +645,10 @@ namespace InfiniteRoleplay.Windows
         public void DrawGalleryImage(int i)
         {
             PlayerCharacter player = plugin.ClientState.LocalPlayer;
+
             if (ImageExists[i] == true)
             {
-
+                
                 if (ImGui.BeginChild("##GalleryImage" + i, new Vector2(150, 280)))
                 {
                     ImGui.Text("Will this image be 18+ ?");
