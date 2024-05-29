@@ -98,8 +98,6 @@ namespace InfiniteRoleplay
             TargetManager = targetManager;
             ContextMenu = contextMenu;
             this.Condition = condition;
-            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-            TaskScheduler.UnobservedTaskException += UnobservedTaskExceptionHandler;
 
             // Subscribe to condition change events
             this.Framework = framework;
@@ -170,24 +168,7 @@ namespace InfiniteRoleplay
             
         }
 
-        private void UnobservedTaskExceptionHandler(object sender, UnobservedTaskExceptionEventArgs e)
-        {
-            // Mark the exception as observed to prevent it from being thrown by the finalizer thread
-            e.SetObserved();
-            Framework.RunOnFrameworkThread(() =>
-            {
-                DataSender.PrintMessage("Exception handled" + e.Exception.Message, LogLevels.LogError);
-            });
-        }
-        public void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            // Handle the unhandled exception here
-            var exception = e.ExceptionObject as Exception;
-            Framework.RunOnFrameworkThread(() =>
-            {
-                DataSender.PrintMessage("Exception handled" + exception.Message, LogLevels.LogError);                 
-            });
-        }
+
         public void AddContextMenu(MenuOpenedArgs args)
         {
             if(IsLoggedIn())
