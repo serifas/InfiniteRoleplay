@@ -185,19 +185,19 @@ namespace InfiniteRoleplay.Windows
 
 
                             ImGui.Spacing();
-                            ImGui.Text("NAME:   " + characterEditName);
+                            ImGui.TextUnformatted("NAME:   " + characterEditName);
                             ImGui.Spacing();
-                            ImGui.Text("RACE:   " + characterEditRace);
+                            ImGui.TextUnformatted("RACE:   " + characterEditRace);
                             ImGui.Spacing();
-                            ImGui.Text("GENDER:   " + characterEditGender);
+                            ImGui.TextUnformatted("GENDER:   " + characterEditGender);
                             ImGui.Spacing();
-                            ImGui.Text("AGE:   " + characterEditAge);
+                            ImGui.TextUnformatted("AGE:   " + characterEditAge);
                             ImGui.Spacing();
-                            ImGui.Text("HEIGHT:   " + characterEditHeight);
+                            ImGui.TextUnformatted("HEIGHT:   " + characterEditHeight);
                             ImGui.Spacing();
-                            ImGui.Text("WEIGHT:   " + characterEditWeight);
+                            ImGui.TextUnformatted("WEIGHT:   " + characterEditWeight);
                             ImGui.Spacing();
-                            ImGui.Text("AT FIRST GLANCE: \n" + characterEditAfg);
+                            ImGui.TextUnformatted("AT FIRST GLANCE: \n" + characterEditAfg);
                             ImGui.Spacing();
                             if (showAlignment == true)
                             {
@@ -251,8 +251,8 @@ namespace InfiniteRoleplay.Windows
                             for (int h = 0; h < hookEditCount; h++)
                             {
                                 Misc.SetCenter(plugin, HookNames[h].ToString());
-                                ImGui.Text(HookNames[h].ToUpper());
-                                ImGui.Text(HookContents[h]);
+                                ImGui.TextUnformatted(HookNames[h].ToUpper());
+                                ImGui.TextUnformatted(HookContents[h]);
                             }
 
                         }
@@ -266,10 +266,10 @@ namespace InfiniteRoleplay.Windows
                             for (int h = 0; h < chapterCount; h++)
                             {
                                 Misc.SetCenter(plugin, ChapterTitle[h]);
-                                ImGui.Text(ChapterTitle[h].ToUpper());
+                                ImGui.TextUnformatted(ChapterTitle[h].ToUpper());
                                 ImGui.Spacing();
                                 using var defInfFontDen = ImRaii.DefaultFont();
-                                ImGui.Text(ChapterContent[h]);
+                                ImGui.TextUnformatted(ChapterContent[h]);
                             }
 
 
@@ -277,7 +277,7 @@ namespace InfiniteRoleplay.Windows
                         if (viewOOC == true)
                         {
                             Misc.SetTitle(plugin, true, "OOC Information");
-                            ImGui.Text(oocInfo);
+                            ImGui.TextUnformatted(oocInfo);
                         }
                         if (viewGallery == true)
                         {
@@ -360,7 +360,7 @@ namespace InfiniteRoleplay.Windows
                         }
                     }
 
-                }
+                }ImGui.EndChild();
 
 
 

@@ -12,6 +12,7 @@ using Networking;
 using Dalamud.Interface.Internal;
 using OtterGui;
 using System.Linq;
+using Dalamud.Interface.Utility.Raii;
 
 namespace InfiniteRoleplay.Windows
 {
@@ -433,7 +434,7 @@ namespace InfiniteRoleplay.Windows
 
 
 
-                    }
+                    }ImGui.EndChild();
                 }
                 else
                 {
@@ -563,24 +564,16 @@ namespace InfiniteRoleplay.Windows
         {
             if (TabOpen[TabValue.Gallery])
             {
-                if (ImGui.BeginTable("##GalleryTable", 4))
+                using var table = ImRaii.Table("table_name", 4);
+                if (table)
                 {
                     for (int i = 0; i < imageIndex; i++)
                     {
-                        if (i % 4 == 0)
-                        {
-                            ImGui.TableNextRow();
-                            ImGui.TableNextColumn();
-                            DrawGalleryImage(i);
-                        }
-                        else
-                        {
-                            ImGui.TableNextColumn();
-                            DrawGalleryImage(i);
-                        }
+                        ImGui.TableNextColumn();
+                        DrawGalleryImage(i);
                     }
-                    ImGui.EndTable();
                 }
+             
             }
         }
         public void DrawHooksUI(Plugin plugin, int hookCount)
