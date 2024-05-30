@@ -22,6 +22,11 @@ using System.Numerics;
 namespace InfiniteRoleplay
 {
 
+
+
+
+
+
     public partial class Plugin : IDalamudPlugin
     {
         public static Plugin plugin;
@@ -93,6 +98,8 @@ namespace InfiniteRoleplay
             TargetManager = targetManager;
             ContextMenu = contextMenu;
             this.Condition = condition;
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            TaskScheduler.UnobservedTaskException += UnobservedTaskExceptionHandler;
 
             // Subscribe to condition change events
             this.Framework = framework;
@@ -140,11 +147,11 @@ namespace InfiniteRoleplay
             if (IsLoggedIn())
             {
                 LoadDtrBar();
-                if(!ClientTCP.Connected)
+                if (!ClientTCP.Connected)
                 {
                     ClientTCP.AttemptConnect();
                 }
-                
+
             }
         }
 
@@ -156,17 +163,34 @@ namespace InfiniteRoleplay
             MainPanel.statusColor = new Vector4(255, 0, 0, 255);
             MainPanel.switchUI();
             MainPanel.login = true;
-            if(ClientTCP.Connected)
+            if (ClientTCP.Connected)
             {
                 ClientTCP.Disconnect();
             }
-            
+
         }
 
-
+        private void UnobservedTaskExceptionHandler(object sender, UnobservedTaskExceptionEventArgs e)
+        {
+            // Mark the exception as observed to prevent it from being thrown by the finalizer thread
+            e.SetObserved();
+            Framework.RunOnFrameworkThread(() =>
+            {
+                DataSender.PrintMessage("Exception handled" + e.Exception.Message, LogLevels.LogError);
+            });
+        }
+        public void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            // Handle the unhandled exception here
+            var exception = e.ExceptionObject as Exception;
+            Framework.RunOnFrameworkThread(() =>
+            {
+                DataSender.PrintMessage("Exception handled" + exception.Message, LogLevels.LogError);
+            });
+        }
         public void AddContextMenu(MenuOpenedArgs args)
         {
-            if(IsLoggedIn())
+            if (IsLoggedIn())
             {
                 var targetPlayer = TargetManager.Target as PlayerCharacter;
                 if (args.AddonPtr == (nint)0 && targetPlayer != null && loggedIn == true)
@@ -186,7 +210,7 @@ namespace InfiniteRoleplay
 
                 }
             }
-         
+
         }
 
         private void ViewProfile(MenuItemClickedArgs args)
@@ -206,7 +230,7 @@ namespace InfiniteRoleplay
                     OpenTargetWindow();
                     DataSender.RequestTargetProfile(characterName, characterWorld, Configuration.username);
                 }
-               
+
             }
             catch (Exception ex)
             {
@@ -278,14 +302,14 @@ namespace InfiniteRoleplay
         public bool IsLoggedIn()
         {
             bool loggedIn = false;
-            if(ClientState.IsLoggedIn && ClientState.LocalPlayer != null)
+            if (ClientState.IsLoggedIn && ClientState.LocalPlayer != null)
             {
                 loggedIn = true;
             }
             return loggedIn;
         }
 
-        private void DrawUI() =>  WindowSystem.Draw();
+        private void DrawUI() => WindowSystem.Draw();
         public void ToggleConfigUI() => OptionsWindow.Toggle();
         public void ToggleMainUI() => MainPanel.Toggle();
         public void OpenMainPanel() => MainPanel.IsOpen = true;
@@ -306,11 +330,11 @@ namespace InfiniteRoleplay
 
                 string connectionStatus = await ClientTCP.GetConnectionStatusAsync(ClientTCP.clientSocket);
                 MainPanel.serverStatus = connectionStatus;
-                if(ClientState.IsLoggedIn && ClientState.LocalPlayer != null)
+                if (ClientState.IsLoggedIn && ClientState.LocalPlayer != null)
                 {
                     dtrBarEntry.Tooltip = new SeStringBuilder().AddText($"Infinite Roleplay: {connectionStatus}").Build();
                 }
-                
+
             }
             catch (Exception ex)
             {
