@@ -20,13 +20,7 @@ using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using System.Runtime.CompilerServices;
 using System.Numerics;
 namespace InfiniteRoleplay
-{
-
-
-
-
-
-
+{ 
     public partial class Plugin : IDalamudPlugin
     {
         public static Plugin plugin;
@@ -112,7 +106,6 @@ namespace InfiniteRoleplay
             // This adds a button to the plugin installer entry of this plugin which allows
             // to toggle the display status of the configuration ui
             Configuration.Initialize(PluginInterface);
-            PluginInterface.UiBuilder.Draw += DrawUI;
             OptionsWindow = new OptionsWindow(this);
             MainPanel = new MainPanel(this);
             TermsWindow = new TOS(this);
@@ -123,6 +116,16 @@ namespace InfiniteRoleplay
             VerificationWindow = new VerificationWindow(this);
             RestorationWindow = new RestorationWindow(this);
             ReportWindow = new ReportWindow(this);
+            ClientState.Login += LoadUI;
+            if(ClientState.IsLoggedIn && clientState.LocalPlayer != null)
+            {
+                LoadUI();
+            }
+        }
+
+
+        public void LoadUI()
+        {
             WindowSystem.AddWindow(OptionsWindow);
             WindowSystem.AddWindow(MainPanel);
             WindowSystem.AddWindow(TermsWindow);
@@ -133,6 +136,7 @@ namespace InfiniteRoleplay
             WindowSystem.AddWindow(VerificationWindow);
             WindowSystem.AddWindow(RestorationWindow);
             WindowSystem.AddWindow(ReportWindow);
+            PluginInterface.UiBuilder.Draw += DrawUI;
             PluginInterface.UiBuilder.OpenConfigUi += ToggleConfigUI;
             PluginInterface.UiBuilder.OpenMainUi += ToggleMainUI;
             ClientState.Login += Connect;
@@ -141,7 +145,6 @@ namespace InfiniteRoleplay
             Connect();
             UpdateStatus();
         }
-
         public void Connect()
         {
             if (IsLoggedIn())
@@ -265,11 +268,14 @@ namespace InfiniteRoleplay
             dtrBarEntry?.Remove();
             dtrBarEntry = null;
             CommandManager.RemoveHandler(CommandName);
+
+
+            PluginInterface.UiBuilder.Draw -= DrawUI;
             PluginInterface.UiBuilder.OpenConfigUi -= ToggleConfigUI;
             PluginInterface.UiBuilder.OpenMainUi -= ToggleMainUI;
+            ClientState.Login -= Connect;
+            ClientState.Logout -= Logout;
             ContextMenu.OnMenuOpened -= AddContextMenu;
-            ClientState.Login -= ClientTCP.AttemptConnect;
-            ClientState.Logout -= ClientTCP.Disconnect;
             // Dispose all windows
             OptionsWindow?.Dispose();
             MainPanel?.Dispose();
