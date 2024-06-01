@@ -11,6 +11,7 @@ public class Configuration : IPluginConfiguration
     public bool AlwaysOpenDefaultImport { get; set; } = false;
     public string username { get; set; } = "";
     public string password { get; set; } = "";
+    public bool rememberInformation { get; set; }
 
     //Config options
     public bool showKofi { get; set; } = true;

@@ -32,6 +32,7 @@ public class MainPanel : Window, IDisposable
     //registration agreement
     public bool AgreeTOS = false;
     public bool Agree18 = false;
+    public bool Remember = false;
     //duh
     //server status label stuff
     public static string serverStatus = "Connection Status...";
@@ -70,6 +71,7 @@ public class MainPanel : Window, IDisposable
         this.npcImage = Constants.UICommonImage(plugin.PluginInterface, Constants.CommonImageTypes.profileCreateNPC);
         this.npcBookmarkImage = Constants.UICommonImage(plugin.PluginInterface, Constants.CommonImageTypes.profileBookmarkNPC);
         this.reconnectImg = Constants.UICommonImage(plugin.PluginInterface, Constants.CommonImageTypes.reconnect);
+        Remember = plugin.Configuration.rememberInformation;
     }
 
     public void Dispose()
@@ -110,19 +112,21 @@ public class MainPanel : Window, IDisposable
             {
                 if (plugin.IsLoggedIn())
                 {
-                    plugin.Configuration.username = username;
-                    plugin.Configuration.password = password;
-                    plugin.Configuration.Save();
+                    SaveLoginPreferences();
                     DataSender.Login(this.username, this.password, plugin.ClientState.LocalPlayer.Name.ToString(), plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString());
                 }
             }
             ImGui.SameLine();
+            if(ImGui.Checkbox("Remember Me", ref Remember)){
+                SaveLoginPreferences();
+            }
             if (ImGui.Button("Forgot"))
             {
                 login = false;
                 register = false;
                 forgot = true;
             }
+            ImGui.SameLine();
             if (ImGui.Button("Register"))
             {
                 login = false;
@@ -362,6 +366,21 @@ public class MainPanel : Window, IDisposable
         }
         ImGui.TextColored(statusColor, status);
 
+    }
+    public void SaveLoginPreferences()
+    {
+        plugin.Configuration.rememberInformation = Remember;
+        if (plugin.Configuration.rememberInformation == true)
+        {
+            plugin.Configuration.username = username;
+            plugin.Configuration.password = password;
+        }
+        else
+        {
+            plugin.Configuration.username = string.Empty;
+            plugin.Configuration.password = string.Empty;
+        }
+        plugin.Configuration.Save();
     }
     public void switchUI()
     {

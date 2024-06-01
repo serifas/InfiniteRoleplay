@@ -117,12 +117,15 @@ namespace InfiniteRoleplay
             RestorationWindow = new RestorationWindow(this);
             ReportWindow = new ReportWindow(this);
             ClientState.Login += LoadUI;
-            if(ClientState.IsLoggedIn && clientState.LocalPlayer != null)
+            if (ClientState.IsLoggedIn && clientState.LocalPlayer != null)
             {
                 LoadUI();
+                if (MainPanel.Remember == true)
+                {
+                    AttemptLogin();
+                }
             }
         }
-
 
         public void LoadUI()
         {
@@ -172,7 +175,10 @@ namespace InfiniteRoleplay
             }
 
         }
-
+        private void AttemptLogin()
+        {
+            DataSender.Login(Configuration.username, Configuration.password, plugin.ClientState.LocalPlayer.Name.ToString(), plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString());
+        }
         private void UnobservedTaskExceptionHandler(object sender, UnobservedTaskExceptionEventArgs e)
         {
             // Mark the exception as observed to prevent it from being thrown by the finalizer thread
@@ -274,6 +280,7 @@ namespace InfiniteRoleplay
             PluginInterface.UiBuilder.OpenConfigUi -= ToggleConfigUI;
             PluginInterface.UiBuilder.OpenMainUi -= ToggleMainUI;
             ClientState.Login -= Connect;
+            ClientState.Login -= LoadUI;
             ClientState.Logout -= Logout;
             ContextMenu.OnMenuOpened -= AddContextMenu;
             // Dispose all windows
