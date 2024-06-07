@@ -47,7 +47,7 @@ public class MainPanel : Window, IDisposable
                                  venueImage, eventImage, venueBookmarkImage, eventBookmarkImage,
                                  //systems
                                  combatImage, statSystemImage,
-                                 reconnectImg;
+                                 reconnectImage;
     public Plugin plugin;
     public MainPanel(Plugin plugin) : base(
         "INFINITE ROLEPLAY",
@@ -59,18 +59,30 @@ public class MainPanel : Window, IDisposable
         this.plugin = plugin;
         this.username = plugin.Configuration.username;
         this.password = plugin.Configuration.password;
+        var kofi = Constants.UICommonImage(plugin, Constants.CommonImageTypes.kofiBtn);
+        var discod = Constants.UICommonImage(plugin, Constants.CommonImageTypes.discordBtn);
+        var profileSectionImg = Constants.UICommonImage(plugin, Constants.CommonImageTypes.profileSection);
+        var eventsImg = Constants.UICommonImage(plugin, Constants.CommonImageTypes.eventsSection);
+        var systemsImg = Constants.UICommonImage(plugin, Constants.CommonImageTypes.systemsSection);
+        var connectionsImg = Constants.UICommonImage(plugin, Constants.CommonImageTypes.connectionsSection);
+        var profileImg = Constants.UICommonImage(plugin, Constants.CommonImageTypes.profileCreateProfile);
+        var profileBookmarkImg = Constants.UICommonImage(plugin, Constants.CommonImageTypes.profileBookmarkProfile);
+        var npcImg = Constants.UICommonImage(plugin, Constants.CommonImageTypes.profileCreateNPC);
+        var npcBookmarkImg = Constants.UICommonImage(plugin, Constants.CommonImageTypes.profileBookmarkNPC);
+        var reconnectImg = Constants.UICommonImage(plugin, Constants.CommonImageTypes.reconnect);
 
-        kofiBtnImg = Constants.UICommonImage(plugin.PluginInterface, Constants.CommonImageTypes.kofiBtn);
-        discoBtn = Constants.UICommonImage(plugin.PluginInterface, Constants.CommonImageTypes.discordBtn);
-        this.profileSectionImage = Constants.UICommonImage(plugin.PluginInterface, Constants.CommonImageTypes.profileSection);
-        this.eventsSectionImage = Constants.UICommonImage(plugin.PluginInterface, Constants.CommonImageTypes.eventsSection);
-        this.systemsSectionImage = Constants.UICommonImage(plugin.PluginInterface, Constants.CommonImageTypes.systemsSection);
-        this.connectionsSectionImage = Constants.UICommonImage(plugin.PluginInterface, Constants.CommonImageTypes.connectionsSection);
-        this.profileImage = Constants.UICommonImage(plugin.PluginInterface, Constants.CommonImageTypes.profileCreateProfile);
-        this.profileBookmarkImage = Constants.UICommonImage(plugin.PluginInterface, Constants.CommonImageTypes.profileBookmarkProfile);
-        this.npcImage = Constants.UICommonImage(plugin.PluginInterface, Constants.CommonImageTypes.profileCreateNPC);
-        this.npcBookmarkImage = Constants.UICommonImage(plugin.PluginInterface, Constants.CommonImageTypes.profileBookmarkNPC);
-        this.reconnectImg = Constants.UICommonImage(plugin.PluginInterface, Constants.CommonImageTypes.reconnect);
+        if (kofi != null) { kofiBtnImg = kofi; }
+        if (discod != null) { discoBtn = discod; }
+        if (profileSectionImg != null) { profileSectionImage = profileSectionImg; }
+        if (eventsImg != null) { eventsSectionImage = eventsImg; }
+        if (systemsImg != null) { systemsSectionImage = systemsImg; }
+        if (connectionsImg != null) { connectionsSectionImage = connectionsImg; }
+        if (profileImg != null) { profileImage = profileImg; }
+        if (profileBookmarkImg != null) { profileBookmarkImage = profileBookmarkImg; }
+        if (npcImg != null) { npcImage = npcImg; }
+        if (npcBookmarkImg != null) { npcBookmarkImage = npcBookmarkImg; }
+        if (reconnectImg != null) { reconnectImage = reconnectImg; }
+
         Remember = plugin.Configuration.rememberInformation;
     }
 
@@ -97,7 +109,7 @@ public class MainPanel : Window, IDisposable
         combatImage?.Dispose();
         statSystemImage?.Dispose();
         //connection
-        reconnectImg?.Dispose();
+        reconnectImage?.Dispose();
     }
     public override void Draw()
     {
@@ -359,7 +371,7 @@ public class MainPanel : Window, IDisposable
         }
         ImGui.TextColored(serverStatusColor, serverStatus);
         ImGui.SameLine();
-        if (ImGui.ImageButton(reconnectImg.ImGuiHandle, new Vector2(18, 18)))
+        if (ImGui.ImageButton(reconnectImage.ImGuiHandle, new Vector2(18, 18)))
         {
             plugin.Connect();
             plugin.UpdateStatus();

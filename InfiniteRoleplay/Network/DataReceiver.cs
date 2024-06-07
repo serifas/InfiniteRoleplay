@@ -324,7 +324,12 @@ namespace Networking
                     buffer.WriteBytes(data);
                     var packetID = buffer.ReadInt();
                     ProfileWindow.ClearUI();
-                    ProfileWindow.currentAvatarImg = Constants.UICommonImage(plugin.PluginInterface, Constants.CommonImageTypes.avatarHolder);
+                    var currentAvatar = Constants.UICommonImage(plugin, Constants.CommonImageTypes.avatarHolder);
+                    if(currentAvatar != null)
+                    {
+                        ProfileWindow.currentAvatarImg = currentAvatar;
+                    }
+                    
                     ProfileWindow.bioFieldsArr[(int)Constants.BioFieldTypes.name] = "";
                     ProfileWindow.bioFieldsArr[(int)Constants.BioFieldTypes.race] = "";
                     ProfileWindow.bioFieldsArr[(int)Constants.BioFieldTypes.gender] = "";
@@ -627,10 +632,15 @@ namespace Networking
                     TargetWindow.characterEditName = name.Replace("''", "'"); TargetWindow.characterEditRace = race.Replace("''", "'"); TargetWindow.characterEditGender = gender.Replace("''", "'");
                     TargetWindow.characterEditAge = age.Replace("''", "'"); TargetWindow.characterEditHeight = height.Replace("''", "'"); TargetWindow.characterEditWeight = weight.Replace("''", "'");
                     TargetWindow.characterEditAfg = atFirstGlance.Replace("''", "'");
-                    TargetWindow.alignmentImg = Constants.AlignementIcon(plugin.PluginInterface, alignment);
-                    TargetWindow.personalityImg1 = Constants.PersonalityIcon(plugin.PluginInterface, personality_1);
-                    TargetWindow.personalityImg2 = Constants.PersonalityIcon(plugin.PluginInterface, personality_2);
-                    TargetWindow.personalityImg3 = Constants.PersonalityIcon(plugin.PluginInterface, personality_3);
+                    var alignmentImage = Constants.AlignementIcon(plugin, alignment);
+                    var personality1Image = Constants.PersonalityIcon(plugin, personality_1);
+                    var personality2Image = Constants.PersonalityIcon(plugin, personality_2);
+                    var personality3Image = Constants.PersonalityIcon(plugin, personality_3);
+
+                    if(alignmentImage != null) { TargetWindow.alignmentImg = alignmentImage; }
+                    if (personality1Image != null) { TargetWindow.personalityImg1 = personality1Image; }
+                    if (personality2Image != null) { TargetWindow.personalityImg1 = personality2Image; }
+                    if (personality3Image != null) { TargetWindow.personalityImg1 = personality3Image; }
 
                     var (text, desc) = Constants.AlignmentVals[alignment];
                     var (textpers1, descpers1) = Constants.PersonalityValues[personality_1];

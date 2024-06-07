@@ -41,36 +41,62 @@ namespace InfiniteRoleplay.Helpers
 
                         if (self == true)
                         {
-                            ProfileWindow.galleryImages[index] = plugin.PluginInterface.UiBuilder.LoadImage(scaledImagePath);
+                            var image = plugin.PluginInterface.UiBuilder.LoadImage(scaledImagePath);
+                            if(image != null)
+                            {
+                                ProfileWindow.galleryImages[index] = image;
+                            }
                             ProfileWindow.imageURLs[index] = url;
                             ProfileWindow.NSFW[index] = nsfw;
                             ProfileWindow.TRIGGER[index] = trigger;
                         }
                         else
                         {
-                            TargetWindow.galleryImages[index] =  plugin.PluginInterface.UiBuilder.LoadImage(scaledImagePath);
+                            var image = plugin.PluginInterface.UiBuilder.LoadImage(scaledImagePath);
+                            if(image != null)
+                            {
+                                TargetWindow.galleryImages[index] = image;
+                            }
+                            
                         }
                         if (trigger == true && nsfw == false)
                         {
 
                             if (self == true)
                             {
-                                ProfileWindow.galleryThumbs[index] = Constants.UICommonImage(plugin.PluginInterface, Constants.CommonImageTypes.TRIGGER);
+                                var image = Constants.UICommonImage(plugin, Constants.CommonImageTypes.TRIGGER);
+                                if(image != null)
+                                {
+                                    ProfileWindow.galleryThumbs[index] = image;
+                                }
+                                
                             }
                             else
                             {
-                                TargetWindow.galleryThumbs[index] = Constants.UICommonImage(plugin.PluginInterface, Constants.CommonImageTypes.TRIGGER);
+                                var image = Constants.UICommonImage(plugin, Constants.CommonImageTypes.TRIGGER);
+                                if (image != null)
+                                {
+                                    TargetWindow.galleryThumbs[index] = image;
+                                }
                             }
                         }
                         if (nsfw == true && trigger == false)
                         {
                             if (self == true)
                             {
-                                ProfileWindow.galleryThumbs[index] = Constants.UICommonImage(plugin.PluginInterface, Constants.CommonImageTypes.NSFW);
+                                var image = Constants.UICommonImage(plugin, Constants.CommonImageTypes.NSFW);
+                                if(image != null)
+                                {
+                                    ProfileWindow.galleryThumbs[index] = image;
+                                }
                             }
                             else
                             {
-                                TargetWindow.galleryThumbs[index] = Constants.UICommonImage(plugin.PluginInterface, Constants.CommonImageTypes.NSFW);
+                                var image = Constants.UICommonImage(plugin, Constants.CommonImageTypes.NSFW);
+                                if (image != null)
+                                {
+                                    TargetWindow.galleryThumbs[index] = image;
+                                }
                             }
 
                         }
@@ -78,13 +104,21 @@ namespace InfiniteRoleplay.Helpers
                         {
                             if (self == true)
                             {
-
-                                ProfileWindow.galleryThumbs[index] = Constants.UICommonImage(plugin.PluginInterface, Constants.CommonImageTypes.NSFWTRIGGER);
+                                var image = Constants.UICommonImage(plugin, Constants.CommonImageTypes.NSFWTRIGGER);
+                                if(image != null)
+                                {
+                                    ProfileWindow.galleryThumbs[index] = image;
+                                }
 
                             }
                             else
                             {
-                                TargetWindow.galleryThumbs[index] = Constants.UICommonImage(plugin.PluginInterface, Constants.CommonImageTypes.NSFWTRIGGER);
+                                var image = Constants.UICommonImage(plugin, Constants.CommonImageTypes.NSFWTRIGGER);
+                                if (image != null)
+                                {
+                                    TargetWindow.galleryThumbs[index] = image;
+                                }
+                                
                             }
                         }
 
@@ -95,7 +129,10 @@ namespace InfiniteRoleplay.Helpers
                             SaveImage(img, GalleryPath, "gallery_thumb_" + profileID + "_" + index + "." + extension);
                             if (self == true)
                             {
-                                ProfileWindow.galleryThumbs[index] = plugin.PluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/Galleries/" + profileID + "/gallery_thumb_" + profileID + "_" + index + "." + extension));
+                                var image = plugin.PluginInterface.UiBuilder.LoadImage(Path.Combine(path, "UI/Galleries/" + profileID + "/gallery_thumb_" + profileID + "_" + index + "." + extension));
+                                if(image != null)
+                                {
+                                    ProfileWindow.galleryThumbs[index] = image;                                }
                             }
                             else
                             {

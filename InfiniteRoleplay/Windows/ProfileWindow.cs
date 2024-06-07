@@ -79,8 +79,16 @@ namespace InfiniteRoleplay.Windows
             pg = plugin.PluginInterface;
             this.configuration = plugin.Configuration;
             this._fileDialogManager = new FileDialogManager();
-            avatarHolder = Constants.UICommonImage(plugin.PluginInterface, Constants.CommonImageTypes.avatarHolder);
-            pictureTab = Constants.UICommonImage(plugin.PluginInterface, Constants.CommonImageTypes.blankPictureTab);
+            var avatarHolderImage = Constants.UICommonImage(plugin, Constants.CommonImageTypes.avatarHolder);
+            if (avatarHolderImage != null)
+            {
+                avatarHolder = avatarHolderImage;
+            }
+            var  pictureTabImage = Constants.UICommonImage(plugin, Constants.CommonImageTypes.blankPictureTab);
+            if(pictureTabImage != null)
+            {
+                pictureTab = pictureTabImage;
+            }
             this.persistAvatarHolder = avatarHolder;
             for (int bf = 0; bf < bioFieldsArr.Length; bf++)
             {

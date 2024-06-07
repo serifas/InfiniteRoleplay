@@ -35,6 +35,7 @@ namespace InfiniteRoleplay
         public IFramework Framework { get; init; }
         private IContextMenu ContextMenu { get; init; }
         public ICondition Condition { get; init; }
+        public ITextureProvider TextureProvider { get; init; }
         [LibraryImport("user32")]
         internal static partial short GetKeyState(int nVirtKey);
         public static bool CtrlPressed() => (GetKeyState(0xA2) & 0x8000) != 0 || (GetKeyState(0xA3) & 0x8000) != 0;
@@ -91,7 +92,9 @@ namespace InfiniteRoleplay
             ClientState = clientState;
             TargetManager = targetManager;
             ContextMenu = contextMenu;
+            TextureProvider = textureProvider;
             this.Condition = condition;
+
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             TaskScheduler.UnobservedTaskException += UnobservedTaskExceptionHandler;
 

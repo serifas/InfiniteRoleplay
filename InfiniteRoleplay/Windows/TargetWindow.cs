@@ -81,7 +81,12 @@ namespace InfiniteRoleplay.Windows
             this.pg = plugin.PluginInterface;
 
             this.nameFont = pg.UiBuilder.GetGameFontHandle(new GameFontStyle(GameFontFamilyAndSize.Jupiter23));
-            pictureTab = Constants.UICommonImage(plugin.PluginInterface, Constants.CommonImageTypes.blankPictureTab);
+            var blankPictureTab = Constants.UICommonImage(plugin, Constants.CommonImageTypes.blankPictureTab);
+            if(blankPictureTab != null)
+            {
+                pictureTab = blankPictureTab;
+            }
+           
             //alignment icons
             this.chatGui = chatGui;
             for (int i = 0; i < 30; i++)
