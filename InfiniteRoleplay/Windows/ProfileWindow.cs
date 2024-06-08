@@ -78,7 +78,7 @@ namespace InfiniteRoleplay.Windows
             this.plugin = plugin;
             pg = plugin.PluginInterface;
             this.configuration = plugin.Configuration;
-            this._fileDialogManager = new FileDialogManager();
+            this._fileDialogManager = new FileDialogManager();            
             var avatarHolderImage = Constants.UICommonImage(plugin, Constants.CommonImageTypes.avatarHolder);
             if (avatarHolderImage != null)
             {
@@ -149,11 +149,11 @@ namespace InfiniteRoleplay.Windows
 
                     if (ExistingProfile == true)
                     {
-                        if (ImGui.Button("Edit Profile", new Vector2(100, 20))) { editProfile = true; }
+                        if(ImGui.Button("Edit Profile", new Vector2(100, 20))) { editProfile = true; }
                     }
                     if (ExistingProfile == false)
                     {
-                         if (ImGui.Button("Add Profile", new Vector2(100, 20))) { addProfile = true; DataSender.CreateProfile(player.Name.ToString(), player.HomeWorld.GameData.Name.ToString()); }
+                        if(ImGui.Button("Add Profile", new Vector2(100, 20))) { addProfile = true; DataSender.CreateProfile(player.Name.ToString(), player.HomeWorld.GameData.Name.ToString()); }
                     }
 
 
@@ -174,6 +174,7 @@ namespace InfiniteRoleplay.Windows
                     }
                     if (ImGui.BeginChild("PROFILE"))
                     {
+                      
                         #region BIO
                         if (TabOpen[TabValue.Bio])
                         {

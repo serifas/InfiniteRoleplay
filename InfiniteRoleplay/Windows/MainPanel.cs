@@ -234,20 +234,16 @@ public class MainPanel : Window, IDisposable
                 #endregion
             }
             ImGui.SameLine();
-            using (OtterGui.Raii.ImRaii.Disabled(true))
+            if (ImGui.ImageButton(this.connectionsSectionImage.ImGuiHandle, new Vector2(100, 50)))
             {
-                if (ImGui.ImageButton(this.connectionsSectionImage.ImGuiHandle, new Vector2(100, 50)))
-                {
-                    //  viewConnections = true;
-                    // viewMainWindow = false;
-
-                }
-
+                DataSender.RequestConnections(plugin.Configuration.username.ToString());
             }
+
             if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
             {
-                ImGui.SetTooltip("Connections - Coming soon");
+                ImGui.SetTooltip("Connections");
             }
+
             using (OtterGui.Raii.ImRaii.Disabled(true))
             {
                 if (ImGui.ImageButton(this.eventsSectionImage.ImGuiHandle, new Vector2(100, 50)))
@@ -256,7 +252,6 @@ public class MainPanel : Window, IDisposable
                     // viewMainWindow = false;
 
                 }
-
             }
             if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
             {

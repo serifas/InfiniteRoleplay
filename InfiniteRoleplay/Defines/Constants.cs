@@ -69,7 +69,17 @@ namespace InfiniteRoleplay
             ChaoticEvil = 8,
             None = 9,
         }
-
+        public enum ConnectionStatus
+        {
+            blocked = -1,
+            canceled = 0,
+            refused = 1,
+            pending = 2,
+            accepted = 3,
+            removed = 4,
+            sendPending = 5,
+            receivedPending = 6,
+        }
         public enum Personalities
         {
             Abrasive = 0,
@@ -551,6 +561,16 @@ namespace InfiniteRoleplay
                                 "because they do not work well with others."),
 
             ("None",            "Not Specified"),
+        };
+        public static readonly (string, string)[] ConnectionListingVals =
+                {
+            ("Connected",     "Hidden profiles you have access to."),
+
+            ("Sent",    "Sent requests to view hidden profiles"),
+
+            ("Received",    "Received requests to see your profile"),
+
+            ("Blocked",  "Blocked requests to see your current profile"),
         };
 
 

@@ -43,16 +43,17 @@ namespace InfiniteRoleplay
         public Configuration Configuration { get; init; }
 
         private readonly WindowSystem WindowSystem = new("Infinite Roleplay");
-        private OptionsWindow OptionsWindow { get; init; }
-        private VerificationWindow VerificationWindow { get; init; }
-        private RestorationWindow RestorationWindow { get; init; }
-        private ReportWindow ReportWindow { get; init; }
-        private MainPanel MainPanel { get; init; }
-        private ProfileWindow ProfileWindow { get; init; }
-        private BookmarksWindow BookmarksWindow { get; init; }
-        private TargetWindow TargetWindow { get; init; }
-        private ImagePreview ImagePreview { get; init; }
-        private TOS TermsWindow { get; init; }
+        private OptionsWindow OptionsWindow { get; set; }
+        private VerificationWindow VerificationWindow { get; set; }
+        private RestorationWindow RestorationWindow { get; set; }
+        private ReportWindow ReportWindow { get; set; }
+        private MainPanel MainPanel { get; set; }
+        private ProfileWindow ProfileWindow { get; set; }
+        public ConnectionsWindow ConnectionsWindow { get; set; }
+        private BookmarksWindow BookmarksWindow { get; set; }
+        private TargetWindow TargetWindow { get; set; }
+        private ImagePreview ImagePreview { get; set; }
+        private TOS TermsWindow { get; set; }
 
         public IClientState ClientState { get; init; }
         public bool barLoaded = false;
@@ -87,14 +88,13 @@ namespace InfiniteRoleplay
             // Wrap the original service with the proxy
 
             this.dtrBar = dtrBar;
+            TextureProvider = textureProvider;
             PluginInterface = pluginInterface;
             CommandManager = commandManager;
             ClientState = clientState;
             TargetManager = targetManager;
             ContextMenu = contextMenu;
-            TextureProvider = textureProvider;
             this.Condition = condition;
-
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             TaskScheduler.UnobservedTaskException += UnobservedTaskExceptionHandler;
 
@@ -102,6 +102,7 @@ namespace InfiniteRoleplay
             this.Framework = framework;
             Configuration = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
             DataReceiver.plugin = this;
+            DataSender.plugin = this;
             CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
             {
                 HelpMessage = "Type /infinite to open the plugin window."
@@ -109,16 +110,6 @@ namespace InfiniteRoleplay
             // This adds a button to the plugin installer entry of this plugin which allows
             // to toggle the display status of the configuration ui
             Configuration.Initialize(PluginInterface);
-            OptionsWindow = new OptionsWindow(this);
-            MainPanel = new MainPanel(this);
-            TermsWindow = new TOS(this);
-            ProfileWindow = new ProfileWindow(this);
-            ImagePreview = new ImagePreview(this);
-            BookmarksWindow = new BookmarksWindow(this);
-            TargetWindow = new TargetWindow(this);
-            VerificationWindow = new VerificationWindow(this);
-            RestorationWindow = new RestorationWindow(this);
-            ReportWindow = new ReportWindow(this);
             ClientState.Login += LoadUI;
             if (ClientState.IsLoggedIn && clientState.LocalPlayer != null)
             {
@@ -132,6 +123,17 @@ namespace InfiniteRoleplay
 
         public void LoadUI()
         {
+            OptionsWindow = new OptionsWindow(this);
+            MainPanel = new MainPanel(this);
+            TermsWindow = new TOS(this);
+            ProfileWindow = new ProfileWindow(this);
+            ImagePreview = new ImagePreview(this);
+            BookmarksWindow = new BookmarksWindow(this);
+            TargetWindow = new TargetWindow(this);
+            VerificationWindow = new VerificationWindow(this);
+            RestorationWindow = new RestorationWindow(this);
+            ReportWindow = new ReportWindow(this);
+            ConnectionsWindow = new ConnectionsWindow(this);
             WindowSystem.AddWindow(OptionsWindow);
             WindowSystem.AddWindow(MainPanel);
             WindowSystem.AddWindow(TermsWindow);
@@ -142,6 +144,7 @@ namespace InfiniteRoleplay
             WindowSystem.AddWindow(VerificationWindow);
             WindowSystem.AddWindow(RestorationWindow);
             WindowSystem.AddWindow(ReportWindow);
+            WindowSystem.AddWindow(ConnectionsWindow);
             PluginInterface.UiBuilder.Draw += DrawUI;
             PluginInterface.UiBuilder.OpenConfigUi += ToggleConfigUI;
             PluginInterface.UiBuilder.OpenMainUi += ToggleMainUI;
@@ -170,6 +173,7 @@ namespace InfiniteRoleplay
             dtrBarEntry = null;
             MainPanel.status = "Logged Out";
             MainPanel.statusColor = new Vector4(255, 0, 0, 255);
+
             MainPanel.switchUI();
             MainPanel.login = true;
             if (ClientTCP.Connected)
@@ -268,6 +272,7 @@ namespace InfiniteRoleplay
                 dtrBarEntry.Text = text;
                 dtrBarEntry.Tooltip = "Infinite Roleplay";
                 entry.OnClick = () => this.MainPanel.Toggle();
+
                 barLoaded = true;
             }
         }
@@ -296,6 +301,7 @@ namespace InfiniteRoleplay
             BookmarksWindow?.Dispose();
             VerificationWindow?.Dispose();
             RestorationWindow?.Dispose();
+            ConnectionsWindow?.Dispose();
             ReportWindow?.Dispose();
             Misc._nameFont?.Dispose();
             Imaging.RemoveAllImages(this);
@@ -338,6 +344,7 @@ namespace InfiniteRoleplay
         public void OpenRestorationWindow() => RestorationWindow.IsOpen = true;
         public void OpenReportWindow() => ReportWindow.IsOpen = true;
         public void OpenOptionsWindow() => OptionsWindow.IsOpen = true;
+        public void OpenConnectionsWindow() => ConnectionsWindow.IsOpen = true;
 
         internal async void UpdateStatus()
         {

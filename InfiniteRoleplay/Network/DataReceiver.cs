@@ -55,6 +55,7 @@ namespace Networking
         SSendTargetOOC = 52,
         SSendNoOOCInfo = 53,
         SSendNoTargetOOCInfo = 54,
+        ReceiveConnections = 55,
     }
     class DataReceiver
     {
@@ -254,6 +255,10 @@ namespace Networking
                 {
                     buffer.WriteBytes(data);
                     var packetID = buffer.ReadInt();
+                    string characterName = buffer.ReadString();
+                    string characterWorld = buffer.ReadString();
+                    TargetWindow.characterName = characterName;
+                    TargetWindow.characterWorld = characterWorld;
                     loggedIn = true;
                     TargetWindow.ExistingProfile = false;
                     TargetWindow.ExistingBio = false;
@@ -270,6 +275,7 @@ namespace Networking
                     TargetWindow.ClearUI();
                     BookmarksWindow.DisableBookmarkSelection = false;
                     ReportWindow.reportStatus = "";
+                   
                 }
             }
             catch (Exception ex)
@@ -639,8 +645,8 @@ namespace Networking
 
                     if(alignmentImage != null) { TargetWindow.alignmentImg = alignmentImage; }
                     if (personality1Image != null) { TargetWindow.personalityImg1 = personality1Image; }
-                    if (personality2Image != null) { TargetWindow.personalityImg1 = personality2Image; }
-                    if (personality3Image != null) { TargetWindow.personalityImg1 = personality3Image; }
+                    if (personality2Image != null) { TargetWindow.personalityImg2 = personality2Image; }
+                    if (personality3Image != null) { TargetWindow.personalityImg3 = personality3Image; }
 
                     var (text, desc) = Constants.AlignmentVals[alignment];
                     var (textpers1, descpers1) = Constants.PersonalityValues[personality_1];
@@ -1058,7 +1064,64 @@ namespace Networking
             {
                 DataSender.PrintMessage($"Error handling ReceiveNoTargetOOCInfo message: {ex}", LogLevels.LogError);
             }
-        }
+        }        
 
+        internal static void ReceiveConnections(byte[] data)
+        {
+            try
+            {
+                using (var buffer = new ByteBuffer())
+                {
+                    buffer.WriteBytes(data);
+                    var packetID = buffer.ReadInt();
+                    int connectionsCount = buffer.ReadInt();
+                    ConnectionsWindow.connetedProfileList.Clear();
+                    ConnectionsWindow.sentProfileRequests.Clear();
+                    ConnectionsWindow.receivedProfileRequests.Clear();
+                    ConnectionsWindow.blockedProfileRequests.Clear();
+                    for(int i = 0; i < connectionsCount; i++)
+                    {
+                        string connectionName = buffer.ReadString();
+                        string connectionWorld = buffer.ReadString();
+                        int status = buffer.ReadInt();
+                        Tuple<string, string> connection = Tuple.Create(connectionName, connectionWorld);
+                        if (status == (int)Constants.ConnectionStatus.accepted)
+                        {
+                            ConnectionsWindow.connetedProfileList.Add(connection);
+                        }
+                        if (status == (int)Constants.ConnectionStatus.blocked)
+                        {
+                            ConnectionsWindow.blockedProfileRequests.Add(connection);
+                        }
+                        if (status == (int)Constants.ConnectionStatus.sendPending)
+                        {
+                            ConnectionsWindow.sentProfileRequests.Add(connection);
+                        }
+                        if (status == (int)Constants.ConnectionStatus.receivedPending)
+                        {
+                            ConnectionsWindow.receivedProfileRequests.Add(connection);
+                        }
+                        if (status == (int)Constants.ConnectionStatus.refused)
+                        {
+                            var receivedProfileRequest = ConnectionsWindow.receivedProfileRequests.Find(tuple => tuple.Item1 == connectionName && tuple.Item2 == connectionWorld);
+                            ConnectionsWindow.receivedProfileRequests.Remove(receivedProfileRequest);
+                        }
+                        if (status == (int)Constants.ConnectionStatus.canceled)
+                        {
+                            var sentProfileRequest = ConnectionsWindow.sentProfileRequests.Find(tuple => tuple.Item1 == connectionName && tuple.Item2 == connectionWorld);
+                            ConnectionsWindow.sentProfileRequests.Remove(sentProfileRequest);
+                        }
+
+
+                    }
+                    plugin.OpenConnectionsWindow();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                DataSender.PrintMessage($"Error handling ReceiveNoTargetOOCInfo message: {ex}", LogLevels.LogError);
+            }
+        }
     }
 }

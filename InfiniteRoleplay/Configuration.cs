@@ -17,8 +17,7 @@ public class Configuration : IPluginConfiguration
     public bool showKofi { get; set; } = true;
     public bool showWIP { get; set; } = true;
     public bool showDisc { get; set; } = true;
-    public bool showTargetOptions { get; set; } = false;
-
+    public bool showProfilesPublicly { get; set; } = false;
     // the below exist just to make saving less cumbersome
     [NonSerialized]
     private DalamudPluginInterface? PluginInterface;

@@ -68,6 +68,8 @@ namespace InfiniteRoleplay.Windows
         private bool AllLoaded;
 
         public static bool[] ChapterExists = new bool[30];
+        internal static string characterName;
+        internal static string characterWorld;
 
         public TargetWindow(Plugin plugin) : base(
        "TARGET", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)
@@ -177,12 +179,16 @@ namespace InfiniteRoleplay.Windows
                 {
 
 
-                    if (ExistingBio == false && ExistingHooks == false && ExistingStory == false && ExistingOOC == false && ExistingOOC == false && ExistingGallery == false)
-                    {
-                        ImGui.Text("No Profile Data Available");
-                    }
-                    else
-                    {
+                        if (ExistingBio == false && ExistingHooks == false && ExistingStory == false && ExistingOOC == false && ExistingOOC == false && ExistingGallery == false)
+                        {
+                            ImGui.TextUnformatted("No Profile Data Available:\nIf this character has a profile, you can request to view it below.");
+                            if(ImGui.Button("Request access"))
+                            {
+                                DataSender.SendProfileAccessUpdate(characterName, characterWorld,(int)Constants.ConnectionStatus.pending);
+                            }
+                        }
+                        else
+                        {
                         if (viewBio == true)
                         {
                             Misc.SetTitle(plugin, true, characterEditName);

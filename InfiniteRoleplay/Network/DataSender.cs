@@ -1,7 +1,9 @@
 using Dalamud.Hooking;
+using FFXIVClientStructs.FFXIV.Client.Graphics.Scene;
 using InfiniteRoleplay;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 
 namespace Networking
@@ -43,6 +45,11 @@ namespace Networking
         SSubmitRestorationRequest = 33,
         SSubmitRestorationKey = 34,
         SSendOOC = 35,
+        SSendUserConfiguration = 36,
+        SendProfileConfiguration = 37,
+        SSendProfileViewRequest = 38,
+        SSendProfileAccessUpdate = 39,
+        SSendConnectionsRequest = 40,
     }
     public enum LogLevels
     {
@@ -86,13 +93,14 @@ namespace Networking
         {
             try
             {
-                using (var buffer = new ByteBuffer()){
-                buffer.WriteInt((int)ClientPackets.CLogin);
-                buffer.WriteString(username);
-                buffer.WriteString(password);
-                buffer.WriteString(playerName);
-                buffer.WriteString(playerWorld);
-                await ClientTCP.SendDataAsync(buffer.ToArray());
+                using (var buffer = new ByteBuffer())
+                {
+                    buffer.WriteInt((int)ClientPackets.CLogin);
+                    buffer.WriteString(username);
+                    buffer.WriteString(password);
+                    buffer.WriteString(playerName);
+                    buffer.WriteString(playerWorld);
+                    await ClientTCP.SendDataAsync(buffer.ToArray());
                 }
             }
             catch (Exception ex)
@@ -100,11 +108,11 @@ namespace Networking
                 PrintMessage("Error in Login: " + ex.ToString(), LogLevels.LogError);
             }
         }
+      
         public static async void Register(string username, string password, string email)
         {
             try
             {
-
                 using (var buffer = new ByteBuffer()){
                 buffer.WriteInt((int)ClientPackets.CRegister);
                 buffer.WriteString(username);
@@ -122,13 +130,14 @@ namespace Networking
         {
             try
             {
-                using (var buffer = new ByteBuffer()){
-                buffer.WriteInt((int)ClientPackets.CReportProfile);
-                buffer.WriteString(playerName);
-                buffer.WriteString(playerWorld);
-                buffer.WriteString(reporterAccount);
-                buffer.WriteString(reportInfo);
-                await ClientTCP.SendDataAsync(buffer.ToArray());
+                using (var buffer = new ByteBuffer())
+                {
+                    buffer.WriteInt((int)ClientPackets.CReportProfile);
+                    buffer.WriteString(playerName);
+                    buffer.WriteString(playerWorld);
+                    buffer.WriteString(reporterAccount);
+                    buffer.WriteString(reportInfo);
+                    await ClientTCP.SendDataAsync(buffer.ToArray());
                 }
             }
             catch (Exception ex)
@@ -137,7 +146,6 @@ namespace Networking
             }
 
         }
-
         public static async void SendGalleryImage(string username, string playername, string playerworld, bool NSFW, bool TRIGGER, string url, int index)
         {
             try
@@ -203,7 +211,28 @@ namespace Networking
                 PrintMessage("Error in SendStory: " + ex.ToString(), LogLevels.LogError);
             }
         }
-
+       
+        public static async void SendProfileAccessUpdate(string connectionName, string connectionWorld, int status)
+        {
+            try
+            {
+                using (var buffer = new ByteBuffer())
+                {
+                    buffer.WriteInt((int)ClientPackets.SSendProfileAccessUpdate);
+                    buffer.WriteString(plugin.Configuration.username.ToString());
+                    buffer.WriteString(plugin.ClientState.LocalPlayer.Name.ToString());
+                    buffer.WriteString(plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString());
+                    buffer.WriteString(connectionName);
+                    buffer.WriteString(connectionWorld);
+                    buffer.WriteInt(status);
+                    await ClientTCP.SendDataAsync(buffer.ToArray());
+                }
+            }
+            catch (Exception ex)
+            {
+                PrintMessage("Error in Login: " + ex.ToString(), LogLevels.LogError);
+            }
+        }
         public static async void FetchProfile(string characterName, string world)
         {
             try
@@ -317,7 +346,38 @@ namespace Networking
             }
 
         }
-
+        public static async void SaveUserConfiguration(bool showProfilesPublicly)
+        {
+            try
+            {
+                using (var buffer = new ByteBuffer())
+                {
+                    buffer.WriteInt((int)ClientPackets.SSendUserConfiguration);
+                    buffer.WriteBool(showProfilesPublicly);
+                    await ClientTCP.SendDataAsync(buffer.ToArray());
+                }
+            }
+            catch (Exception ex)
+            {
+                PrintMessage("Error in sending user configuration: " + ex.ToString(), LogLevels.LogError);
+            }
+        }
+        public static async void SaveProfileConfiguration(bool showProfilePublicly, string playerName, string playerWorld)
+        {
+            try
+            {
+                using (var buffer = new ByteBuffer())
+                {
+                    buffer.WriteInt((int)ClientPackets.SendProfileConfiguration);
+                    buffer.WriteBool(showProfilePublicly);
+                    await ClientTCP.SendDataAsync(buffer.ToArray());
+                }
+            }
+            catch (Exception ex)
+            {
+                PrintMessage("Error in sending user configuration: " + ex.ToString(), LogLevels.LogError);
+            }
+        }
 
         public static async void RequestTargetProfile(string targetPlayerName, string targetPlayerWorld, string requesterUsername)
         {
@@ -454,5 +514,22 @@ namespace Networking
             }
         }
 
+
+        internal static async void RequestConnections(string username)
+        {
+            try
+            {
+                using (var buffer = new ByteBuffer())
+                {
+                    buffer.WriteInt((int)ClientPackets.SSendConnectionsRequest);
+                    buffer.WriteString(username);
+                    await ClientTCP.SendDataAsync(buffer.ToArray());
+                }
+            }
+            catch (Exception ex)
+            {
+                PrintMessage("Error in RequestConnections: " + ex.ToString(), LogLevels.LogError);
+            }
+        }
     }
 }
