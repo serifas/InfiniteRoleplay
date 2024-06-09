@@ -56,6 +56,7 @@ namespace Networking
         SSendNoOOCInfo = 53,
         SSendNoTargetOOCInfo = 54,
         ReceiveConnections = 55,
+        ReceiveNewConnectionRequest = 56,
     }
     class DataReceiver
     {
@@ -64,8 +65,8 @@ namespace Networking
         public static int BioLoadStatus = -1, HooksLoadStatus = -1, StoryLoadStatus = -1, OOCLoadStatus = -1, GalleryLoadStatus = -1, BookmarkLoadStatus = -1,
                           TargetBioLoadStatus = -1, TargetHooksLoadStatus = -1, TargetStoryLoadStatus = -1, TargetOOCLoadStatus = -1, TargetGalleryLoadStatus = -1, TargetNotesLoadStatus = -1,
                           targetHookEditCount, ExistingGalleryImageCount, ExistingGalleryThumbCount,
-                          lawfulGoodEditVal, neutralGoodEditVal, chaoticGoodEditVal, 
-                          lawfulNeutralEditVal, trueNeutralEditVal, chaoticNeutralEditVal, 
+                          lawfulGoodEditVal, neutralGoodEditVal, chaoticGoodEditVal,
+                          lawfulNeutralEditVal, trueNeutralEditVal, chaoticNeutralEditVal,
                           lawfulEvilEditVal, neutralEvilEditVal, chaoticEvilEditVal;
 
         public static Vector4 accounStatusColor, verificationStatusColor, forgotStatusColor, restorationStatusColor = new Vector4(255, 255, 255, 255);
@@ -108,7 +109,7 @@ namespace Networking
          
          
          */
-     
+
         public static void RecBookmarks(byte[] data)
         {
             var buffer = new ByteBuffer();
@@ -117,7 +118,7 @@ namespace Networking
             string bookmarkVals = buffer.ReadString();
 
             plugin.OpenBookmarksWindow();
-            
+
             Regex nameRx = new Regex(@"<bookmarkName>(.*?)</bookmarkName>");
             Regex worldRx = new Regex(@"<bookmarkWorld>(.*?)</bookmarkWorld>");
             string[] bookmarkSplit = bookmarkVals.Replace("|||", "~").Split('~');
@@ -130,9 +131,9 @@ namespace Networking
                 BookmarksWindow.profiles.Add(characterName, characterWorld);
             }
             BookmarkLoadStatus = 1;
-                
+
         }
-    
+
         public static void HandleWelcomeMessage(byte[] data)
         {
             try
@@ -151,7 +152,7 @@ namespace Networking
             {
                 DataSender.PrintMessage($"Error handling Welcome message: {ex}", LogLevels.LogError);
             }
-          
+
         }
         public static void BadLogin(byte[] data)
         {
@@ -163,7 +164,8 @@ namespace Networking
                     var packetID = buffer.ReadInt();
                     var profiles = buffer.ReadString();
                 }
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 DataSender.PrintMessage($"Error handling BadLogin message: {ex}", LogLevels.LogError);
             }
@@ -179,10 +181,10 @@ namespace Networking
                     TargetWindow.ExistingProfile = true;
                     TargetWindow.ClearUI();
                     ReportWindow.reportStatus = "";
-                    TargetWindow.ReloadTarget();               
+                    TargetWindow.ReloadTarget();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 DataSender.PrintMessage($"Error handling ExistingTargetProfile message: {ex}", LogLevels.LogError);
             }
@@ -214,7 +216,8 @@ namespace Networking
                     var packetID = buffer.ReadInt();
                     ReportWindow.reportStatus = "Profile has already been reported!";
                 }
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 DataSender.PrintMessage($"Error handling RecProfileAlreadyReported message: {ex}", LogLevels.LogError);
             }
@@ -241,7 +244,8 @@ namespace Networking
                     plugin.OpenProfileWindow();
                     ProfileWindow.ExistingProfile = false;
                 }
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 DataSender.PrintMessage($"Error handling NoProfile message: {ex}", LogLevels.LogError);
             }
@@ -275,7 +279,7 @@ namespace Networking
                     TargetWindow.ClearUI();
                     BookmarksWindow.DisableBookmarkSelection = false;
                     ReportWindow.reportStatus = "";
-                   
+
                 }
             }
             catch (Exception ex)
@@ -296,7 +300,8 @@ namespace Networking
                     BookmarksWindow.DisableBookmarkSelection = false;
                     TargetGalleryLoadStatus = 0;
                 }
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 DataSender.PrintMessage($"Error handling NoTargetGallery message: {ex}", LogLevels.LogError);
             }
@@ -313,12 +318,13 @@ namespace Networking
                     TargetWindow.ExistingStory = false;
                     TargetStoryLoadStatus = 0;
                 }
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 DataSender.PrintMessage($"Error handling NoTargetStory message: {ex}", LogLevels.LogError);
             }
         }
-        
+
 
 
         public static void NoProfileBio(byte[] data)
@@ -331,11 +337,11 @@ namespace Networking
                     var packetID = buffer.ReadInt();
                     ProfileWindow.ClearUI();
                     var currentAvatar = Constants.UICommonImage(plugin, Constants.CommonImageTypes.avatarHolder);
-                    if(currentAvatar != null)
+                    if (currentAvatar != null)
                     {
                         ProfileWindow.currentAvatarImg = currentAvatar;
                     }
-                    
+
                     ProfileWindow.bioFieldsArr[(int)Constants.BioFieldTypes.name] = "";
                     ProfileWindow.bioFieldsArr[(int)Constants.BioFieldTypes.race] = "";
                     ProfileWindow.bioFieldsArr[(int)Constants.BioFieldTypes.gender] = "";
@@ -352,7 +358,8 @@ namespace Networking
                     ProfileWindow.ExistingBio = false;
                     BioLoadStatus = 0;
                 }
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 DataSender.PrintMessage($"Error handling NoProfileBio message: {ex}", LogLevels.LogError);
             }
@@ -371,13 +378,13 @@ namespace Networking
                     loggedIn = true;
                     TargetBioLoadStatus = 0;
                 }
-            } 
-            catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 DataSender.PrintMessage($"Error handling NoTargetBio message: {ex}", LogLevels.LogError);
             }
         }
-       
+
         public static void NoTargetHooks(byte[] data)
         {
             try
@@ -409,13 +416,14 @@ namespace Networking
                     ProfileWindow.ExistingProfile = true;
                     loggedIn = true;
                 }
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 DataSender.PrintMessage($"Error handling ReceiveProfile message: {ex}", LogLevels.LogError);
             }
         }
-     
-      
+
+
         public static void StatusMessage(byte[] data)
         {
             try
@@ -534,7 +542,8 @@ namespace Networking
 
                     TargetGalleryLoadStatus = 1;
                 }
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 DataSender.PrintMessage($"Error handling ReceiveTargetGalleryImage message: {ex}", LogLevels.LogError);
             }
@@ -558,7 +567,8 @@ namespace Networking
                     GalleryLoadStatus = 0;
                     ProfileWindow.ExistingGallery = false;
                 }
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 DataSender.PrintMessage($"Error handling ReceiveNoProfileGallery message: {ex}", LogLevels.LogError);
             }
@@ -589,7 +599,8 @@ namespace Networking
 
                     GalleryLoadStatus = 1;
                 }
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 DataSender.PrintMessage($"Error handling ReceiveProfileGalleryImage message: {ex}", LogLevels.LogError);
             }
@@ -643,7 +654,7 @@ namespace Networking
                     var personality2Image = Constants.PersonalityIcon(plugin, personality_2);
                     var personality3Image = Constants.PersonalityIcon(plugin, personality_3);
 
-                    if(alignmentImage != null) { TargetWindow.alignmentImg = alignmentImage; }
+                    if (alignmentImage != null) { TargetWindow.alignmentImg = alignmentImage; }
                     if (personality1Image != null) { TargetWindow.personalityImg1 = personality1Image; }
                     if (personality2Image != null) { TargetWindow.personalityImg2 = personality2Image; }
                     if (personality3Image != null) { TargetWindow.personalityImg3 = personality3Image; }
@@ -661,7 +672,8 @@ namespace Networking
                     TargetWindow.ExistingBio = true;
                     TargetBioLoadStatus = 1;
                 }
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 DataSender.PrintMessage($"Error handling ReceiveTargetBio message: {ex}", LogLevels.LogError);
             }
@@ -722,7 +734,8 @@ namespace Networking
 
                     BioLoadStatus = 1;
                 }
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 DataSender.PrintMessage($"Error handling ReceiveProfileBio message: {ex}", LogLevels.LogError);
             }
@@ -739,7 +752,8 @@ namespace Networking
                     ProfileWindow.ExistingProfile = true;
                     ProfileWindow.ReloadProfile();
                 }
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 DataSender.PrintMessage($"Error handling ExistingProfile message: {ex}", LogLevels.LogError);
             }
@@ -882,7 +896,8 @@ namespace Networking
                     }
                     HooksLoadStatus = 0;
                 }
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 DataSender.PrintMessage($"Error handling NoProfileHooks message: {ex}", LogLevels.LogError);
             }
@@ -903,7 +918,8 @@ namespace Networking
                     }
                     StoryLoadStatus = 0;
                 }
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 DataSender.PrintMessage($"Error handling NoProfileStory message: {ex}", LogLevels.LogError);
             }
@@ -919,7 +935,8 @@ namespace Networking
                     TargetWindow.profileNotes = string.Empty;
                     TargetNotesLoadStatus = 0;
                 }
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 DataSender.PrintMessage($"Error handling NoProfileNotes message: {ex}", LogLevels.LogError);
             }
@@ -972,7 +989,7 @@ namespace Networking
                     MainPanel.status = "Successfully Registered!";
                     MainPanel.statusColor = new Vector4(0, 255, 0, 255);
                 }
-            } 
+            }
             catch (Exception ex)
             {
                 DataSender.PrintMessage($"Error handling ReceiveVerificationMessage message: {ex}", LogLevels.LogError);
@@ -1026,7 +1043,8 @@ namespace Networking
                     ProfileWindow.oocInfo = string.Empty;
                     ProfileWindow.ExistingOOC = false;
                 }
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 DataSender.PrintMessage($"Error handling ReceiveNoOOCInfo message: {ex}", LogLevels.LogError);
             }
@@ -1043,7 +1061,8 @@ namespace Networking
                     TargetWindow.oocInfo = ooc;
                     TargetWindow.ExistingOOC = true;
                 }
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 DataSender.PrintMessage($"Error handling ReceiveTargetOOCInfo message: {ex}", LogLevels.LogError);
             }
@@ -1064,7 +1083,7 @@ namespace Networking
             {
                 DataSender.PrintMessage($"Error handling ReceiveNoTargetOOCInfo message: {ex}", LogLevels.LogError);
             }
-        }        
+        }
 
         internal static void ReceiveConnections(byte[] data)
         {
@@ -1079,37 +1098,55 @@ namespace Networking
                     ConnectionsWindow.sentProfileRequests.Clear();
                     ConnectionsWindow.receivedProfileRequests.Clear();
                     ConnectionsWindow.blockedProfileRequests.Clear();
-                    for(int i = 0; i < connectionsCount; i++)
+                    for (int i = 0; i < connectionsCount; i++)
                     {
-                        string connectionName = buffer.ReadString();
-                        string connectionWorld = buffer.ReadString();
+                        string requesterName = buffer.ReadString();
+                        string requesterWorld = buffer.ReadString();
+                        string receiverName = buffer.ReadString();
+                        string receiverWorld = buffer.ReadString();
                         int status = buffer.ReadInt();
-                        Tuple<string, string> connection = Tuple.Create(connectionName, connectionWorld);
-                        if (status == (int)Constants.ConnectionStatus.accepted)
+                        Tuple<string, string> requester = Tuple.Create(requesterName, requesterWorld);
+                        Tuple<string, string> receiver = Tuple.Create(receiverName, receiverWorld);
+                        if (receiverName == plugin.ClientState.LocalPlayer.Name.ToString() && receiverWorld == plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString())
                         {
-                            ConnectionsWindow.connetedProfileList.Add(connection);
+                            if (status == (int)Constants.ConnectionStatus.pending)
+                            {
+                                ConnectionsWindow.receivedProfileRequests.Add(requester);
+                            }
+                            if (status == (int)Constants.ConnectionStatus.accepted)
+                            {
+                                ConnectionsWindow.connetedProfileList.Add(requester);
+                            }
+                            if(status == (int)Constants.ConnectionStatus.blocked)
+                            {
+                                ConnectionsWindow.blockedProfileRequests.Add(requester);
+                            }
+                            if (status == (int)Constants.ConnectionStatus.refused)
+                            {
+                                if(ConnectionsWindow.receivedProfileRequests.Contains(requester))
+                                {
+                                    ConnectionsWindow.receivedProfileRequests.Remove(requester);
+                                }
+                            }
                         }
-                        if (status == (int)Constants.ConnectionStatus.blocked)
+                        if(requesterName == plugin.ClientState.LocalPlayer.Name.ToString() && requesterWorld == plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString())
                         {
-                            ConnectionsWindow.blockedProfileRequests.Add(connection);
-                        }
-                        if (status == (int)Constants.ConnectionStatus.sendPending)
-                        {
-                            ConnectionsWindow.sentProfileRequests.Add(connection);
-                        }
-                        if (status == (int)Constants.ConnectionStatus.receivedPending)
-                        {
-                            ConnectionsWindow.receivedProfileRequests.Add(connection);
-                        }
-                        if (status == (int)Constants.ConnectionStatus.refused)
-                        {
-                            var receivedProfileRequest = ConnectionsWindow.receivedProfileRequests.Find(tuple => tuple.Item1 == connectionName && tuple.Item2 == connectionWorld);
-                            ConnectionsWindow.receivedProfileRequests.Remove(receivedProfileRequest);
-                        }
-                        if (status == (int)Constants.ConnectionStatus.canceled)
-                        {
-                            var sentProfileRequest = ConnectionsWindow.sentProfileRequests.Find(tuple => tuple.Item1 == connectionName && tuple.Item2 == connectionWorld);
-                            ConnectionsWindow.sentProfileRequests.Remove(sentProfileRequest);
+                            if (status == (int)Constants.ConnectionStatus.pending)
+                            {
+                                ConnectionsWindow.sentProfileRequests.Add(receiver);
+                            }
+                            if(status == (int)Constants.ConnectionStatus.accepted)
+                            {
+                                ConnectionsWindow.connetedProfileList.Add(receiver);
+                            }
+                            if(status == (int)Constants.ConnectionStatus.blocked)
+                            {
+                                ConnectionsWindow.sentProfileRequests.Add(receiver);
+                            }
+                            if(status == (int)Constants.ConnectionStatus.refused)
+                            {
+                                ConnectionsWindow.sentProfileRequests.Add(receiver);
+                            }
                         }
 
 
@@ -1121,6 +1158,23 @@ namespace Networking
             catch (Exception ex)
             {
                 DataSender.PrintMessage($"Error handling ReceiveNoTargetOOCInfo message: {ex}", LogLevels.LogError);
+            }
+        }
+
+        internal static void ReceiveConnectionRequest(byte[] data)
+        {
+            try
+            {
+                using (var buffer = new ByteBuffer())
+                {
+                    buffer.WriteBytes(data);
+                    var packetID = buffer.ReadInt();
+                    plugin.LoadConnectionRequestBar();
+                }
+            }
+            catch (Exception ex)
+            {
+                DataSender.PrintMessage($"Error Receiving Connection Request: {ex}", LogLevels.LogError);
             }
         }
     }

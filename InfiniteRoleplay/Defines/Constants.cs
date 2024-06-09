@@ -69,16 +69,15 @@ namespace InfiniteRoleplay
             ChaoticEvil = 8,
             None = 9,
         }
+
         public enum ConnectionStatus
         {
             blocked = -1,
             canceled = 0,
-            refused = 1,
-            pending = 2,
+            pending = 1,
+            refused = 2,
             accepted = 3,
             removed = 4,
-            sendPending = 5,
-            receivedPending = 6,
         }
         public enum Personalities
         {
