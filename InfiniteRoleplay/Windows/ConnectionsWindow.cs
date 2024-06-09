@@ -130,7 +130,7 @@ namespace InfiniteRoleplay.Windows
                         ImGui.SameLine();
                         using (ImRaii.Disabled(!Plugin.CtrlPressed()))
                         {
-                            if (ImGui.Button("Bock##Block" + i))
+                            if (ImGui.Button("Block##Block" + i))
                             {
                                 DataSender.SendProfileAccessUpdate(connectionName, connectionWorld, (int)Constants.ConnectionStatus.blocked);
                             }

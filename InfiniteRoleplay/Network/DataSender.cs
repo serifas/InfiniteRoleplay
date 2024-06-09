@@ -50,6 +50,7 @@ namespace Networking
         SSendProfileViewRequest = 38,
         SSendProfileAccessUpdate = 39,
         SSendConnectionsRequest = 40,
+        SSendProfileStatus = 41,
     }
     public enum LogLevels
     {
@@ -529,6 +530,27 @@ namespace Networking
             catch (Exception ex)
             {
                 PrintMessage("Error in RequestConnections: " + ex.ToString(), LogLevels.LogError);
+            }
+        }
+
+
+        internal static async void SetProfileStatus(string username, string characterName, string characterWorld, bool status)
+        {
+            try
+            {
+                using (var buffer = new ByteBuffer())
+                {
+                    buffer.WriteInt((int)ClientPackets.SSendProfileStatus);
+                    buffer.WriteString(username);
+                    buffer.WriteString(characterName);
+                    buffer.WriteString(characterWorld);
+                    buffer.WriteBool(status);
+                    await ClientTCP.SendDataAsync(buffer.ToArray());
+                }
+            }
+            catch (Exception ex)
+            {
+                PrintMessage("Error in SetProfileStatus: " + ex.ToString(), LogLevels.LogError);
             }
         }
     }

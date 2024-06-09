@@ -28,7 +28,6 @@ namespace InfiniteRoleplay.Windows
             };
             pg = plugin;
             this._nameFont = plugin.PluginInterface.UiBuilder.GetGameFontHandle(new GameFontStyle(GameFontFamilyAndSize.Jupiter23));
-            showAllProfilesPublicly = plugin.Configuration.showProfilesPublicly;
             showWIP = plugin.Configuration.showWIP;
             showKofi = plugin.Configuration.showKofi;
             showDisc = plugin.Configuration.showDisc;
@@ -48,15 +47,6 @@ namespace InfiniteRoleplay.Windows
             {
                 pg.Configuration.showDisc = showDisc;
                 pg.Configuration.Save();
-            }
-            if(pg.loggedIn)
-            {
-                if (ImGui.Checkbox("Show all my profiles publicly.", ref showAllProfilesPublicly))
-                {
-                    pg.Configuration.showProfilesPublicly = showAllProfilesPublicly;
-                    pg.Configuration.Save();
-                    DataSender.SaveUserConfiguration(showAllProfilesPublicly);
-                }
             }
            
         }

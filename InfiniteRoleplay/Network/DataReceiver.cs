@@ -1105,9 +1105,10 @@ namespace Networking
                         string receiverName = buffer.ReadString();
                         string receiverWorld = buffer.ReadString();
                         int status = buffer.ReadInt();
+                        bool isReceiver = buffer.ReadBool();
                         Tuple<string, string> requester = Tuple.Create(requesterName, requesterWorld);
                         Tuple<string, string> receiver = Tuple.Create(receiverName, receiverWorld);
-                        if (receiverName == plugin.ClientState.LocalPlayer.Name.ToString() && receiverWorld == plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString())
+                        if (isReceiver)
                         {
                             if (status == (int)Constants.ConnectionStatus.pending)
                             {
@@ -1129,7 +1130,7 @@ namespace Networking
                                 }
                             }
                         }
-                        if(requesterName == plugin.ClientState.LocalPlayer.Name.ToString() && requesterWorld == plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString())
+                        else
                         {
                             if (status == (int)Constants.ConnectionStatus.pending)
                             {

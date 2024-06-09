@@ -63,6 +63,8 @@ namespace InfiniteRoleplay.Windows
         public static bool drawChapter;
         public static int storyChapterCount = -1;
         public static int currentChapter;
+        private bool privateProfile = true;
+
         public bool RedrawChapters { get; private set; }
 
         public ProfileWindow(Plugin plugin) : base(
@@ -149,7 +151,12 @@ namespace InfiniteRoleplay.Windows
 
                     if (ExistingProfile == true)
                     {
-                        if(ImGui.Button("Edit Profile", new Vector2(100, 20))) { editProfile = true; }
+                        if(ImGui.Button("Edit Profile", new Vector2(100, 20))) { editProfile = true;}
+                        ImGui.SameLine();
+                        if(ImGui.Checkbox("Set Private", ref privateProfile))
+                        {
+                            DataSender.SetProfileStatus(plugin.Configuration.username.ToString(), plugin.ClientState.LocalPlayer.Name.ToString(), plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString(), privateProfile);
+                        }
                     }
                     if (ExistingProfile == false)
                     {
@@ -207,34 +214,16 @@ namespace InfiniteRoleplay.Windows
                             ImGui.Spacing();
                             ImGui.Spacing();
                             ImGui.TextColored(new Vector4(1, 1, 1, 1), "ALIGNMENT:");
-                            ImGui.SameLine();
-                            ImGui.Checkbox("Hidden", ref alignmentHidden);
-                            if (alignmentHidden == true)
-                            {
-                                currentAlignment = 9;
-                            }
-                            else
-                            {
-                                AddAlignmentSelection();
-                            }
+                           
+                            AddAlignmentSelection();
 
                             ImGui.Spacing();
 
                             ImGui.TextColored(new Vector4(1, 1, 1, 1), "PERSONALITY TRAITS:");
-                            ImGui.SameLine();
-                            ImGui.Checkbox("Hidden", ref personalityHidden);
-                            if (personalityHidden == true)
-                            {
-                                currentPersonality_1 = 26;
-                                currentPersonality_2 = 26;
-                                currentPersonality_3 = 26;
-                            }
-                            else
-                            {
-                                AddPersonalitySelection_1();
-                                AddPersonalitySelection_2();
-                                AddPersonalitySelection_3();
-                            }
+                                                
+                            AddPersonalitySelection_1();
+                            AddPersonalitySelection_2();
+                            AddPersonalitySelection_3();
                             if (ImGui.Button("Save Bio"))
                             {
                                 DataSender.SubmitProfileBio(player.Name.ToString(), player.HomeWorld.GameData.Name.ToString(),
@@ -374,7 +363,6 @@ namespace InfiniteRoleplay.Windows
                         }
                         if (drawChapter == true)
                         {
-                            ImGui.NewLine();
                             DrawChapter(currentChapter, plugin);
                         }
                         if (Reorder == true)
@@ -492,10 +480,12 @@ namespace InfiniteRoleplay.Windows
 
                 if (storyChapterExists[i] == true && viewChapter[i] == true)
                 {
-                    if (ImGui.BeginChild("##Chapter" + i, new Vector2(550, 250)))
+                    ImGui.InputTextWithHint("##ChapterName" + i, "Chapter Name", ref ChapterNames[i], 300);
+                    Vector2 windowSize = ImGui.GetWindowSize();
+                    if (ImGui.BeginChild("##Chapter" + i, new Vector2(windowSize.X - 20, windowSize.Y - 130)))
                     {
-                        ImGui.InputTextWithHint("##ChapterName" + i, "Chapter Name", ref ChapterNames[i], 300);
-                        ImGui.InputTextMultiline("##ChapterContent" + i, ref ChapterContents[i], 5000, new Vector2(500, 200));
+                        Vector2 inputSize = new Vector2(windowSize.X - 30, windowSize.Y - 200); // Adjust as needed
+                        ImGui.InputTextMultiline("##ChapterContent" + i, ref ChapterContents[i], 5000, inputSize);
                         try
                         {
 

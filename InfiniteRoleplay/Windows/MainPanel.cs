@@ -155,7 +155,7 @@ public class MainPanel : Window, IDisposable
             {
                 if (ImGui.ImageButton(discoBtn.ImGuiHandle, new Vector2(172, 27)))
                 {
-                    Util.OpenLink("https://discord.gg/JN5BcHDnHp");
+                    Util.OpenLink("https://discord.gg/infinite-roleplay");
                 }
             }
 
