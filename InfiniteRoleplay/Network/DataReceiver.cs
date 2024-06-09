@@ -1141,7 +1141,7 @@ namespace Networking
                             }
                             if(status == (int)Constants.ConnectionStatus.blocked)
                             {
-                                ConnectionsWindow.sentProfileRequests.Add(receiver);
+                                ConnectionsWindow.blockedProfileRequests.Add(receiver);
                             }
                             if(status == (int)Constants.ConnectionStatus.refused)
                             {
@@ -1161,21 +1161,6 @@ namespace Networking
             }
         }
 
-        internal static void ReceiveConnectionRequest(byte[] data)
-        {
-            try
-            {
-                using (var buffer = new ByteBuffer())
-                {
-                    buffer.WriteBytes(data);
-                    var packetID = buffer.ReadInt();
-                    plugin.LoadConnectionRequestBar();
-                }
-            }
-            catch (Exception ex)
-            {
-                DataSender.PrintMessage($"Error Receiving Connection Request: {ex}", LogLevels.LogError);
-            }
-        }
+
     }
 }

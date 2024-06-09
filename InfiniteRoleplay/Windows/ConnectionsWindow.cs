@@ -55,14 +55,12 @@ namespace InfiniteRoleplay.Windows
 
             AddConnectionListingOptions();
 
-           if(currentListing == 2) { 
-            ImGui.TextUnformatted("Received Requests");
+            if(currentListing == 2) {
             if (ImGui.BeginChild("ReceivedRequests", new Vector2(290, 250), true))
             {
 
                 for (int i = 0; i < receivedProfileRequests.Count; i++)
                 {
-
                     string requesterName = receivedProfileRequests[i].Item1;
                     string requesterWorld = receivedProfileRequests[i].Item2;
                     ImGui.TextUnformatted(requesterName + " @ " + requesterWorld);
@@ -109,8 +107,6 @@ namespace InfiniteRoleplay.Windows
             }
             if (currentListing == 0)
             {
-
-                    ImGui.TextUnformatted("Connected");
                 if (ImGui.BeginChild("Connected", new Vector2(290, 250), true))
                 {
 
@@ -149,7 +145,6 @@ namespace InfiniteRoleplay.Windows
 
             }
             if(currentListing == 1) { 
-                ImGui.TextUnformatted("Sent Requests");
                 if (ImGui.BeginChild("SentRequests", new Vector2(290, 250), true))
                 {
 
@@ -177,14 +172,13 @@ namespace InfiniteRoleplay.Windows
             }
             if(currentListing == 3)
             {
-                ImGui.TextUnformatted("Blocked Requests");
                 if (ImGui.BeginChild("BlockedRequests", new Vector2(290, 250), true))
                 {
 
                     for (int i = 0; i < blockedProfileRequests.Count; i++)
                     {
-                        string blockedName = sentProfileRequests[i].Item1;
-                        string blockedWorld = sentProfileRequests[i].Item2;
+                        string blockedName = blockedProfileRequests[i].Item1;
+                        string blockedWorld = blockedProfileRequests[i].Item2;
                         ImGui.TextUnformatted(blockedName + " @ " + blockedWorld);
                         ImGui.SameLine();
                         using (ImRaii.Disabled(!Plugin.CtrlPressed()))

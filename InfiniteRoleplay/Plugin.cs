@@ -29,7 +29,6 @@ namespace InfiniteRoleplay
         public bool PluginLoaded = false;
         private readonly IDtrBar dtrBar;
         private DtrBarEntry? dtrBarEntry;
-        private DtrBarEntry? dtrRequestEntry;
         public static bool BarAdded = false;
         public DalamudPluginInterface PluginInterface { get; init; }
         private ICommandManager CommandManager { get; init; }
@@ -172,8 +171,6 @@ namespace InfiniteRoleplay
 
         private void Logout()
         {
-            dtrRequestEntry?.Dispose();
-            dtrRequestEntry = null;
             dtrBarEntry?.Dispose();
             dtrBarEntry = null;
             MainPanel.status = "Logged Out";
@@ -280,27 +277,6 @@ namespace InfiniteRoleplay
                 barLoaded = true;
             }
         }
-        public void LoadConnectionRequestBar()
-        {
-            if (dtrRequestEntry == null)
-            {
-                string randomTitle = Misc.GenerateRandomString();
-                if (dtrBar.Get(randomTitle) is not { } requestEntry) return;
-                dtrRequestEntry = requestEntry;
-                string requestTxt = "\uE070";
-                dtrRequestEntry.Text = requestTxt;
-                dtrRequestEntry.Tooltip = "New Connection Request";
-                requestEntry.OnClick = () => OpenConnectionsWindow();
-                requetsBarLoaded = true;
-            }
-        }
-
-        public void UnloadConnectionRequestBar()
-        {
-            dtrRequestEntry?.Remove();
-            dtrRequestEntry = null;
-        }
-
         public void Dispose()
         {
             WindowSystem?.RemoveAllWindows();
