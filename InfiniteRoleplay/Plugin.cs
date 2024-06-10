@@ -19,6 +19,7 @@ using FFXIVClientStructs.Havok;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using System.Runtime.CompilerServices;
 using System.Numerics;
+using System.Timers;
 namespace InfiniteRoleplay
 { 
     public partial class Plugin : IDalamudPlugin
@@ -29,7 +30,9 @@ namespace InfiniteRoleplay
         public bool PluginLoaded = false;
         private readonly IDtrBar dtrBar;
         private DtrBarEntry? dtrBarEntry;
+        private DtrBarEntry? dtrRequestEntry;
         public static bool BarAdded = false;
+        public static Timer timer = new Timer(3000);
         public DalamudPluginInterface PluginInterface { get; init; }
         private ICommandManager CommandManager { get; init; }
         public IFramework Framework { get; init; }
@@ -43,6 +46,8 @@ namespace InfiniteRoleplay
         public Configuration Configuration { get; init; }
 
         private readonly WindowSystem WindowSystem = new("Infinite Roleplay");
+        private bool uiLoaded;
+
         private OptionsWindow OptionsWindow { get; set; }
         private VerificationWindow VerificationWindow { get; set; }
         private RestorationWindow RestorationWindow { get; set; }
@@ -109,17 +114,32 @@ namespace InfiniteRoleplay
             {
                 HelpMessage = "Type /infinite to open the plugin window."
             });
+            timer.Elapsed += CheckIfOnline;
+            timer.AutoReset = true;
             // This adds a button to the plugin installer entry of this plugin which allows
             // to toggle the display status of the configuration ui
             Configuration.Initialize(PluginInterface);
-            ClientState.Login += LoadUI;
-            if (ClientState.IsLoggedIn && clientState.LocalPlayer != null)
+            timer.Start();
+            if (IsLoggedIn())
             {
-                LoadUI();
-                if (MainPanel.Remember == true)
+                if (uiLoaded == false)
                 {
-                    AttemptLogin();
+                    LoadUI();
                 }
+
+            }
+        }
+
+
+        private void CheckIfOnline(object? sender, ElapsedEventArgs e)
+        {
+            if (IsLoggedIn())
+            {
+                if (uiLoaded == false)
+                {
+                    LoadUI();
+                }
+               
             }
         }
 
@@ -155,6 +175,7 @@ namespace InfiniteRoleplay
             ContextMenu.OnMenuOpened += AddContextMenu;
             Connect();
             UpdateStatus();
+            uiLoaded = true;
         }
         public void Connect()
         {
@@ -163,6 +184,11 @@ namespace InfiniteRoleplay
                 LoadDtrBar();
                 if (!ClientTCP.Connected)
                 {
+                    MainPanel.switchUI();
+                    MainPanel.viewMainWindow = false;
+                    MainPanel.login = true;
+                    MainPanel.status = "Logged Out";
+                    MainPanel.statusColor = new Vector4(255, 0, 0, 255);
                     ClientTCP.AttemptConnect();
                 }
 
@@ -171,6 +197,8 @@ namespace InfiniteRoleplay
 
         private void Logout()
         {
+            dtrRequestEntry?.Dispose();
+            dtrRequestEntry = null;
             dtrBarEntry?.Dispose();
             dtrBarEntry = null;
             MainPanel.status = "Logged Out";
@@ -277,8 +305,31 @@ namespace InfiniteRoleplay
                 barLoaded = true;
             }
         }
+        public void LoadConnectionRequestBar()
+        {
+            if (dtrRequestEntry == null)
+            {
+                string randomTitle = Misc.GenerateRandomString();
+                if (dtrBar.Get(randomTitle) is not { } requestEntry) return;
+                dtrRequestEntry = requestEntry;
+                string requestTxt = "\uE070";
+                dtrRequestEntry.Text = requestTxt;
+                dtrRequestEntry.Tooltip = "New Connection Request";
+                requestEntry.OnClick = () => OpenConnectionsWindow();
+                requetsBarLoaded = true;
+            }
+        }
+
+        public void UnloadConnectionRequestBar()
+        {
+            dtrRequestEntry?.Remove();
+            dtrRequestEntry = null;
+        }
+
         public void Dispose()
         {
+            timer?.Stop();
+            timer?.Dispose();
             WindowSystem?.RemoveAllWindows();
             dtrBarEntry?.Remove();
             dtrBarEntry = null;
@@ -306,6 +357,7 @@ namespace InfiniteRoleplay
             ReportWindow?.Dispose();
             Misc._nameFont?.Dispose();
             Imaging.RemoveAllImages(this);
+            uiLoaded = false;
         }
         private void OnCommand(string command, string args)
         {

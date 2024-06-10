@@ -45,10 +45,6 @@ namespace InfiniteRoleplay.Windows
         }
         public override void Draw()
         {
-            
-            Misc.SetTitle(plugin, false, "Profiles");
-            using var defInfFontDen = ImRaii.DefaultFont();
-            using var DefaultColor = ImRaii.DefaultColors();
 
             if (ImGui.BeginChild("Profiles", new Vector2(290, 380), true))
             {

@@ -54,7 +54,7 @@ public class MainPanel : Window, IDisposable
         ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoScrollbar |
         ImGuiWindowFlags.NoScrollWithMouse)
     {
-        this.Size = new Vector2(250, 310);
+        this.Size = new Vector2(250, 330);
         this.SizeCondition = ImGuiCond.Always;
         this.plugin = plugin;
         this.username = plugin.Configuration.username;
@@ -124,8 +124,11 @@ public class MainPanel : Window, IDisposable
             {
                 if (plugin.IsLoggedIn())
                 {
-                    SaveLoginPreferences();
-                    DataSender.Login(this.username, this.password, plugin.ClientState.LocalPlayer.Name.ToString(), plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString());
+                    if(username != string.Empty && password != string.Empty)
+                    {
+                        SaveLoginPreferences();
+                        DataSender.Login(this.username, this.password, plugin.ClientState.LocalPlayer.Name.ToString(), plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString());
+                    }
                 }
             }
             ImGui.SameLine();
@@ -197,14 +200,21 @@ public class MainPanel : Window, IDisposable
             {
                 if (ImGui.Button("Register Account"))
                 {
-                    if (registerPassword == registerVerPassword)
+                    if (username == string.Empty || registerPassword == string.Empty || registerVerPassword == string.Empty || email == string.Empty)
                     {
-                        plugin.Configuration.username = registerUser;
-                        if (plugin.IsLoggedIn())
+                        status = "Please fill out all fields.";
+                        statusColor = new Vector4(255, 0, 0, 255);
+                    }
+                    else { 
+                        if (registerPassword == registerVerPassword)
                         {
-                            DataSender.Register(registerUser, registerPassword, email);
+                            plugin.Configuration.username = registerUser;
+                            if (plugin.IsLoggedIn())
+                            {
+                                DataSender.Register(registerUser, registerPassword, email);
+                            }
+
                         }
-                       
                     }
 
                 }
@@ -354,7 +364,6 @@ public class MainPanel : Window, IDisposable
             }
 
         }
-
 
         if (viewProfile == true || viewSystems == true || viewEvents == true || viewConnections == true)
         {

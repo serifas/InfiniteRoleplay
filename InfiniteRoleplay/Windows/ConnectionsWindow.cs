@@ -49,10 +49,6 @@ namespace InfiniteRoleplay.Windows
         }
         public override void Draw()
         {
-            Misc.SetTitle(plugin, false, "Connections");
-            using var defInfFontDen = ImRaii.DefaultFont();
-            using var DefaultColor = ImRaii.DefaultColors();
-
             AddConnectionListingOptions();
 
             if(currentListing == 2) {
