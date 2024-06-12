@@ -289,6 +289,8 @@ public class MainPanel : Window, IDisposable
             }
             if (ImGui.Button("Logout", new Vector2(225, 25)))
             {
+                plugin.newConnection = false;
+                plugin.UnloadConnectionsBar();
                 LoggedIN = false;
                 switchUI();
                 login = true;

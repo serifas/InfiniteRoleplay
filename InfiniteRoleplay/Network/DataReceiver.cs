@@ -1165,6 +1165,22 @@ namespace Networking
             }
         }
 
+        internal static void ReceiveConnectionsRequest(byte[] data)
+        {
+            try
+            {
+                using (var buffer = new ByteBuffer())
+                {
+                    buffer.WriteBytes(data);
+                    var packetID = buffer.ReadInt();
+                    plugin.newConnection = true;
 
+                }
+            }
+            catch (Exception ex)
+            {
+                DataSender.PrintMessage($"Error handling ReceiveNoTargetOOCInfo message: {ex}", LogLevels.LogError);
+            }
+        }
     }
 }

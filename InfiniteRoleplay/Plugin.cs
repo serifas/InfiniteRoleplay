@@ -19,6 +19,10 @@ using FFXIVClientStructs.Havok;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using System.Runtime.CompilerServices;
 using System.Numerics;
+using System.Drawing;
+using Lumina.Extensions;
+using System.Threading;
+using System.Timers;
 namespace InfiniteRoleplay
 { 
     public partial class Plugin : IDalamudPlugin
@@ -29,8 +33,10 @@ namespace InfiniteRoleplay
         public bool loggedIn;
         public bool PluginLoaded = false;
         private readonly IDtrBar dtrBar;
-        private DtrBarEntry? dtrBarEntry;
+        private DtrBarEntry? statusBarEntry;
+        private DtrBarEntry? connectionsBarEntry;
         public static bool BarAdded = false;
+        private float timer = 0f;
         public DalamudPluginInterface PluginInterface { get; init; }
         private ICommandManager CommandManager { get; init; }
         public IFramework Framework { get; init; }
@@ -57,7 +63,8 @@ namespace InfiniteRoleplay
         private ConnectionsWindow ConnectionsWindow { get; init; }
 
         public IClientState ClientState { get; init; }
-        public bool barLoaded = false;
+        public float BlinkInterval = 0.5f;
+        public bool newConnection;
 
         public Plugin(
             [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
@@ -119,30 +126,33 @@ namespace InfiniteRoleplay
             WindowSystem.AddWindow(RestorationWindow);
             WindowSystem.AddWindow(ReportWindow);
             WindowSystem.AddWindow(ConnectionsWindow);
+            ConnectionsWindow.plugin = this;
             PluginInterface.UiBuilder.Draw += DrawUI;
             PluginInterface.UiBuilder.OpenConfigUi += ToggleConfigUI;
             PluginInterface.UiBuilder.OpenMainUi += ToggleMainUI;
             ClientState.Logout += Logout;
             ContextMenu.OnMenuOpened += AddContextMenu;
             ClientState.Login += LoadConnection;
-           
+
+            this.Framework.Update += OnUpdate;
+
             if (ClientState.IsLoggedIn && clientState.LocalPlayer != null)
             {
                 LoadConnection();
             }
         }
-        
+
         public void LoadConnection()
         {
             Connect();
             UpdateStatus();
-            MainPanel.AttemptLogin();
+            ToggleMainUI();
         }
         public void Connect()
         {
             if (IsLoggedIn())
             {
-                LoadDtrBar();
+                LoadStatusBar();
                 if (!ClientTCP.Connected)
                 {
                     ClientTCP.AttemptConnect();
@@ -153,8 +163,10 @@ namespace InfiniteRoleplay
 
         private void Logout()
         {
-            dtrBarEntry?.Dispose();
-            dtrBarEntry = null;
+            connectionsBarEntry?.Dispose();
+            connectionsBarEntry = null;
+            statusBarEntry?.Dispose();
+            statusBarEntry = null;
             MainPanel.status = "Logged Out";
             MainPanel.statusColor = new Vector4(255, 0, 0, 255);
             MainPanel.switchUI();
@@ -240,25 +252,60 @@ namespace InfiniteRoleplay
                 DataSender.BookmarkPlayer(Configuration.username.ToString(), targetPlayer.Name.ToString(), targetPlayer.HomeWorld.GameData.Name.ToString());
             }
         }
-        public void LoadDtrBar()
+        public void LoadStatusBar()
         {
-            if (dtrBarEntry == null)
+            if (statusBarEntry == null)
             {
                 string randomTitle = Misc.GenerateRandomString();
                 if (dtrBar.Get(randomTitle) is not { } entry) return;
-                dtrBarEntry = entry;
-                string text = "\uE03E";
-                dtrBarEntry.Text = text;
-                dtrBarEntry.Tooltip = "Infinite Roleplay";
+                statusBarEntry = entry;
+                string icon = "\uE03E";
+                statusBarEntry.Text = icon;
+                statusBarEntry.Tooltip = "Infinite Roleplay";
                 entry.OnClick = () => ToggleMainUI();
-                barLoaded = true;
             }
         }
+        public void LoadConnectionsBar(float deltaTime)
+        {
+            timer += deltaTime;
+            float pulse = ((int)(timer / BlinkInterval) % 2 == 0) ? 14 : 0; // Alternate between 0 and 14 every BlinkInterval
+
+            if (connectionsBarEntry == null)
+            {
+                string randomTitle = Misc.GenerateRandomString();
+                if (dtrBar.Get(randomTitle) is not { } entry) return;
+                connectionsBarEntry = entry;
+                connectionsBarEntry.Tooltip = "New Connections Request";
+                entry.OnClick = () => DataSender.RequestConnections(Configuration.username.ToString());                 
+            }
+
+            SeStringBuilder statusString = new SeStringBuilder();
+            statusString.AddUiGlow((ushort)pulse); // Apply pulsing glow
+            statusString.AddText("\uE070");
+            statusString.AddUiGlow(0);
+            SeString str = statusString.BuiltString;
+            connectionsBarEntry.Text = str;
+        }
+        public void UnloadConnectionsBar()
+        {
+            if(connectionsBarEntry != null)
+            {
+                connectionsBarEntry?.Dispose();
+                connectionsBarEntry = null;
+            }
+        }
+        private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Dispose()
         {
             WindowSystem?.RemoveAllWindows();
-            dtrBarEntry?.Remove();
-            dtrBarEntry = null;
+            statusBarEntry?.Remove();
+            statusBarEntry = null;
+            connectionsBarEntry?.Dispose();
+            connectionsBarEntry = null;
             CommandManager.RemoveHandler(CommandName);
 
 
@@ -268,7 +315,8 @@ namespace InfiniteRoleplay
             ClientState.Login -= Connect;
             ClientState.Login -= LoadConnection;
             ClientState.Logout -= Logout;
-            ContextMenu.OnMenuOpened -= AddContextMenu;
+            ContextMenu.OnMenuOpened -= AddContextMenu; 
+            this.Framework.Update -= OnUpdate;
             // Dispose all windows
             OptionsWindow?.Dispose();
             MainPanel?.Dispose();
@@ -284,6 +332,18 @@ namespace InfiniteRoleplay
             Misc._nameFont?.Dispose();
             Imaging.RemoveAllImages(this);
         }
+        private void OnUpdate(IFramework framework)
+        {
+            TimeSpan deltaTimeSpan = framework.UpdateDelta;
+            float deltaTime = (float)deltaTimeSpan.TotalSeconds; // Convert deltaTime to seconds
+            if(newConnection == true)
+            {
+                LoadConnectionsBar(deltaTime);
+            }
+            
+        }
+
+
         private void OnCommand(string command, string args)
         {
             // in response to the slash command, just toggle the display status of our main ui
@@ -313,12 +373,14 @@ namespace InfiniteRoleplay
         public void ToggleConfigUI() => OptionsWindow.Toggle();
         public void ToggleMainUI()
         {
-            MainPanel.Toggle();
+            MainPanel.IsOpen = true;
             if (IsLoggedIn() && loggedIn == false)
             {
                 MainPanel.AttemptLogin();
             }
         }
+       
+        
         public void OpenMainPanel() => MainPanel.IsOpen = true;
         public void OpenTermsWindow() => TermsWindow.IsOpen = true;
         public void OpenImagePreview() => ImagePreview.IsOpen = true;
@@ -340,7 +402,7 @@ namespace InfiniteRoleplay
                 MainPanel.serverStatus = connectionStatus;
                 if (ClientState.IsLoggedIn && ClientState.LocalPlayer != null)
                 {
-                    dtrBarEntry.Tooltip = new SeStringBuilder().AddText($"Infinite Roleplay: {connectionStatus}").Build();
+                    statusBarEntry.Tooltip = new SeStringBuilder().AddText($"Infinite Roleplay: {connectionStatus}").Build();
                 }
 
             }
@@ -350,4 +412,5 @@ namespace InfiniteRoleplay
             }
         }
     }
+   
 }
