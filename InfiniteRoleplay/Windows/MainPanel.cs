@@ -129,6 +129,7 @@ public class MainPanel : Window, IDisposable
             {
                 if (plugin.IsLoggedIn())
                 {
+                    
                     SaveLoginPreferences();
                     DataSender.Login(this.username, this.password, plugin.ClientState.LocalPlayer.Name.ToString(), plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString());
                 }

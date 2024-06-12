@@ -30,10 +30,10 @@ namespace InfiniteRoleplay.Windows
             pg = plugin;
 
             load = true;
-            ToS1 = ReadTOS("https://raw.githubusercontent.com/serifas/infinite-roleplay-plugin/main/TOS1.txt");
-            ToS2 = ReadTOS("https://raw.githubusercontent.com/serifas/infinite-roleplay-plugin/main/TOS2.txt");
-            Rules1 = ReadTOS("https://raw.githubusercontent.com/serifas/infinite-roleplay-plugin/main/Rules1.txt");
-            Rules2 = ReadTOS("https://raw.githubusercontent.com/serifas/infinite-roleplay-plugin/main/Rules2.txt");
+            ToS1 = ReadTOS("https://raw.githubusercontent.com/serifas/InfiniteRoleplay/main/TOS1.txt");
+            ToS2 = ReadTOS("https://raw.githubusercontent.com/serifas/InfiniteRoleplay/main/TOS2.txt");
+            Rules1 = ReadTOS("https://raw.githubusercontent.com/serifas/InfiniteRoleplay/main/Rules1.txt");
+            Rules2 = ReadTOS("https://raw.githubusercontent.com/serifas/InfiniteRoleplay/main/Rules2.txt");
         }
         public override async void Draw()
         {

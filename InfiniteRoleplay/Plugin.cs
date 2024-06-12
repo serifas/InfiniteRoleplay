@@ -93,7 +93,6 @@ namespace InfiniteRoleplay
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             TaskScheduler.UnobservedTaskException += UnobservedTaskExceptionHandler;
 
-            // Subscribe to condition change events
             this.Framework = framework;
             Configuration = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
             DataReceiver.plugin = this;
@@ -101,8 +100,6 @@ namespace InfiniteRoleplay
             {
                 HelpMessage = "Type /infinite to open the plugin window."
             });
-            // This adds a button to the plugin installer entry of this plugin which allows
-            // to toggle the display status of the configuration ui
             OptionsWindow = new OptionsWindow(this);
             MainPanel = new MainPanel(this);
             TermsWindow = new TOS(this);
@@ -127,6 +124,7 @@ namespace InfiniteRoleplay
             WindowSystem.AddWindow(ReportWindow);
             WindowSystem.AddWindow(ConnectionsWindow);
             ConnectionsWindow.plugin = this;
+            // Subscribe to condition change events
             PluginInterface.UiBuilder.Draw += DrawUI;
             PluginInterface.UiBuilder.OpenConfigUi += ToggleConfigUI;
             PluginInterface.UiBuilder.OpenMainUi += ToggleMainUI;
@@ -338,6 +336,7 @@ namespace InfiniteRoleplay
             float deltaTime = (float)deltaTimeSpan.TotalSeconds; // Convert deltaTime to seconds
             if(newConnection == true)
             {
+                //if th
                 LoadConnectionsBar(deltaTime);
             }
             

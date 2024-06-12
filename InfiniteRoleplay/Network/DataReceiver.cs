@@ -455,7 +455,11 @@ namespace Networking
                         MainPanel.viewMainWindow = true;
                         MainPanel.LoggedIN = true;
                     }
-
+                    if(status == (int)Constants.StatusMessages.LOGIN_WRONG_INFORMATION)
+                    {
+                        MainPanel.statusColor = new System.Numerics.Vector4(255,0,0,255);   
+                        MainPanel.status = "Incorrect login details";
+                    }
                     if (status == (int)Constants.StatusMessages.REGISTRATION_DUPLICATE_USERNAME)
                     {
                         MainPanel.statusColor = new Vector4(255, 255, 0, 255);
