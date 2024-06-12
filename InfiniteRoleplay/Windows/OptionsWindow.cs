@@ -6,7 +6,6 @@ using System;
 using Dalamud.Interface.GameFonts;
 using InfiniteRoleplay;
 using InfiniteRoleplay.Helpers;
-using Networking;
 namespace InfiniteRoleplay.Windows
 {
     public class OptionsWindow : Window, IDisposable
@@ -14,7 +13,7 @@ namespace InfiniteRoleplay.Windows
         private GameFontHandle _nameFont;
         private float _modVersionWidth;
         public static Plugin pg;
-        public static bool showAllProfilesPublicly;
+        public static bool showTargetOptions;
         public static bool showKofi;
         public static bool showDisc;
         public static bool showWIP;
@@ -38,17 +37,16 @@ namespace InfiniteRoleplay.Windows
             //okay that's done.
             ImGui.Spacing();
             //now for some simple toggles
-            if (ImGui.Checkbox("Show Ko-fi button", ref showKofi))
+            if (ImGui.Checkbox("Show Ko-fi Button", ref showKofi))
             {
                 pg.Configuration.showKofi = showKofi;
                 pg.Configuration.Save();
             }
-            if (ImGui.Checkbox("Show Discord button.", ref showDisc))
+            if (ImGui.Checkbox("Show Discord Button.", ref showDisc))
             {
                 pg.Configuration.showDisc = showDisc;
                 pg.Configuration.Save();
             }
-           
         }
         public void Dispose()
         {

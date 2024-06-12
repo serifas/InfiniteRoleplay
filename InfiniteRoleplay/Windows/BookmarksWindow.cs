@@ -45,8 +45,10 @@ namespace InfiniteRoleplay.Windows
         }
         public override void Draw()
         {
-
-            if (ImGui.BeginChild("Profiles", new Vector2(290, 380), true))
+            
+            Vector2 windowSize = ImGui.GetWindowSize();
+            Vector2 childSize = new Vector2(windowSize.X - 30, windowSize.Y - 80);
+            if (ImGui.BeginChild("Profiles", childSize, true))
             {
                 if (plugin.IsLoggedIn())
                 {

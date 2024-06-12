@@ -63,7 +63,7 @@ namespace InfiniteRoleplay.Windows
         public static bool drawChapter;
         public static int storyChapterCount = -1;
         public static int currentChapter;
-        private bool privateProfile = true;
+        private bool privateProfile;
 
         public bool RedrawChapters { get; private set; }
 
@@ -80,14 +80,19 @@ namespace InfiniteRoleplay.Windows
             this.plugin = plugin;
             pg = plugin.PluginInterface;
             this.configuration = plugin.Configuration;
-            this._fileDialogManager = new FileDialogManager();            
+            this._fileDialogManager = new FileDialogManager();
+           
+
+        }
+        public override void OnOpen()
+        {
             var avatarHolderImage = Constants.UICommonImage(plugin, Constants.CommonImageTypes.avatarHolder);
             if (avatarHolderImage != null)
             {
                 avatarHolder = avatarHolderImage;
             }
-            var  pictureTabImage = Constants.UICommonImage(plugin, Constants.CommonImageTypes.blankPictureTab);
-            if(pictureTabImage != null)
+            var pictureTabImage = Constants.UICommonImage(plugin, Constants.CommonImageTypes.blankPictureTab);
+            if (pictureTabImage != null)
             {
                 pictureTab = pictureTabImage;
             }
@@ -151,16 +156,17 @@ namespace InfiniteRoleplay.Windows
 
                     if (ExistingProfile == true)
                     {
-                        if(ImGui.Button("Edit Profile", new Vector2(100, 20))) { editProfile = true;}
+                        if (ImGui.Button("Edit Profile", new Vector2(100, 20))) { editProfile = true; }
+
                         ImGui.SameLine();
-                        if(ImGui.Checkbox("Set Private", ref privateProfile))
+                        if (ImGui.Checkbox("Set Private", ref privateProfile))
                         {
                             DataSender.SetProfileStatus(plugin.Configuration.username.ToString(), plugin.ClientState.LocalPlayer.Name.ToString(), plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString(), privateProfile);
                         }
                     }
                     if (ExistingProfile == false)
                     {
-                        if(ImGui.Button("Add Profile", new Vector2(100, 20))) { addProfile = true; DataSender.CreateProfile(player.Name.ToString(), player.HomeWorld.GameData.Name.ToString()); }
+                         if (ImGui.Button("Add Profile", new Vector2(100, 20))) { addProfile = true; DataSender.CreateProfile(player.Name.ToString(), player.HomeWorld.GameData.Name.ToString()); }
                     }
 
 
@@ -181,7 +187,6 @@ namespace InfiniteRoleplay.Windows
                     }
                     if (ImGui.BeginChild("PROFILE"))
                     {
-                      
                         #region BIO
                         if (TabOpen[TabValue.Bio])
                         {
@@ -214,13 +219,11 @@ namespace InfiniteRoleplay.Windows
                             ImGui.Spacing();
                             ImGui.Spacing();
                             ImGui.TextColored(new Vector4(1, 1, 1, 1), "ALIGNMENT:");
-                           
                             AddAlignmentSelection();
 
                             ImGui.Spacing();
 
                             ImGui.TextColored(new Vector4(1, 1, 1, 1), "PERSONALITY TRAITS:");
-                                                
                             AddPersonalitySelection_1();
                             AddPersonalitySelection_2();
                             AddPersonalitySelection_3();
@@ -363,6 +366,7 @@ namespace InfiniteRoleplay.Windows
                         }
                         if (drawChapter == true)
                         {
+                            ImGui.NewLine();
                             DrawChapter(currentChapter, plugin);
                         }
                         if (Reorder == true)
@@ -480,7 +484,6 @@ namespace InfiniteRoleplay.Windows
 
                 if (storyChapterExists[i] == true && viewChapter[i] == true)
                 {
-                    ImGui.InputTextWithHint("##ChapterName" + i, "Chapter Name", ref ChapterNames[i], 300);
                     Vector2 windowSize = ImGui.GetWindowSize();
                     if (ImGui.BeginChild("##Chapter" + i, new Vector2(windowSize.X - 20, windowSize.Y - 130)))
                     {
@@ -796,16 +799,7 @@ namespace InfiniteRoleplay.Windows
             persistAvatarHolder?.Dispose();
             persistAvatarHolder = null;
 
-            for (int i = 0; i < galleryImages.Length; i++)
-            {
-                galleryImages[i]?.Dispose();
-                galleryImages[i] = null;
-            }
-            for (int i = 0; i < galleryThumbs.Length; i++)
-            {
-                galleryThumbs[i]?.Dispose();
-                galleryThumbs[i] = null;
-            }
+       
             for (int i = 0; i < galleryImagesList.Count; i++)
             {
                 galleryImagesList[i]?.Dispose();

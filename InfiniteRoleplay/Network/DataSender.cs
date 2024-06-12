@@ -213,16 +213,16 @@ namespace Networking
             }
         }
        
-        public static async void SendProfileAccessUpdate(string connectionName, string connectionWorld, int status)
+        public static async void SendProfileAccessUpdate(string username, string localName, string localServer, string connectionName, string connectionWorld, int status)
         {
             try
             {
                 using (var buffer = new ByteBuffer())
                 {
                     buffer.WriteInt((int)ClientPackets.SSendProfileAccessUpdate);
-                    buffer.WriteString(plugin.Configuration.username.ToString());
-                    buffer.WriteString(plugin.ClientState.LocalPlayer.Name.ToString());
-                    buffer.WriteString(plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString());
+                    buffer.WriteString(username);
+                    buffer.WriteString(localName);
+                    buffer.WriteString(localServer);
                     buffer.WriteString(connectionName);
                     buffer.WriteString(connectionWorld);
                     buffer.WriteInt(status);

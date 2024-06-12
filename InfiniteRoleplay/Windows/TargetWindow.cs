@@ -81,14 +81,16 @@ namespace InfiniteRoleplay.Windows
             };
             this.plugin = plugin;
             this.pg = plugin.PluginInterface;
-
+        }
+        public override void OnOpen()
+        {
             this.nameFont = pg.UiBuilder.GetGameFontHandle(new GameFontStyle(GameFontFamilyAndSize.Jupiter23));
             var blankPictureTab = Constants.UICommonImage(plugin, Constants.CommonImageTypes.blankPictureTab);
-            if(blankPictureTab != null)
+            if (blankPictureTab != null)
             {
                 pictureTab = blankPictureTab;
             }
-           
+
             //alignment icons
             this.chatGui = chatGui;
             for (int i = 0; i < 30; i++)
@@ -106,7 +108,6 @@ namespace InfiniteRoleplay.Windows
             galleryImages = galleryImagesList.ToArray();
             galleryThumbs = galleryThumbsList.ToArray();
         }
-       
 
         public override void Draw()
         {
@@ -179,16 +180,17 @@ namespace InfiniteRoleplay.Windows
                 {
 
 
-                        if (ExistingBio == false && ExistingHooks == false && ExistingStory == false && ExistingOOC == false && ExistingOOC == false && ExistingGallery == false)
-                        {
+                    if (ExistingBio == false && ExistingHooks == false && ExistingStory == false && ExistingOOC == false && ExistingOOC == false && ExistingGallery == false)
+                    {
                             ImGui.TextUnformatted("No Profile Data Available:\nIf this character has a profile, you can request to view it below.");
-                            if(ImGui.Button("Request access"))
+                            if (ImGui.Button("Request access"))
                             {
-                                DataSender.SendProfileAccessUpdate(characterName, characterWorld,(int)Constants.ConnectionStatus.pending);
+                                DataSender.SendProfileAccessUpdate(plugin.username, plugin.ClientState.LocalPlayer.Name.ToString(), plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString(), characterName, characterWorld, (int)Constants.ConnectionStatus.pending);
+
                             }
-                        }
-                        else
-                        {
+                    }
+                    else
+                    {
                         if (viewBio == true)
                         {
                             Misc.SetTitle(plugin, true, characterEditName);
@@ -409,7 +411,8 @@ namespace InfiniteRoleplay.Windows
             // Properly dispose of IDisposable resources
             currentAvatarImg?.Dispose();
             currentAvatarImg = null;
-
+            nameFont?.Dispose();
+            nameFont = null;
             currentAvatarImg?.Dispose();
             currentAvatarImg = null;
             pictureTab?.Dispose();
@@ -426,19 +429,6 @@ namespace InfiniteRoleplay.Windows
             // Dispose gallery images and thumbs
             DisposeListResources(galleryImagesList);
             DisposeListResources(galleryThumbsList);
-            for(int i = 0; i < galleryImages.Length; i++)
-            {
-                galleryImages[i]?.Dispose();
-                galleryImages[i] = null;
-            }
-            for(int i = 0; i < galleryThumbs.Length; i++)
-            {
-                galleryThumbs[i]?.Dispose();
-                galleryThumbs[i] = null;
-            }
-            // Manually set IDisposable resources to null after disposal to avoid double disposal and null reference issues
-            galleryImages = null;
-            galleryThumbs = null;
         }
 
 
@@ -451,7 +441,7 @@ namespace InfiniteRoleplay.Windows
                 {
                     if (resource != null)
                     {
-                        resource.Dispose();
+                        resource?.Dispose();
                     }
                 }
                 resources.Clear();

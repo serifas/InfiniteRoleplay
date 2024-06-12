@@ -19,20 +19,18 @@ using FFXIVClientStructs.Havok;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using System.Runtime.CompilerServices;
 using System.Numerics;
-using System.Timers;
 namespace InfiniteRoleplay
 { 
     public partial class Plugin : IDalamudPlugin
     {
         public static Plugin plugin;
+        public string username;
         private const string CommandName = "/infinite";
         public bool loggedIn;
         public bool PluginLoaded = false;
         private readonly IDtrBar dtrBar;
         private DtrBarEntry? dtrBarEntry;
-        private DtrBarEntry? dtrRequestEntry;
         public static bool BarAdded = false;
-        public static Timer timer = new Timer(3000);
         public DalamudPluginInterface PluginInterface { get; init; }
         private ICommandManager CommandManager { get; init; }
         public IFramework Framework { get; init; }
@@ -46,37 +44,20 @@ namespace InfiniteRoleplay
         public Configuration Configuration { get; init; }
 
         private readonly WindowSystem WindowSystem = new("Infinite Roleplay");
-        private bool uiLoaded;
-
-        private OptionsWindow OptionsWindow { get; set; }
-        private VerificationWindow VerificationWindow { get; set; }
-        private RestorationWindow RestorationWindow { get; set; }
-        private ReportWindow ReportWindow { get; set; }
-        private MainPanel MainPanel { get; set; }
-        private ProfileWindow ProfileWindow { get; set; }
-        public ConnectionsWindow ConnectionsWindow { get; set; }
-        private BookmarksWindow BookmarksWindow { get; set; }
-        private TargetWindow TargetWindow { get; set; }
-        private ImagePreview ImagePreview { get; set; }
-        private TOS TermsWindow { get; set; }
+        private OptionsWindow OptionsWindow { get; init; }
+        private VerificationWindow VerificationWindow { get; init; }
+        private RestorationWindow RestorationWindow { get; init; }
+        private ReportWindow ReportWindow { get; init; }
+        private MainPanel MainPanel { get; init; }
+        private ProfileWindow ProfileWindow { get; init; }
+        private BookmarksWindow BookmarksWindow { get; init; }
+        private TargetWindow TargetWindow { get; init; }
+        private ImagePreview ImagePreview { get; init; }
+        private TOS TermsWindow { get; init; }
+        private ConnectionsWindow ConnectionsWindow { get; init; }
 
         public IClientState ClientState { get; init; }
         public bool barLoaded = false;
-        private bool requetsBarLoaded;
-
-        public enum WindowType
-        {
-            OptionsWindow = 1,
-            MainPanel = 2,
-            TermsWindow = 3,
-            ProfileWindow = 4,
-            ImagePreview = 5,
-            BookmarksWindow = 6,
-            TargetWindow = 7,
-            VerificationWindow = 8,
-            RestorationWindow = 9,
-            ReportWindow = 10,
-        }
 
         public Plugin(
             [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
@@ -93,15 +74,15 @@ namespace InfiniteRoleplay
             // Original Dalamud-related object creation
             plugin = this;
             // Wrap the original service with the proxy
-
             this.dtrBar = dtrBar;
-            TextureProvider = textureProvider;
             PluginInterface = pluginInterface;
             CommandManager = commandManager;
             ClientState = clientState;
             TargetManager = targetManager;
             ContextMenu = contextMenu;
+            TextureProvider = textureProvider;
             this.Condition = condition;
+
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             TaskScheduler.UnobservedTaskException += UnobservedTaskExceptionHandler;
 
@@ -109,42 +90,12 @@ namespace InfiniteRoleplay
             this.Framework = framework;
             Configuration = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
             DataReceiver.plugin = this;
-            DataSender.plugin = this;
             CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
             {
                 HelpMessage = "Type /infinite to open the plugin window."
             });
-            timer.Elapsed += CheckIfOnline;
-            timer.AutoReset = true;
             // This adds a button to the plugin installer entry of this plugin which allows
             // to toggle the display status of the configuration ui
-            Configuration.Initialize(PluginInterface);
-            timer.Start();
-            if (IsLoggedIn())
-            {
-                if (uiLoaded == false)
-                {
-                    LoadUI();
-                }
-
-            }
-        }
-
-
-        private void CheckIfOnline(object? sender, ElapsedEventArgs e)
-        {
-            if (IsLoggedIn())
-            {
-                if (uiLoaded == false)
-                {
-                    LoadUI();
-                }
-               
-            }
-        }
-
-        public void LoadUI()
-        {
             OptionsWindow = new OptionsWindow(this);
             MainPanel = new MainPanel(this);
             TermsWindow = new TOS(this);
@@ -156,13 +107,14 @@ namespace InfiniteRoleplay
             RestorationWindow = new RestorationWindow(this);
             ReportWindow = new ReportWindow(this);
             ConnectionsWindow = new ConnectionsWindow(this);
+            Configuration.Initialize(PluginInterface);
             WindowSystem.AddWindow(OptionsWindow);
             WindowSystem.AddWindow(MainPanel);
             WindowSystem.AddWindow(TermsWindow);
-            WindowSystem.AddWindow(ImagePreview);
             WindowSystem.AddWindow(ProfileWindow);
-            WindowSystem.AddWindow(TargetWindow);
+            WindowSystem.AddWindow(ImagePreview);
             WindowSystem.AddWindow(BookmarksWindow);
+            WindowSystem.AddWindow(TargetWindow);
             WindowSystem.AddWindow(VerificationWindow);
             WindowSystem.AddWindow(RestorationWindow);
             WindowSystem.AddWindow(ReportWindow);
@@ -170,12 +122,21 @@ namespace InfiniteRoleplay
             PluginInterface.UiBuilder.Draw += DrawUI;
             PluginInterface.UiBuilder.OpenConfigUi += ToggleConfigUI;
             PluginInterface.UiBuilder.OpenMainUi += ToggleMainUI;
-            ClientState.Login += Connect;
             ClientState.Logout += Logout;
             ContextMenu.OnMenuOpened += AddContextMenu;
+            ClientState.Login += LoadConnection;
+           
+            if (ClientState.IsLoggedIn && clientState.LocalPlayer != null)
+            {
+                LoadConnection();
+            }
+        }
+        
+        public void LoadConnection()
+        {
             Connect();
             UpdateStatus();
-            uiLoaded = true;
+            MainPanel.AttemptLogin();
         }
         public void Connect()
         {
@@ -184,11 +145,6 @@ namespace InfiniteRoleplay
                 LoadDtrBar();
                 if (!ClientTCP.Connected)
                 {
-                    MainPanel.switchUI();
-                    MainPanel.viewMainWindow = false;
-                    MainPanel.login = true;
-                    MainPanel.status = "Logged Out";
-                    MainPanel.statusColor = new Vector4(255, 0, 0, 255);
                     ClientTCP.AttemptConnect();
                 }
 
@@ -197,13 +153,10 @@ namespace InfiniteRoleplay
 
         private void Logout()
         {
-            dtrRequestEntry?.Dispose();
-            dtrRequestEntry = null;
             dtrBarEntry?.Dispose();
             dtrBarEntry = null;
             MainPanel.status = "Logged Out";
             MainPanel.statusColor = new Vector4(255, 0, 0, 255);
-
             MainPanel.switchUI();
             MainPanel.login = true;
             if (ClientTCP.Connected)
@@ -211,10 +164,6 @@ namespace InfiniteRoleplay
                 ClientTCP.Disconnect();
             }
 
-        }
-        private void AttemptLogin()
-        {
-            DataSender.Login(Configuration.username, Configuration.password, plugin.ClientState.LocalPlayer.Name.ToString(), plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString());
         }
         private void UnobservedTaskExceptionHandler(object sender, UnobservedTaskExceptionEventArgs e)
         {
@@ -301,35 +250,12 @@ namespace InfiniteRoleplay
                 string text = "\uE03E";
                 dtrBarEntry.Text = text;
                 dtrBarEntry.Tooltip = "Infinite Roleplay";
-                entry.OnClick = () => this.MainPanel.Toggle();
+                entry.OnClick = () => ToggleMainUI();
                 barLoaded = true;
             }
         }
-        public void LoadConnectionRequestBar()
-        {
-            if (dtrRequestEntry == null)
-            {
-                string randomTitle = Misc.GenerateRandomString();
-                if (dtrBar.Get(randomTitle) is not { } requestEntry) return;
-                dtrRequestEntry = requestEntry;
-                string requestTxt = "\uE070";
-                dtrRequestEntry.Text = requestTxt;
-                dtrRequestEntry.Tooltip = "New Connection Request";
-                requestEntry.OnClick = () => OpenConnectionsWindow();
-                requetsBarLoaded = true;
-            }
-        }
-
-        public void UnloadConnectionRequestBar()
-        {
-            dtrRequestEntry?.Remove();
-            dtrRequestEntry = null;
-        }
-
         public void Dispose()
         {
-            timer?.Stop();
-            timer?.Dispose();
             WindowSystem?.RemoveAllWindows();
             dtrBarEntry?.Remove();
             dtrBarEntry = null;
@@ -340,7 +266,7 @@ namespace InfiniteRoleplay
             PluginInterface.UiBuilder.OpenConfigUi -= ToggleConfigUI;
             PluginInterface.UiBuilder.OpenMainUi -= ToggleMainUI;
             ClientState.Login -= Connect;
-            ClientState.Login -= LoadUI;
+            ClientState.Login -= LoadConnection;
             ClientState.Logout -= Logout;
             ContextMenu.OnMenuOpened -= AddContextMenu;
             // Dispose all windows
@@ -353,11 +279,10 @@ namespace InfiniteRoleplay
             BookmarksWindow?.Dispose();
             VerificationWindow?.Dispose();
             RestorationWindow?.Dispose();
-            ConnectionsWindow?.Dispose();
             ReportWindow?.Dispose();
+            ConnectionsWindow?.Dispose();
             Misc._nameFont?.Dispose();
             Imaging.RemoveAllImages(this);
-            uiLoaded = false;
         }
         private void OnCommand(string command, string args)
         {
@@ -386,7 +311,14 @@ namespace InfiniteRoleplay
 
         private void DrawUI() => WindowSystem.Draw();
         public void ToggleConfigUI() => OptionsWindow.Toggle();
-        public void ToggleMainUI() => MainPanel.Toggle();
+        public void ToggleMainUI()
+        {
+            MainPanel.Toggle();
+            if (IsLoggedIn() && loggedIn == false)
+            {
+                MainPanel.AttemptLogin();
+            }
+        }
         public void OpenMainPanel() => MainPanel.IsOpen = true;
         public void OpenTermsWindow() => TermsWindow.IsOpen = true;
         public void OpenImagePreview() => ImagePreview.IsOpen = true;

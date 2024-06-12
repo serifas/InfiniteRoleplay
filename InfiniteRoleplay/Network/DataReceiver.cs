@@ -432,6 +432,7 @@ namespace Networking
                 {
                     buffer.WriteBytes(data);
                     var packetID = buffer.ReadInt();
+                    string username = buffer.ReadString();
                     int status = buffer.ReadInt();
                     //account window
                     if (status == (int)Constants.StatusMessages.LOGIN_BANNED)
@@ -448,9 +449,11 @@ namespace Networking
                     if (status == (int)Constants.StatusMessages.LOGIN_VERIFIED)
                     {
                         plugin.loggedIn = true;
+                        plugin.username = username;
                         MainPanel.status = "Logged In";
                         MainPanel.statusColor = new Vector4(0, 255, 0, 255);
                         MainPanel.viewMainWindow = true;
+                        MainPanel.LoggedIN = true;
                     }
 
                     if (status == (int)Constants.StatusMessages.REGISTRATION_DUPLICATE_USERNAME)

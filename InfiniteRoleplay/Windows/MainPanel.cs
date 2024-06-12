@@ -49,16 +49,24 @@ public class MainPanel : Window, IDisposable
                                  combatImage, statSystemImage,
                                  reconnectImage;
     public Plugin plugin;
+    public static bool LoggedIN = false;
+
     public MainPanel(Plugin plugin) : base(
         "INFINITE ROLEPLAY",
         ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoScrollbar |
         ImGuiWindowFlags.NoScrollWithMouse)
     {
-        this.Size = new Vector2(250, 330);
+        this.Size = new Vector2(250, 310);
         this.SizeCondition = ImGuiCond.Always;
         this.plugin = plugin;
         this.username = plugin.Configuration.username;
         this.password = plugin.Configuration.password;
+       
+
+        Remember = plugin.Configuration.rememberInformation;
+    }
+    public override void OnOpen()
+    {
         var kofi = Constants.UICommonImage(plugin, Constants.CommonImageTypes.kofiBtn);
         var discod = Constants.UICommonImage(plugin, Constants.CommonImageTypes.discordBtn);
         var profileSectionImg = Constants.UICommonImage(plugin, Constants.CommonImageTypes.profileSection);
@@ -82,8 +90,6 @@ public class MainPanel : Window, IDisposable
         if (npcImg != null) { npcImage = npcImg; }
         if (npcBookmarkImg != null) { npcBookmarkImage = npcBookmarkImg; }
         if (reconnectImg != null) { reconnectImage = reconnectImg; }
-
-        Remember = plugin.Configuration.rememberInformation;
     }
 
     public void Dispose()
@@ -113,7 +119,6 @@ public class MainPanel : Window, IDisposable
     }
     public override void Draw()
     {
-
         // can't ref a property, so use a local copy
         if (login == true)
         {
@@ -124,11 +129,8 @@ public class MainPanel : Window, IDisposable
             {
                 if (plugin.IsLoggedIn())
                 {
-                    if(username != string.Empty && password != string.Empty)
-                    {
-                        SaveLoginPreferences();
-                        DataSender.Login(this.username, this.password, plugin.ClientState.LocalPlayer.Name.ToString(), plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString());
-                    }
+                    SaveLoginPreferences();
+                    DataSender.Login(this.username, this.password, plugin.ClientState.LocalPlayer.Name.ToString(), plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString());
                 }
             }
             ImGui.SameLine();
@@ -158,7 +160,7 @@ public class MainPanel : Window, IDisposable
             {
                 if (ImGui.ImageButton(discoBtn.ImGuiHandle, new Vector2(172, 27)))
                 {
-                    Util.OpenLink("https://discord.gg/infinite-roleplay");
+                    Util.OpenLink("https://discord.gg/JN5BcHDnHp");
                 }
             }
 
@@ -200,21 +202,14 @@ public class MainPanel : Window, IDisposable
             {
                 if (ImGui.Button("Register Account"))
                 {
-                    if (username == string.Empty || registerPassword == string.Empty || registerVerPassword == string.Empty || email == string.Empty)
+                    if (registerPassword == registerVerPassword)
                     {
-                        status = "Please fill out all fields.";
-                        statusColor = new Vector4(255, 0, 0, 255);
-                    }
-                    else { 
-                        if (registerPassword == registerVerPassword)
+                        plugin.Configuration.username = registerUser;
+                        if (plugin.IsLoggedIn())
                         {
-                            plugin.Configuration.username = registerUser;
-                            if (plugin.IsLoggedIn())
-                            {
-                                DataSender.Register(registerUser, registerPassword, email);
-                            }
-
+                            DataSender.Register(registerUser, registerPassword, email);
                         }
+                       
                     }
 
                 }
@@ -247,13 +242,12 @@ public class MainPanel : Window, IDisposable
             if (ImGui.ImageButton(this.connectionsSectionImage.ImGuiHandle, new Vector2(100, 50)))
             {
                 DataSender.RequestConnections(plugin.Configuration.username.ToString());
-            }
 
-            if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
+            }
+            if (ImGui.IsItemHovered())
             {
                 ImGui.SetTooltip("Connections");
             }
-
             using (OtterGui.Raii.ImRaii.Disabled(true))
             {
                 if (ImGui.ImageButton(this.eventsSectionImage.ImGuiHandle, new Vector2(100, 50)))
@@ -262,6 +256,7 @@ public class MainPanel : Window, IDisposable
                     // viewMainWindow = false;
 
                 }
+
             }
             if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
             {
@@ -294,10 +289,10 @@ public class MainPanel : Window, IDisposable
             }
             if (ImGui.Button("Logout", new Vector2(225, 25)))
             {
-                plugin.CloseAllWindows();
-                plugin.OpenMainPanel();
-                viewMainWindow = false;
+                LoggedIN = false;
+                switchUI();
                 login = true;
+                viewMainWindow = false;
                 status = "Logged Out";
                 statusColor = new Vector4(255, 0, 0, 255);
             }
@@ -365,6 +360,7 @@ public class MainPanel : Window, IDisposable
 
         }
 
+
         if (viewProfile == true || viewSystems == true || viewEvents == true || viewConnections == true)
         {
             if (ImGui.Button("Back"))
@@ -382,6 +378,7 @@ public class MainPanel : Window, IDisposable
         }
         ImGui.TextColored(statusColor, status);
 
+        
     }
     public void SaveLoginPreferences()
     {
@@ -397,6 +394,11 @@ public class MainPanel : Window, IDisposable
             plugin.Configuration.password = string.Empty;
         }
         plugin.Configuration.Save();
+    }
+    public void AttemptLogin()
+    {
+        LoggedIN = true;
+        DataSender.Login(plugin.Configuration.username, plugin.Configuration.password, plugin.ClientState.LocalPlayer.Name.ToString(), plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString());
     }
     public void switchUI()
     {
