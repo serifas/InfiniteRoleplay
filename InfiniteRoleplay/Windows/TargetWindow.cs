@@ -176,139 +176,130 @@ namespace InfiniteRoleplay.Windows
 
 
 
-                if (ImGui.BeginChild("PROFILE"))
-                {
-
-
-                    if (ExistingBio == false && ExistingHooks == false && ExistingStory == false && ExistingOOC == false && ExistingOOC == false && ExistingGallery == false)
+                    using var profileTable = ImRaii.Child("PROFILE");
+                    if (profileTable)
                     {
-                            ImGui.TextUnformatted("No Profile Data Available:\nIf this character has a profile, you can request to view it below.");
-                            if (ImGui.Button("Request access"))
-                            {
-                                DataSender.SendProfileAccessUpdate(plugin.username, plugin.ClientState.LocalPlayer.Name.ToString(), plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString(), characterName, characterWorld, (int)Constants.ConnectionStatus.pending);
-
-                            }
-                    }
-                    else
-                    {
-                        if (viewBio == true)
+                        if (ExistingBio == false && ExistingHooks == false && ExistingStory == false && ExistingOOC == false && ExistingOOC == false && ExistingGallery == false)
                         {
-                            Misc.SetTitle(plugin, true, characterEditName);
-                            ImGui.Image(currentAvatarImg.ImGuiHandle, new Vector2(100, 100));
-
-
-                            ImGui.Spacing();
-                            ImGui.TextUnformatted("NAME:   " + characterEditName);
-                            ImGui.Spacing();
-                            ImGui.TextUnformatted("RACE:   " + characterEditRace);
-                            ImGui.Spacing();
-                            ImGui.TextUnformatted("GENDER:   " + characterEditGender);
-                            ImGui.Spacing();
-                            ImGui.TextUnformatted("AGE:   " + characterEditAge);
-                            ImGui.Spacing();
-                            ImGui.TextUnformatted("HEIGHT:   " + characterEditHeight);
-                            ImGui.Spacing();
-                            ImGui.TextUnformatted("WEIGHT:   " + characterEditWeight);
-                            ImGui.Spacing();
-                            ImGui.TextUnformatted("AT FIRST GLANCE: \n" + characterEditAfg);
-                            ImGui.Spacing();
-                            if (showAlignment == true)
-                            {
-
-                                ImGui.TextColored(new Vector4(1, 1, 1, 1), "ALIGNMENT:");
-
-                                ImGui.Image(alignmentImg.ImGuiHandle, new Vector2(32, 32));
-
-                                if (ImGui.IsItemHovered())
+                                ImGui.TextUnformatted("No Profile Data Available:\nIf this character has a profile, you can request to view it below.");
+                                if (ImGui.Button("Request access"))
                                 {
-                                    ImGui.SetTooltip(alignmentTooltip);
+                                    DataSender.SendProfileAccessUpdate(plugin.username, plugin.ClientState.LocalPlayer.Name.ToString(), plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString(), characterName, characterWorld, (int)Constants.ConnectionStatus.pending);
+
                                 }
-                            }
-                            if (showPersonality == true)
+                        }
+                        else
+                        {
+                            if (viewBio == true)
                             {
+                                Misc.SetTitle(plugin, true, characterEditName);
+                                ImGui.Image(currentAvatarImg.ImGuiHandle, new Vector2(100, 100));
+
+
                                 ImGui.Spacing();
-
-                                ImGui.TextColored(new Vector4(1, 1, 1, 1), "PERSONALITY TRAITS:");
-
-                                ImGui.Image(personalityImg1.ImGuiHandle, new Vector2(32, 42));
-
-                                if (ImGui.IsItemHovered())
-                                {
-                                    ImGui.SetTooltip(personality1Tooltip);
-                                }
-                                ImGui.SameLine();
-                                ImGui.Image(personalityImg2.ImGuiHandle, new Vector2(32, 42));
-
-                                if (ImGui.IsItemHovered())
-                                {
-                                    ImGui.SetTooltip(personality2Tooltip);
-                                }
-                                ImGui.SameLine();
-                                ImGui.Image(personalityImg3.ImGuiHandle, new Vector2(32, 42));
-
-                                if (ImGui.IsItemHovered())
-                                {
-                                    ImGui.SetTooltip(personality3Tooltip);
-                                }
-
-                            }
-
-
-                        }
-
-
-
-                        if (viewHooks == true)
-                        {
-                            Misc.SetTitle(plugin, true, "Hooks");
-                            for (int h = 0; h < hookEditCount; h++)
-                            {
-                                Misc.SetCenter(plugin, HookNames[h].ToString());
-                                ImGui.TextUnformatted(HookNames[h].ToUpper());
-                                ImGui.TextUnformatted(HookContents[h]);
-                            }
-
-                        }
-
-                        if (viewStory == true)
-                        {
-                            Misc.SetTitle(plugin, true, storyTitle);
-                            string chapterMsg = "";
-
-
-                            for (int h = 0; h < chapterCount; h++)
-                            {
-                                Misc.SetCenter(plugin, ChapterTitle[h]);
-                                ImGui.TextUnformatted(ChapterTitle[h].ToUpper());
+                                ImGui.TextUnformatted("NAME:   " + characterEditName);
                                 ImGui.Spacing();
-                                using var defInfFontDen = ImRaii.DefaultFont();
-                                ImGui.TextUnformatted(ChapterContent[h]);
-                            }
-
-
-                        }
-                        if (viewOOC == true)
-                        {
-                            Misc.SetTitle(plugin, true, "OOC Information");
-                            ImGui.TextUnformatted(oocInfo);
-                        }
-                        if (viewGallery == true)
-                        {
-
-                            Misc.SetTitle(plugin, true, "Gallery");
-                            if (ImGui.BeginTable("##GalleryTargetTable", 4))
-                            {
-                                for (int i = 0; i < existingGalleryImageCount; i++)
+                                ImGui.TextUnformatted("RACE:   " + characterEditRace);
+                                ImGui.Spacing();
+                                ImGui.TextUnformatted("GENDER:   " + characterEditGender);
+                                ImGui.Spacing();
+                                ImGui.TextUnformatted("AGE:   " + characterEditAge);
+                                ImGui.Spacing();
+                                ImGui.TextUnformatted("HEIGHT:   " + characterEditHeight);
+                                ImGui.Spacing();
+                                ImGui.TextUnformatted("WEIGHT:   " + characterEditWeight);
+                                ImGui.Spacing();
+                                ImGui.TextUnformatted("AT FIRST GLANCE: \n" + characterEditAfg);
+                                ImGui.Spacing();
+                                if (showAlignment == true)
                                 {
-                                    if (i % 4 == 0)
+
+                                    ImGui.TextColored(new Vector4(1, 1, 1, 1), "ALIGNMENT:");
+
+                                    ImGui.Image(alignmentImg.ImGuiHandle, new Vector2(32, 32));
+
+                                    if (ImGui.IsItemHovered())
                                     {
-                                        ImGui.TableNextRow();
+                                        ImGui.SetTooltip(alignmentTooltip);
+                                    }
+                                }
+                                if (showPersonality == true)
+                                {
+                                    ImGui.Spacing();
+
+                                    ImGui.TextColored(new Vector4(1, 1, 1, 1), "PERSONALITY TRAITS:");
+
+                                    ImGui.Image(personalityImg1.ImGuiHandle, new Vector2(32, 42));
+
+                                    if (ImGui.IsItemHovered())
+                                    {
+                                        ImGui.SetTooltip(personality1Tooltip);
+                                    }
+                                    ImGui.SameLine();
+                                    ImGui.Image(personalityImg2.ImGuiHandle, new Vector2(32, 42));
+
+                                    if (ImGui.IsItemHovered())
+                                    {
+                                        ImGui.SetTooltip(personality2Tooltip);
+                                    }
+                                    ImGui.SameLine();
+                                    ImGui.Image(personalityImg3.ImGuiHandle, new Vector2(32, 42));
+
+                                    if (ImGui.IsItemHovered())
+                                    {
+                                        ImGui.SetTooltip(personality3Tooltip);
+                                    }
+
+                                }
+
+
+                            }
+
+
+
+                            if (viewHooks == true)
+                            {
+                                Misc.SetTitle(plugin, true, "Hooks");
+                                for (int h = 0; h < hookEditCount; h++)
+                                {
+                                    Misc.SetCenter(plugin, HookNames[h].ToString());
+                                    ImGui.TextUnformatted(HookNames[h].ToUpper());
+                                    ImGui.TextUnformatted(HookContents[h]);
+                                }
+
+                            }
+
+                            if (viewStory == true)
+                            {
+                                Misc.SetTitle(plugin, true, storyTitle);
+                                string chapterMsg = "";
+
+
+                                for (int h = 0; h < chapterCount; h++)
+                                {
+                                    Misc.SetCenter(plugin, ChapterTitle[h]);
+                                    ImGui.TextUnformatted(ChapterTitle[h].ToUpper());
+                                    ImGui.Spacing();
+                                    using var defInfFontDen = ImRaii.DefaultFont();
+                                    ImGui.TextUnformatted(ChapterContent[h]);
+                                }
+
+
+                            }
+                            if (viewOOC == true)
+                            {
+                                Misc.SetTitle(plugin, true, "OOC Information");
+                                ImGui.TextUnformatted(oocInfo);
+                            }
+                            if (viewGallery == true)
+                            {
+                                Misc.SetTitle(plugin, true, "Gallery");
+                                using var table = ImRaii.Table("GalleryTargetTable", 4);
+                                if (table)
+                                {
+                                    for (int i = 0; i < existingGalleryImageCount; i++)
+                                    {
                                         ImGui.TableNextColumn();
-
-                                        // you might normally want to embed resources and load them from the manifest stream
-                                        //this.imageTextures.Add(goatImage);
-
-
                                         ImGui.Image(galleryThumbs[i].ImGuiHandle, new Vector2(galleryThumbs[i].Width, galleryThumbs[i].Height));
                                         if (ImGui.IsItemHovered()) { ImGui.SetTooltip("Click to enlarge"); }
                                         if (ImGui.IsItemClicked())
@@ -319,70 +310,40 @@ namespace InfiniteRoleplay.Windows
                                             loadPreview = true;
                                         }
                                     }
-                                    else
-                                    {
-                                        ImGui.TableNextColumn();
-                                        // simulate some work
-
-                                        // you might normally want to embed resources and load them from the manifest stream
-                                        //this.imageTextures.Add(goatImage);
-
-
-                                        ImGui.Image(galleryThumbs[i].ImGuiHandle, new Vector2(galleryThumbs[i].Width, galleryThumbs[i].Height));
-                                        if (ImGui.IsItemHovered()) { ImGui.SetTooltip("Click to enlarge"); }
-                                        if (ImGui.IsItemClicked())
-                                        {
-                                            ImagePreview.width = galleryImages[i].Width;
-                                            ImagePreview.height = galleryImages[i].Height;
-                                            ImagePreview.PreviewImage = galleryImages[i];
-                                            loadPreview = true;
-                                        }
-                                    }
-
                                 }
-                                ImGui.EndTable();
-
-
-
-
-
+                            
                             }
-                        }
 
-                        if (addNotes == true)
-                        {
-
-                            Misc.SetTitle(plugin, true, "Personal Notes");
-
-                            ImGui.Text("Here you can add personal notes about this player or profile");
-                            ImGui.InputTextMultiline("##info", ref profileNotes, 500, new Vector2(400, 100));
-                            if (ImGui.Button("Add Notes"))
+                            if (addNotes == true)
                             {
-                                if (plugin.IsLoggedIn())
+
+                                Misc.SetTitle(plugin, true, "Personal Notes");
+
+                                ImGui.Text("Here you can add personal notes about this player or profile");
+                                ImGui.InputTextMultiline("##info", ref profileNotes, 500, new Vector2(400, 100));
+                                if (ImGui.Button("Add Notes"))
                                 {
-                                    DataSender.AddProfileNotes(plugin.Configuration.username, characterNameVal, characterWorldVal, profileNotes);
-                                }
+                                    if (plugin.IsLoggedIn())
+                                    {
+                                        DataSender.AddProfileNotes(plugin.Configuration.username, characterNameVal, characterWorldVal, profileNotes);
+                                    }
                                 
+                                }
+
                             }
+                            if (loadPreview == true)
+                            {
+                                plugin.OpenImagePreview();
+                                loadPreview = false;
+                            }
+                        }
 
-                        }
-                        if (loadPreview == true)
-                        {
-                            plugin.OpenImagePreview();
-                            loadPreview = false;
-                        }
                     }
-
-                }ImGui.EndChild();
-
-
-
-
-            }
-            else
-            {
-                Misc.StartLoader(currentInd, max, loading);
-            }
+                }
+                else
+                {
+                    Misc.StartLoader(currentInd, max, loading);
+                }
 
 
             }
@@ -413,8 +374,6 @@ namespace InfiniteRoleplay.Windows
             currentAvatarImg = null;
             nameFont?.Dispose();
             nameFont = null;
-            currentAvatarImg?.Dispose();
-            currentAvatarImg = null;
             pictureTab?.Dispose();
             pictureTab = null;
             alignmentImg?.Dispose();

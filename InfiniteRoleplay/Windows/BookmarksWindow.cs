@@ -48,7 +48,8 @@ namespace InfiniteRoleplay.Windows
             
             Vector2 windowSize = ImGui.GetWindowSize();
             Vector2 childSize = new Vector2(windowSize.X - 30, windowSize.Y - 80);
-            if (ImGui.BeginChild("Profiles", childSize, true))
+            using var profileTable = ImRaii.Child("Profiles", childSize, true);
+            if(profileTable)
             {
                 if (plugin.IsLoggedIn())
                 {
@@ -90,12 +91,9 @@ namespace InfiniteRoleplay.Windows
                             ImGui.EndDisabled();
                         }
                     }
-               
-
                 }
 
             }
-            ImGui.EndChild();
 
         }
 

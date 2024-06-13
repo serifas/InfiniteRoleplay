@@ -61,7 +61,8 @@ namespace InfiniteRoleplay.Windows
             localPlayerWorld = plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString();
             if (currentListing == 2) 
             {
-                if (ImGui.BeginChild("ReceivedRequests", childSize, true))
+                using var receivedRequestsTable = ImRaii.Child("ReceivedRequests", childSize, true);
+                if(receivedRequestsTable)
                 {
 
                     for (int i = 0; i < receivedProfileRequests.Count; i++)
@@ -107,12 +108,11 @@ namespace InfiniteRoleplay.Windows
                         }
                     }
                 }
-
-                     ImGui.EndChild();
             }
             if (currentListing == 0)
             {
-                if (ImGui.BeginChild("Connected", childSize, true))
+                using var connectedTable = ImRaii.Child("Connected", childSize, true);
+                if (connectedTable)
                 {
 
                     for (int i = 0; i < connetedProfileList.Count; i++)
@@ -146,11 +146,11 @@ namespace InfiniteRoleplay.Windows
                         }
                     }
                 }
-                ImGui.EndChild();
 
             }
-            if(currentListing == 1) { 
-                if (ImGui.BeginChild("SentRequests", childSize, true))
+            if(currentListing == 1) {
+                using var sentRequestsTable = ImRaii.Child("SentRequests", childSize, true);
+                if (sentRequestsTable)
                 {
 
                     for (int i = 0; i < sentProfileRequests.Count; i++)
@@ -173,11 +173,11 @@ namespace InfiniteRoleplay.Windows
                         }
                     }
                 }
-                ImGui.EndChild();
             }
             if(currentListing == 3)
             {
-                if (ImGui.BeginChild("BlockedRequests", childSize, true))
+                using var blockedRequestsTable = ImRaii.Child("BlockedRequests", childSize, true);
+                if (blockedRequestsTable)
                 {
 
                     for (int i = 0; i < blockedProfileRequests.Count; i++)
@@ -199,7 +199,6 @@ namespace InfiniteRoleplay.Windows
                         }
                     }
                 }
-                ImGui.EndChild();
 
 
             }

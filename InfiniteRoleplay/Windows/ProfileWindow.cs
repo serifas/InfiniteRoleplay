@@ -86,6 +86,7 @@ namespace InfiniteRoleplay.Windows
         }
         public override void OnOpen()
         {
+            TabOpen.Clear();
             var avatarHolderImage = Constants.UICommonImage(plugin, Constants.CommonImageTypes.avatarHolder);
             if (avatarHolderImage != null)
             {
@@ -185,7 +186,8 @@ namespace InfiniteRoleplay.Windows
                         if (ImGui.Button("Edit Gallery", new Vector2(100, 20))) { ClearUI(); TabOpen[TabValue.Gallery] = true; }
 
                     }
-                    if (ImGui.BeginChild("PROFILE"))
+                    using var ProfileTable = ImRaii.Child("PROFILE");
+                    if(ProfileTable) 
                     {
                         #region BIO
                         if (TabOpen[TabValue.Bio])
@@ -435,7 +437,7 @@ namespace InfiniteRoleplay.Windows
 
 
 
-                    }ImGui.EndChild();
+                    }
                 }
                 else
                 {
@@ -485,41 +487,31 @@ namespace InfiniteRoleplay.Windows
                 if (storyChapterExists[i] == true && viewChapter[i] == true)
                 {
                     Vector2 windowSize = ImGui.GetWindowSize();
-                    if (ImGui.BeginChild("##Chapter" + i, new Vector2(windowSize.X - 20, windowSize.Y - 130)))
+                    using var profileTable = ImRaii.Child("##Chapter" + i, new Vector2(windowSize.X - 20, windowSize.Y - 130));
+                    if(profileTable)
                     {
                         Vector2 inputSize = new Vector2(windowSize.X - 30, windowSize.Y - 200); // Adjust as needed
                         ImGui.InputTextMultiline("##ChapterContent" + i, ref ChapterContents[i], 5000, inputSize);
-                        try
+                        using var chapterControlTable = ImRaii.Child("##ChapterControls" + i);
+                        if(chapterControlTable)
                         {
-
-                            if (ImGui.BeginChild("##ChapterControls" + i))
+                            using (OtterGui.Raii.ImRaii.Disabled(!InfiniteRoleplay.Plugin.CtrlPressed()))
                             {
-                                using (OtterGui.Raii.ImRaii.Disabled(!InfiniteRoleplay.Plugin.CtrlPressed()))
+                                if (ImGui.Button("Remove##" + "chapter" + i))
                                 {
-                                    if (ImGui.Button("Remove##" + "chapter" + i))
-                                    {
-                                        RemoveChapter(i);
-
-                                    }
+                                    RemoveChapter(i);
 
                                 }
-                                if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
-                                {
-                                    ImGui.SetTooltip("Ctrl Click to Enable");
-                                }
 
-
+                            }
+                            if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
+                            {
+                                ImGui.SetTooltip("Ctrl Click to Enable");
                             }
 
 
-
-                            ImGui.EndChild();
-                        }
-                        catch (Exception ex)
-                        {
                         }
                     }
-                    ImGui.EndChild();
 
 
                 }
@@ -529,7 +521,8 @@ namespace InfiniteRoleplay.Windows
         {
             if (hookExists[i] == true)
             {
-                if (ImGui.BeginChild("##Hook" + i, new Vector2(550, 250)))
+                using var hookTable = ImRaii.Child("##Hook" + i, new Vector2(550, 250));
+                if(hookTable)
                 {
                     ImGui.InputTextWithHint("##HookName" + i, "Hook Name", ref HookNames[i], 300);
                     ImGui.InputTextMultiline("##HookContent" + i, ref HookContents[i], 5000, new Vector2(500, 200));
@@ -537,7 +530,8 @@ namespace InfiniteRoleplay.Windows
                     try
                     {
 
-                        if (ImGui.BeginChild("##HookControls" + i))
+                        using var hookControlsTable = ImRaii.Child("##HookControls" + i);
+                        if(hookControlsTable)
                         {
                             using (OtterGui.Raii.ImRaii.Disabled(!InfiniteRoleplay.Plugin.CtrlPressed()))
                             {
@@ -552,13 +546,11 @@ namespace InfiniteRoleplay.Windows
                                 ImGui.SetTooltip("Ctrl Click to Enable");
                             }
                         }
-                        ImGui.EndChild();
                     }
                     catch (Exception ex)
                     {
                     }
                 }
-                ImGui.EndChild();
             }
         }
 
@@ -574,8 +566,7 @@ namespace InfiniteRoleplay.Windows
                         ImGui.TableNextColumn();
                         DrawGalleryImage(i);
                     }
-                }
-             
+                }             
             }
         }
         public void DrawHooksUI(Plugin plugin, int hookCount)
@@ -643,8 +634,9 @@ namespace InfiniteRoleplay.Windows
 
             if (ImageExists[i] == true)
             {
-                
-                if (ImGui.BeginChild("##GalleryImage" + i, new Vector2(150, 280)))
+
+                using var galleryImageTable = ImRaii.Child("##GalleryImage" + i, new Vector2(150, 280));
+                if(galleryImageTable)
                 {
                     ImGui.Text("Will this image be 18+ ?");
                     if (ImGui.Checkbox("Yes 18+", ref NSFW[i]))
@@ -682,7 +674,8 @@ namespace InfiniteRoleplay.Windows
 
 
 
-                        if (ImGui.BeginChild("##GalleryImageControls" + i))
+                        using var galleryImageControlsTable = ImRaii.Child("##GalleryImageControls" + i);
+                        if (galleryImageControlsTable)
                         {
                             using (OtterGui.Raii.ImRaii.Disabled(!InfiniteRoleplay.Plugin.CtrlPressed()))
                             {
@@ -699,15 +692,11 @@ namespace InfiniteRoleplay.Windows
                             }
 
                         }
-                        ImGui.EndChild();
                     }
                     catch (Exception ex)
                     {
                     }
                 }
-
-
-                ImGui.EndChild();
 
             }
 
@@ -740,27 +729,6 @@ namespace InfiniteRoleplay.Windows
             {
                 DataSender.PrintMessage("Could not reset gallery:: Results may be incorrect.", LogLevels.LogWarning);
             }
-        }
-        public async void Reset()
-        {
-            ResetBio();
-            ResetGallery();
-            ResetHooks();
-            ResetStory();
-        }
-        public void ResetBio()
-        {
-            currentAvatarImg = this.persistAvatarHolder;
-        }
-        public void ResetHooks()
-        {
-            for (int h = 0; h < hookCount; h++)
-            {
-                HookNames[h] = string.Empty;
-                HookContents[h] = string.Empty;
-                hookExists[h] = false;
-            }
-            hookCount = 0;
         }
         public static void ResetStory()
         {
@@ -797,9 +765,7 @@ namespace InfiniteRoleplay.Windows
             currentAvatarImg?.Dispose();
             currentAvatarImg = null;
             persistAvatarHolder?.Dispose();
-            persistAvatarHolder = null;
-
-       
+            persistAvatarHolder = null;       
             for (int i = 0; i < galleryImagesList.Count; i++)
             {
                 galleryImagesList[i]?.Dispose();
