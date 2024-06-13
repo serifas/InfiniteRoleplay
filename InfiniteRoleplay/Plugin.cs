@@ -23,6 +23,7 @@ using System.Drawing;
 using Lumina.Extensions;
 using System.Threading;
 using System.Timers;
+using Lumina;
 namespace InfiniteRoleplay
 { 
     public partial class Plugin : IDalamudPlugin
@@ -43,6 +44,7 @@ namespace InfiniteRoleplay
         private IContextMenu ContextMenu { get; init; }
         public ICondition Condition { get; init; }
         public ITextureProvider TextureProvider { get; init; }
+        public ILogger Logger { get; init; }
         [LibraryImport("user32")]
         internal static partial short GetKeyState(int nVirtKey);
         public static bool CtrlPressed() => (GetKeyState(0xA2) & 0x8000) != 0 || (GetKeyState(0xA3) & 0x8000) != 0;
@@ -75,6 +77,7 @@ namespace InfiniteRoleplay
             [RequiredVersion("1.0")] ITargetManager targetManager,
             [RequiredVersion("1.0")] IFramework framework,
             [RequiredVersion("1.0")] ICondition condition,
+            [RequiredVersion("1.0")] ILogger logger,
             [RequiredVersion("1.0")] IDtrBar dtrBar
             )
         {
@@ -88,6 +91,7 @@ namespace InfiniteRoleplay
             TargetManager = targetManager;
             ContextMenu = contextMenu;
             TextureProvider = textureProvider;
+            this.Logger = logger;
             this.Condition = condition;
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
@@ -181,7 +185,7 @@ namespace InfiniteRoleplay
             e.SetObserved();
             Framework.RunOnFrameworkThread(() =>
             {
-                DataSender.PrintMessage("Exception handled" + e.Exception.Message, LogLevels.LogError);
+               plugin.Logger.Error("Exception handled" + e.Exception.Message);
             });
         }
         public void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -190,7 +194,7 @@ namespace InfiniteRoleplay
             var exception = e.ExceptionObject as Exception;
             Framework.RunOnFrameworkThread(() =>
             {
-                DataSender.PrintMessage("Exception handled" + exception.Message, LogLevels.LogError);
+               plugin.Logger.Error("Exception handled" + exception.Message);
             });
         }
         public void AddContextMenu(MenuOpenedArgs args)
@@ -239,7 +243,7 @@ namespace InfiniteRoleplay
             }
             catch (Exception ex)
             {
-                DataSender.PrintMessage("Error when viewing profile from context " + ex.ToString(), LogLevels.LogError);
+               plugin.Logger.Error("Error when viewing profile from context " + ex.ToString());
             }
         }
         private void BookmarkProfile(MenuItemClickedArgs args)
@@ -407,7 +411,7 @@ namespace InfiniteRoleplay
             }
             catch (Exception ex)
             {
-                DataSender.PrintMessage("Error updating status: " + ex.ToString(), LogLevels.LogError);
+               plugin.Logger.Error("Error updating status: " + ex.ToString());
             }
         }
     }

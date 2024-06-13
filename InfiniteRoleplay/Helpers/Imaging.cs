@@ -144,7 +144,7 @@ namespace InfiniteRoleplay.Helpers
                 }
                 catch
                 {
-                    DataSender.PrintMessage("Unable to Read or Write Image", LogLevels.LogError);
+                   plugin.Logger.Error("Unable to Read or Write Image");
                 }
             }
         }

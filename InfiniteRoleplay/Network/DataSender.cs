@@ -52,44 +52,10 @@ namespace Networking
         SSendConnectionsRequest = 40,
         SSendProfileStatus = 41,
     }
-    public enum LogLevels
-    {
-        Log = 0,
-        LogInformation = 1,
-        LogDebug = 2,
-        LogWarning = 3,
-        LogError = 4,
-    }
     public class DataSender
     {
         public static int userID;
         public static Plugin plugin;
-
-        public static void PrintMessage(string message, LogLevels logLevel)
-        {
-            if (logLevel == LogLevels.Log)
-            {
-                Dalamud.Logging.PluginLog.Log(message);
-            }
-            if (logLevel == LogLevels.LogInformation)
-            {
-                Dalamud.Logging.PluginLog.LogInformation(message);
-            }
-            if (logLevel == LogLevels.LogDebug)
-            {
-                Dalamud.Logging.PluginLog.LogDebug(message);
-            }
-            if (logLevel == LogLevels.LogWarning)
-            {
-                Dalamud.Logging.PluginLog.Warning(message);
-            }
-            if (logLevel == LogLevels.LogError)
-            {
-                Dalamud.Logging.PluginLog.LogError(message);
-            }
-
-        }
-
         public static async void Login(string username, string password, string playerName, string playerWorld)
         {
             try
@@ -106,7 +72,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                PrintMessage("Error in Login: " + ex.ToString(), LogLevels.LogError);
+                plugin.Logger.Error("Error in Login: " + ex.ToString());
             }
         }
       
@@ -124,7 +90,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                PrintMessage("Error in Register: " + ex.ToString(), LogLevels.LogError);
+                plugin.Logger.Error("Error in Register: " + ex.ToString());
             }
         }
         public static async void ReportProfile(string reporterAccount, string playerName, string playerWorld, string reportInfo)
@@ -143,7 +109,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                PrintMessage("Error in ReportProfile: " + ex.ToString(), LogLevels.LogError);
+                plugin.Logger.Error("Error in ReportProfile: " + ex.ToString());
             }
 
         }
@@ -166,7 +132,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                PrintMessage("Error in SendGalleryImage: " + ex.ToString(), LogLevels.LogError);
+                plugin.Logger.Error("Error in SendGalleryImage: " + ex.ToString());
             }
         }
         public static async void RemoveGalleryImage(string playername, string playerworld, int index, int imageCount)
@@ -186,7 +152,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                PrintMessage("Error in SendGalleryImage: " + ex.ToString(), LogLevels.LogError);
+                plugin.Logger.Error("Error in SendGalleryImage: " + ex.ToString());
             }
         }
         public static async void SendStory(string playername, string worldname, string storyTitle, List<Tuple<string, string>> storyChapters)
@@ -209,7 +175,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                PrintMessage("Error in SendStory: " + ex.ToString(), LogLevels.LogError);
+                plugin.Logger.Error("Error in SendStory: " + ex.ToString());
             }
         }
        
@@ -231,7 +197,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                PrintMessage("Error in Login: " + ex.ToString(), LogLevels.LogError);
+                plugin.Logger.Error("Error in Login: " + ex.ToString());
             }
         }
         public static async void FetchProfile(string characterName, string world)
@@ -247,7 +213,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                PrintMessage("Error in FetchProfile: " + ex.ToString(), LogLevels.LogError);
+                plugin.Logger.Error("Error in FetchProfile: " + ex.ToString());
             }
         }
         public static async void CreateProfile(string playerName, string playerServer)
@@ -263,7 +229,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                PrintMessage("Error in CreateProfile: " + ex.ToString(), LogLevels.LogError);
+                plugin.Logger.Error("Error in CreateProfile: " + ex.ToString());
             }
         }
         public static async void BookmarkPlayer(string username, string playerName, string playerWorld)
@@ -279,7 +245,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                PrintMessage("Error in BookmarkProfile: " + ex.ToString(), LogLevels.LogError);
+                plugin.Logger.Error("Error in BookmarkProfile: " + ex.ToString());
             }
 
         }
@@ -296,7 +262,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                PrintMessage("Error in RemoveBookmarkedPlayer: " + ex.ToString(), LogLevels.LogError);
+                plugin.Logger.Error("Error in RemoveBookmarkedPlayer: " + ex.ToString());
             }
         }
         public static async void RequestBookmarks(string username)
@@ -311,7 +277,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                PrintMessage("Error in RequestBookmarks: " + ex.ToString(), LogLevels.LogError);
+                plugin.Logger.Error("Error in RequestBookmarks: " + ex.ToString());
             }
 
         }
@@ -343,7 +309,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                PrintMessage("Error in SubmitProfileBio: " + ex.ToString(), LogLevels.LogError);
+                plugin.Logger.Error("Error in SubmitProfileBio: " + ex.ToString());
             }
 
         }
@@ -360,7 +326,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                PrintMessage("Error in sending user configuration: " + ex.ToString(), LogLevels.LogError);
+                plugin.Logger.Error("Error in sending user configuration: " + ex.ToString());
             }
         }
         public static async void SaveProfileConfiguration(bool showProfilePublicly, string playerName, string playerWorld)
@@ -376,7 +342,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                PrintMessage("Error in sending user configuration: " + ex.ToString(), LogLevels.LogError);
+                plugin.Logger.Error("Error in sending user configuration: " + ex.ToString());
             }
         }
 
@@ -394,7 +360,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                PrintMessage("Error in SubmitProfileBio: " + ex.ToString(), LogLevels.LogError);
+                plugin.Logger.Error("Error in SubmitProfileBio: " + ex.ToString());
             }
 
         }
@@ -418,7 +384,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                PrintMessage("Error in SendHooks: " + ex.ToString(), LogLevels.LogError);
+                plugin.Logger.Error("Error in SendHooks: " + ex.ToString());
             }
 
         }
@@ -441,7 +407,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                PrintMessage("Error in AddProfileNotes: " + ex.ToString(), LogLevels.LogError);
+                plugin.Logger.Error("Error in AddProfileNotes: " + ex.ToString());
             }
         }
 
@@ -458,7 +424,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                PrintMessage("Error in SendVerification: " + ex.ToString(), LogLevels.LogError);
+                plugin.Logger.Error("Error in SendVerification: " + ex.ToString());
             }
 
         }
@@ -475,7 +441,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                PrintMessage("Error in SendRestorationRequest: " + ex.ToString(), LogLevels.LogError);
+                plugin.Logger.Error("Error in SendRestorationRequest: " + ex.ToString());
             }
         }
 
@@ -493,7 +459,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                PrintMessage("Error in SendRestoration: " + ex.ToString(), LogLevels.LogError);
+                plugin.Logger.Error("Error in SendRestoration: " + ex.ToString());
             }
         }
 
@@ -511,7 +477,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                PrintMessage("Error in SendOOCInfo: " + ex.ToString(), LogLevels.LogError);
+                plugin.Logger.Error("Error in SendOOCInfo: " + ex.ToString());
             }
         }
 
@@ -529,7 +495,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                PrintMessage("Error in RequestConnections: " + ex.ToString(), LogLevels.LogError);
+                plugin.Logger.Error("Error in RequestConnections: " + ex.ToString());
             }
         }
 
@@ -550,7 +516,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-                PrintMessage("Error in SetProfileStatus: " + ex.ToString(), LogLevels.LogError);
+                plugin.Logger.Error("Error in SetProfileStatus: " + ex.ToString());
             }
         }
     }
