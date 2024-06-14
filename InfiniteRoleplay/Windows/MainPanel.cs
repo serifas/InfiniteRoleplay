@@ -128,9 +128,8 @@ public class MainPanel : Window, IDisposable
 
             if (ImGui.Button("Login"))
             {
-                if (plugin.IsLoggedIn())
-                {
-                    
+                if (plugin.IsLoggedIn() && ClientTCP.clientSocket.Connected == true)
+                {                    
                     SaveLoginPreferences();
                     DataSender.Login(this.username, this.password, plugin.ClientState.LocalPlayer.Name.ToString(), plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString());
                 }
@@ -294,6 +293,8 @@ public class MainPanel : Window, IDisposable
                 plugin.newConnection = false;
                 plugin.UnloadConnectionsBar();
                 LoggedIN = false;
+                plugin.CloseAllWindows();
+                plugin.OpenMainPanel();
                 switchUI();
                 login = true;
                 viewMainWindow = false;
@@ -377,7 +378,7 @@ public class MainPanel : Window, IDisposable
         ImGui.SameLine();
         if (ImGui.ImageButton(reconnectImage.ImGuiHandle, new Vector2(18, 18)))
         {
-            plugin.Connect();
+            ClientTCP.AttemptConnect();
             plugin.UpdateStatus();
         }
         ImGui.TextColored(statusColor, status);
@@ -402,7 +403,10 @@ public class MainPanel : Window, IDisposable
     public void AttemptLogin()
     {
         LoggedIN = true;
-        DataSender.Login(plugin.Configuration.username, plugin.Configuration.password, plugin.ClientState.LocalPlayer.Name.ToString(), plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString());
+        if(ClientTCP.clientSocket.Connected == true && plugin.Configuration.username != string.Empty && plugin.Configuration.password != string.Empty)
+        {
+            DataSender.Login(plugin.Configuration.username, plugin.Configuration.password, plugin.ClientState.LocalPlayer.Name.ToString(), plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString());
+        }
     }
     public void switchUI()
     {

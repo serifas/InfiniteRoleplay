@@ -135,22 +135,27 @@ namespace InfiniteRoleplay
             }
         }
 
-        public void LoadConnection()
+        public async void LoadConnection()
         {
             Connect();
             UpdateStatus();
             ToggleMainUI();
+            bool connected = await ClientTCP.IsConnectedToServerAsync(ClientTCP.clientSocket);
+            if (connected)
+            {
+                MainPanel.AttemptLogin();
+            }
         }
-        public void Connect()
+        public async void Connect()
         {
             if (IsLoggedIn())
             {
                 LoadStatusBar();
-                if (!ClientTCP.Connected)
+                bool connected = await ClientTCP.IsConnectedToServerAsync(ClientTCP.clientSocket);
+                if (!connected)
                 {
                     ClientTCP.AttemptConnect();
                 }
-
             }
         }
 
@@ -164,7 +169,7 @@ namespace InfiniteRoleplay
             MainPanel.statusColor = new Vector4(255, 0, 0, 255);
             MainPanel.switchUI();
             MainPanel.login = true;
-            if (ClientTCP.Connected)
+            if (ClientTCP.clientSocket.Connected == true)
             {
                 ClientTCP.Disconnect();
             }
@@ -305,7 +310,6 @@ namespace InfiniteRoleplay
             PluginInterface.UiBuilder.Draw -= DrawUI;
             PluginInterface.UiBuilder.OpenConfigUi -= ToggleConfigUI;
             PluginInterface.UiBuilder.OpenMainUi -= ToggleMainUI;
-            ClientState.Login -= Connect;
             ClientState.Login -= LoadConnection;
             ClientState.Logout -= Logout;
             ContextMenu.OnMenuOpened -= AddContextMenu; 
@@ -365,12 +369,10 @@ namespace InfiniteRoleplay
 
         private void DrawUI() => WindowSystem.Draw();
         public void ToggleConfigUI() => OptionsWindow.Toggle();
-        public void ToggleMainUI()
-        {
-            MainPanel.IsOpen = true;
-        }
-       
-        
+
+
+
+        public void ToggleMainUI() => MainPanel.Toggle();
         public void OpenMainPanel() => MainPanel.IsOpen = true;
         public void OpenTermsWindow() => TermsWindow.IsOpen = true;
         public void OpenImagePreview() => ImagePreview.IsOpen = true;
