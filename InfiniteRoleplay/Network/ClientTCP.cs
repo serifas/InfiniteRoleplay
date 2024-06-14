@@ -107,14 +107,8 @@ namespace Networking
         }
         public static bool IsConnected()
         {
-            if (clientSocket.Connected == true)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            bool isConnected = Task.Run(async () => await IsConnectedToServerAsync(clientSocket)).GetAwaiter().GetResult();
+            return isConnected;
         }
         public static async Task<bool> IsConnectedToServerAsync(TcpClient tcpClient)
         {

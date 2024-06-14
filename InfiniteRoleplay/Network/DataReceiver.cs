@@ -82,34 +82,6 @@ namespace Networking
         public static bool loggedIn;
         public static bool isAdmin;
 
-        // public NSWorld.World world = new NSWorld.World();
-        //EXAMPLE PACKET//
-        /*
-         public static void ExampleRecPacket(byte[] data)
-        {
-            ByteBuffer buffer = new ByteBuffer(); //create a new buffer (always the same)
-            buffer.WriteBytes(data); //write the bytes of the data sent from the packet into the buffer (always the same)
-            int packetID = buffer.ReadInt(); //packetID is simply the id of the packet sent from server (always the same)
-            //CAN BE ANY BUFFER FROM THE ByteBuffer SCRIPT. MUT MATCH DATA SENT FROM SERVER
-            //      types are:
-            //      ReadByte
-            //      ReadBytes
-            //      ReadShort
-            //      ReadInt
-            //      ReadLong
-            //      ReadFloat
-            //      ReadBool
-            //      ReadString
-        
-            string msg = buffer.ReadString(); //example buffer data from server.
-            buffer.Dispose(); //dispose of our buffer
-            Debug.Log(msg); //log our message from server if wanted in the console window or do something else with the data received.   
-        }
-         
-         
-         
-         */
-
         public static void RecBookmarks(byte[] data)
         {
             var buffer = new ByteBuffer();
@@ -453,7 +425,6 @@ namespace Networking
                         MainPanel.status = "Logged In";
                         MainPanel.statusColor = new Vector4(0, 255, 0, 255);
                         MainPanel.viewMainWindow = true;
-                        MainPanel.LoggedIN = true;
                     }
                     if(status == (int)Constants.StatusMessages.LOGIN_WRONG_INFORMATION)
                     {

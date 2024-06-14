@@ -60,6 +60,7 @@ namespace InfiniteRoleplay
         public IClientState ClientState { get; init; }
         public float BlinkInterval = 0.5f;
         public bool newConnection;
+        public bool ControlsLogin = false;
 
         public Plugin(
             [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
@@ -139,25 +140,21 @@ namespace InfiniteRoleplay
         {
             Connect();
             UpdateStatus();
-            ToggleMainUI();
-            bool connected = await ClientTCP.IsConnectedToServerAsync(ClientTCP.clientSocket);
-            if (connected)
-            {
-                MainPanel.AttemptLogin();
-            }
+            ToggleMainUI();  
         }
         public async void Connect()
         {
             if (IsLoggedIn())
             {
                 LoadStatusBar();
-                bool connected = await ClientTCP.IsConnectedToServerAsync(ClientTCP.clientSocket);
-                if (!connected)
+                
+                if (!ClientTCP.IsConnected())
                 {
                     ClientTCP.AttemptConnect();
                 }
             }
         }
+
 
 
         private void Logout()
@@ -170,7 +167,7 @@ namespace InfiniteRoleplay
             MainPanel.statusColor = new Vector4(255, 0, 0, 255);
             MainPanel.switchUI();
             MainPanel.login = true;
-            if (ClientTCP.clientSocket.Connected == true)
+            if (ClientTCP.IsConnected())
             {
                 ClientTCP.Disconnect();
             }
@@ -336,10 +333,14 @@ namespace InfiniteRoleplay
             float deltaTime = (float)deltaTimeSpan.TotalSeconds; // Convert deltaTime to seconds
             if(newConnection == true)
             {
-                //if th
                 LoadConnectionsBar(deltaTime);
             }
-            
+            if (IsLoggedIn() == true && ClientTCP.IsConnected() == true && ControlsLogin == false)
+            {
+                MainPanel.AttemptLogin();
+                ControlsLogin = true;
+            }
+
         }
 
 
@@ -361,7 +362,7 @@ namespace InfiniteRoleplay
         public bool IsLoggedIn()
         {
             bool loggedIn = false;
-            if (ClientState.IsLoggedIn && ClientState.LocalPlayer != null)
+            if (ClientState.IsLoggedIn == true && ClientState.LocalPlayer != null)
             {
                 loggedIn = true;
             }

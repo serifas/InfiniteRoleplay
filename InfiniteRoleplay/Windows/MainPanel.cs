@@ -128,7 +128,7 @@ public class MainPanel : Window, IDisposable
 
             if (ImGui.Button("Login"))
             {
-                if (plugin.IsLoggedIn() && ClientTCP.clientSocket.Connected == true)
+                if (plugin.IsLoggedIn() && ClientTCP.IsConnected() == true)
                 {                    
                     SaveLoginPreferences();
                     DataSender.Login(this.username, this.password, plugin.ClientState.LocalPlayer.Name.ToString(), plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString());
@@ -290,9 +290,9 @@ public class MainPanel : Window, IDisposable
             }
             if (ImGui.Button("Logout", new Vector2(225, 25)))
             {
+                plugin.ControlsLogin = true;
                 plugin.newConnection = false;
                 plugin.UnloadConnectionsBar();
-                LoggedIN = false;
                 plugin.CloseAllWindows();
                 plugin.OpenMainPanel();
                 switchUI();
@@ -402,11 +402,11 @@ public class MainPanel : Window, IDisposable
     }
     public void AttemptLogin()
     {
-        LoggedIN = true;
-        if(ClientTCP.clientSocket.Connected == true && plugin.Configuration.username != string.Empty && plugin.Configuration.password != string.Empty)
+        if(ClientTCP.IsConnected() && plugin.Configuration.username != string.Empty && plugin.Configuration.password != string.Empty)
         {
             DataSender.Login(plugin.Configuration.username, plugin.Configuration.password, plugin.ClientState.LocalPlayer.Name.ToString(), plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString());
         }
+        plugin.CloseAllWindows();
     }
     public void switchUI()
     {
