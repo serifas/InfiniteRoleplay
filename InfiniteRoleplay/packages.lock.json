@@ -8,6 +8,15 @@
         "resolved": "2.1.12",
         "contentHash": "Sc0PVxvgg4NQjcI8n10/VfUQBAS4O+Fw2pZrAqBdRMbthYGeogzu5+xmIGCGmsEZ/ukMOBuAqiNiB5qA3MRalg=="
       },
+      "Lumina": {
+        "type": "Direct",
+        "requested": "[4.1.0, )",
+        "resolved": "4.1.0",
+        "contentHash": "bl+CdE2TXGU6aUCiqcrqiiiXJ0eGpfK0c+CwvCL+SY78ydV/zMqLH61XsU1+4CsjSU1+jDiRlLw2/0bIIE6guQ==",
+        "dependencies": {
+          "Microsoft.Extensions.ObjectPool": "9.0.0-preview.1.24081.5"
+        }
+      },
       "Microsoft.Extensions.Hosting.Abstractions": {
         "type": "Direct",
         "requested": "[8.0.0, )",
@@ -81,6 +90,11 @@
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0"
         }
+      },
+      "Microsoft.Extensions.ObjectPool": {
+        "type": "Transitive",
+        "resolved": "9.0.0-preview.1.24081.5",
+        "contentHash": "aAR7YW+pUUdvHk3vj7GtAi71dWGDIuY9270lsmQ6lKw23zzY+r8pLP3cGNbJdlnA9VWl+S+gnIVkBCqj2ROlEg=="
       },
       "Microsoft.Extensions.Options": {
         "type": "Transitive",

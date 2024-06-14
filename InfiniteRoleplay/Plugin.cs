@@ -15,15 +15,8 @@ using Dalamud.Game.Gui.Dtr;
 using Dalamud.Game.Text.SeStringHandling;
 using System.Threading.Tasks;
 using InfiniteRoleplay.Helpers;
-using FFXIVClientStructs.Havok;
-using FFXIVClientStructs.FFXIV.Client.System.Framework;
-using System.Runtime.CompilerServices;
 using System.Numerics;
-using System.Drawing;
-using Lumina.Extensions;
-using System.Threading;
-using System.Timers;
-using Lumina;
+using OtterGui.Log;
 namespace InfiniteRoleplay
 { 
     public partial class Plugin : IDalamudPlugin
@@ -44,7 +37,6 @@ namespace InfiniteRoleplay
         private IContextMenu ContextMenu { get; init; }
         public ICondition Condition { get; init; }
         public ITextureProvider TextureProvider { get; init; }
-        public ILogger Logger { get; init; }
         [LibraryImport("user32")]
         internal static partial short GetKeyState(int nVirtKey);
         public static bool CtrlPressed() => (GetKeyState(0xA2) & 0x8000) != 0 || (GetKeyState(0xA3) & 0x8000) != 0;
@@ -62,6 +54,7 @@ namespace InfiniteRoleplay
         private TargetWindow TargetWindow { get; init; }
         private ImagePreview ImagePreview { get; init; }
         private TOS TermsWindow { get; init; }
+        public Logger logger = new Logger();
         private ConnectionsWindow ConnectionsWindow { get; init; }
 
         public IClientState ClientState { get; init; }
@@ -77,7 +70,6 @@ namespace InfiniteRoleplay
             [RequiredVersion("1.0")] ITargetManager targetManager,
             [RequiredVersion("1.0")] IFramework framework,
             [RequiredVersion("1.0")] ICondition condition,
-            [RequiredVersion("1.0")] ILogger logger,
             [RequiredVersion("1.0")] IDtrBar dtrBar
             )
         {
@@ -91,7 +83,6 @@ namespace InfiniteRoleplay
             TargetManager = targetManager;
             ContextMenu = contextMenu;
             TextureProvider = textureProvider;
-            this.Logger = logger;
             this.Condition = condition;
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
@@ -135,7 +126,7 @@ namespace InfiniteRoleplay
             ClientState.Logout += Logout;
             ContextMenu.OnMenuOpened += AddContextMenu;
             ClientState.Login += LoadConnection;
-
+            MainPanel.plugin = this;
             this.Framework.Update += OnUpdate;
 
             if (ClientState.IsLoggedIn && clientState.LocalPlayer != null)
@@ -185,7 +176,7 @@ namespace InfiniteRoleplay
             e.SetObserved();
             Framework.RunOnFrameworkThread(() =>
             {
-               plugin.Logger.Error("Exception handled" + e.Exception.Message);
+               logger.Error("Exception handled" + e.Exception.Message);
             });
         }
         public void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -194,7 +185,7 @@ namespace InfiniteRoleplay
             var exception = e.ExceptionObject as Exception;
             Framework.RunOnFrameworkThread(() =>
             {
-               plugin.Logger.Error("Exception handled" + exception.Message);
+                logger.Error("Exception handled" + exception.Message);
             });
         }
         public void AddContextMenu(MenuOpenedArgs args)
@@ -243,7 +234,7 @@ namespace InfiniteRoleplay
             }
             catch (Exception ex)
             {
-               plugin.Logger.Error("Error when viewing profile from context " + ex.ToString());
+                logger.Error("Error when viewing profile from context " + ex.ToString());
             }
         }
         private void BookmarkProfile(MenuItemClickedArgs args)
@@ -278,7 +269,7 @@ namespace InfiniteRoleplay
                 if (dtrBar.Get(randomTitle) is not { } entry) return;
                 connectionsBarEntry = entry;
                 connectionsBarEntry.Tooltip = "New Connections Request";
-                entry.OnClick = () => DataSender.RequestConnections(Configuration.username.ToString());                 
+                entry.OnClick = () => DataSender.RequestConnections(Configuration.username.ToString(), ClientState.LocalPlayer.Name.ToString(), ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString());                 
             }
 
             SeStringBuilder statusString = new SeStringBuilder();
@@ -377,10 +368,6 @@ namespace InfiniteRoleplay
         public void ToggleMainUI()
         {
             MainPanel.IsOpen = true;
-            if (IsLoggedIn() && loggedIn == false)
-            {
-                MainPanel.AttemptLogin();
-            }
         }
        
         
@@ -411,7 +398,7 @@ namespace InfiniteRoleplay
             }
             catch (Exception ex)
             {
-               plugin.Logger.Error("Error updating status: " + ex.ToString());
+                logger.Error("Error updating status: " + ex.ToString());
             }
         }
     }

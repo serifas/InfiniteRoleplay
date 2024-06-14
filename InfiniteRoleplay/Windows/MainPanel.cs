@@ -11,6 +11,7 @@ using Dalamud.Configuration;
 using Microsoft.VisualBasic;
 using InfiniteRoleplay;
 using System.Diagnostics;
+using Dalamud.Plugin.Services;
 namespace InfiniteRoleplay.Windows;
 
 public class MainPanel : Window, IDisposable
@@ -242,7 +243,7 @@ public class MainPanel : Window, IDisposable
             ImGui.SameLine();
             if (ImGui.ImageButton(this.connectionsSectionImage.ImGuiHandle, new Vector2(100, 50)))
             {
-                DataSender.RequestConnections(plugin.Configuration.username.ToString());
+                DataSender.RequestConnections(plugin.Configuration.username.ToString(), plugin.ClientState.LocalPlayer.Name.ToString(), plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString());
 
             }
             if (ImGui.IsItemHovered())

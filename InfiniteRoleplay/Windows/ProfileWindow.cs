@@ -727,7 +727,7 @@ namespace InfiniteRoleplay.Windows
             }
             catch (Exception ex)
             {
-               plugin.Logger.Error("Could not reset gallery:: Results may be incorrect.");
+                plugin.logger.Error("Could not reset gallery:: Results may be incorrect.");
             }
         }
         public static void ResetStory()

@@ -42,7 +42,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-               plugin.Logger.Error("Error receiving data: " + ex.ToString());
+                plugin.logger.Error("Error receiving data: " + ex.ToString());
                 Connected = false;
             }
         }
@@ -126,7 +126,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-               plugin.Logger.Error("Error checking server connection: " + ex.ToString());
+                plugin.logger.Error("Error checking server connection: " + ex.ToString());
                 return false;
             }
         }
@@ -158,7 +158,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-               plugin.Logger.Error("Error checking status: " + ex.ToString());
+                plugin.logger.Error("Error checking status: " + ex.ToString());
             }
         }
 
@@ -179,7 +179,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-               plugin.Logger.Error("Could not connect to server: " + ex.ToString());
+                plugin.logger.Error("Could not connect to server: " + ex.ToString());
                 Disconnect();
             }
         }
@@ -195,7 +195,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-               plugin.Logger.Error("Could not establish connection: " + ex.ToString());
+                plugin.logger.Error("Could not establish connection: " + ex.ToString());
                 clientSocket?.Dispose();
             }
         }
@@ -218,7 +218,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-               plugin.Logger.Error("Could not establish reconnect: " + ex);
+                plugin.logger.Error("Could not establish reconnect: " + ex);
             }
         }
         public static async Task SendDataAsync(byte[] data)
@@ -234,7 +234,7 @@ namespace Networking
             }
             catch (Exception ex)
             {
-               plugin.Logger.Error("Error sending data: " + ex.ToString());
+                plugin.logger.Error("Error sending data: " + ex.ToString());
             }
         }
     }
