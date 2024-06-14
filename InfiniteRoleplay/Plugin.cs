@@ -159,6 +159,7 @@ namespace InfiniteRoleplay
             }
         }
 
+
         private void Logout()
         {
             connectionsBarEntry?.Dispose();

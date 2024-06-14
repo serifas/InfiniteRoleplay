@@ -105,6 +105,17 @@ namespace Networking
                 return false;
             }
         }
+        public static bool IsConnected()
+        {
+            if (clientSocket.Connected == true)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         public static async Task<bool> IsConnectedToServerAsync(TcpClient tcpClient)
         {
             try

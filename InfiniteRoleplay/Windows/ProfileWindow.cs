@@ -63,7 +63,7 @@ namespace InfiniteRoleplay.Windows
         public static bool drawChapter;
         public static int storyChapterCount = -1;
         public static int currentChapter;
-        private bool privateProfile;
+        public static bool privateProfile;
 
         public bool RedrawChapters { get; private set; }
 

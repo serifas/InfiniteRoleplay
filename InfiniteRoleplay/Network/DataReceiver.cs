@@ -755,9 +755,12 @@ namespace Networking
                 {
                     buffer.WriteBytes(data);
                     var packetID = buffer.ReadInt();
+                    bool status = buffer.ReadBool();
                     plugin.OpenProfileWindow();
+                    ProfileWindow.privateProfile = status;
                     ProfileWindow.ExistingProfile = true;
                     ProfileWindow.ReloadProfile();
+                    
                 }
             }
             catch (Exception ex)

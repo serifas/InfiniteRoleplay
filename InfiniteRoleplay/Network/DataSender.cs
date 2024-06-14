@@ -58,226 +58,273 @@ namespace Networking
         public static Plugin plugin;
         public static async void Login(string username, string password, string playerName, string playerWorld)
         {
-            try
+            if (ClientTCP.IsConnected())
             {
-                using (var buffer = new ByteBuffer())
+                try
                 {
-                    buffer.WriteInt((int)ClientPackets.CLogin);
-                    buffer.WriteString(username);
-                    buffer.WriteString(password);
-                    buffer.WriteString(playerName);
-                    buffer.WriteString(playerWorld);
-                    await ClientTCP.SendDataAsync(buffer.ToArray());
+                    using (var buffer = new ByteBuffer())
+                    {
+                        buffer.WriteInt((int)ClientPackets.CLogin);
+                        buffer.WriteString(username);
+                        buffer.WriteString(password);
+                        buffer.WriteString(playerName);
+                        buffer.WriteString(playerWorld);
+                        await ClientTCP.SendDataAsync(buffer.ToArray());
+                    }
                 }
+                catch (Exception ex)
+                {
+                    plugin.logger.Error("Error in Login: " + ex.ToString());
+                }
+
             }
-            catch (Exception ex)
-            {
-                plugin.logger.Error("Error in Login: " + ex.ToString());
-            }
+        
         }
       
         public static async void Register(string username, string password, string email)
         {
-            try
+            if (ClientTCP.IsConnected())
             {
-                using (var buffer = new ByteBuffer()){
-                buffer.WriteInt((int)ClientPackets.CRegister);
-                buffer.WriteString(username);
-                buffer.WriteString(password);
-                buffer.WriteString(email);
-                await ClientTCP.SendDataAsync(buffer.ToArray());
+                try
+                {
+                    using (var buffer = new ByteBuffer())
+                    {
+                        buffer.WriteInt((int)ClientPackets.CRegister);
+                        buffer.WriteString(username);
+                        buffer.WriteString(password);
+                        buffer.WriteString(email);
+                        await ClientTCP.SendDataAsync(buffer.ToArray());
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                plugin.logger.Error("Error in Register: " + ex.ToString());
+                catch (Exception ex)
+                {
+                    plugin.logger.Error("Error in Register: " + ex.ToString());
+                }
             }
         }
         public static async void ReportProfile(string reporterAccount, string playerName, string playerWorld, string reportInfo)
         {
-            try
+            if (ClientTCP.IsConnected())
             {
-                using (var buffer = new ByteBuffer())
+                try
                 {
-                    buffer.WriteInt((int)ClientPackets.CReportProfile);
-                    buffer.WriteString(playerName);
-                    buffer.WriteString(playerWorld);
-                    buffer.WriteString(reporterAccount);
-                    buffer.WriteString(reportInfo);
-                    await ClientTCP.SendDataAsync(buffer.ToArray());
+                    using (var buffer = new ByteBuffer())
+                    {
+                        buffer.WriteInt((int)ClientPackets.CReportProfile);
+                        buffer.WriteString(playerName);
+                        buffer.WriteString(playerWorld);
+                        buffer.WriteString(reporterAccount);
+                        buffer.WriteString(reportInfo);
+                        await ClientTCP.SendDataAsync(buffer.ToArray());
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                plugin.logger.Error("Error in ReportProfile: " + ex.ToString());
+                catch (Exception ex)
+                {
+                    plugin.logger.Error("Error in ReportProfile: " + ex.ToString());
+                }
             }
 
         }
         public static async void SendGalleryImage(string username, string playername, string playerworld, bool NSFW, bool TRIGGER, string url, int index)
         {
-            try
+            if (ClientTCP.IsConnected())
             {
+                try
+                {
 
-                using (var buffer = new ByteBuffer()){
-                buffer.WriteInt((int)ClientPackets.CSendGallery);
-                buffer.WriteString(playername);
-                buffer.WriteString(playerworld);
-                buffer.WriteString(url);
-                buffer.WriteBool(NSFW);
-                buffer.WriteBool(TRIGGER);
-                buffer.WriteInt(index);
+                    using (var buffer = new ByteBuffer())
+                    {
+                        buffer.WriteInt((int)ClientPackets.CSendGallery);
+                        buffer.WriteString(playername);
+                        buffer.WriteString(playerworld);
+                        buffer.WriteString(url);
+                        buffer.WriteBool(NSFW);
+                        buffer.WriteBool(TRIGGER);
+                        buffer.WriteInt(index);
 
-                await ClientTCP.SendDataAsync(buffer.ToArray());
+                        await ClientTCP.SendDataAsync(buffer.ToArray());
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                plugin.logger.Error("Error in SendGalleryImage: " + ex.ToString());
+                catch (Exception ex)
+                {
+                    plugin.logger.Error("Error in SendGalleryImage: " + ex.ToString());
+                }
             }
         }
         public static async void RemoveGalleryImage(string playername, string playerworld, int index, int imageCount)
         {
-            try
+            if (ClientTCP.IsConnected())
             {
-                using (var buffer = new ByteBuffer()){
-                buffer.WriteInt((int)ClientPackets.CSendGalleryRemoveRequest);
-                buffer.WriteString(playername);
-                buffer.WriteString(playerworld);
+                try
+                {
+                    using (var buffer = new ByteBuffer())
+                    {
+                        buffer.WriteInt((int)ClientPackets.CSendGalleryRemoveRequest);
+                        buffer.WriteString(playername);
+                        buffer.WriteString(playerworld);
 
-                buffer.WriteInt(index);
-                buffer.WriteInt(imageCount);
+                        buffer.WriteInt(index);
+                        buffer.WriteInt(imageCount);
 
-                await ClientTCP.SendDataAsync(buffer.ToArray());
+                        await ClientTCP.SendDataAsync(buffer.ToArray());
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                plugin.logger.Error("Error in SendGalleryImage: " + ex.ToString());
+                catch (Exception ex)
+                {
+                    plugin.logger.Error("Error in SendGalleryImage: " + ex.ToString());
+                }
             }
         }
         public static async void SendStory(string playername, string worldname, string storyTitle, List<Tuple<string, string>> storyChapters)
         {
-            try
+            if (ClientTCP.IsConnected())
             {
-                using (var buffer = new ByteBuffer()){
-                buffer.WriteInt((int)ClientPackets.CSendStory);
-                buffer.WriteString(playername);
-                buffer.WriteString(worldname);
-                buffer.WriteInt(storyChapters.Count);
-                buffer.WriteString(storyTitle);
-                for (int i = 0; i < storyChapters.Count; i++)
+                try
                 {
-                    buffer.WriteString(storyChapters[i].Item1);
-                    buffer.WriteString(storyChapters[i].Item2);
+                    using (var buffer = new ByteBuffer())
+                    {
+                        buffer.WriteInt((int)ClientPackets.CSendStory);
+                        buffer.WriteString(playername);
+                        buffer.WriteString(worldname);
+                        buffer.WriteInt(storyChapters.Count);
+                        buffer.WriteString(storyTitle);
+                        for (int i = 0; i < storyChapters.Count; i++)
+                        {
+                            buffer.WriteString(storyChapters[i].Item1);
+                            buffer.WriteString(storyChapters[i].Item2);
+                        }
+                        await ClientTCP.SendDataAsync(buffer.ToArray());
+                    }
                 }
-                await ClientTCP.SendDataAsync(buffer.ToArray());
+                catch (Exception ex)
+                {
+                    plugin.logger.Error("Error in SendStory: " + ex.ToString());
                 }
-            }
-            catch (Exception ex)
-            {
-                plugin.logger.Error("Error in SendStory: " + ex.ToString());
             }
         }
        
         public static async void SendProfileAccessUpdate(string username, string localName, string localServer, string connectionName, string connectionWorld, int status)
         {
-            try
+            if (ClientTCP.IsConnected())
             {
-                using (var buffer = new ByteBuffer())
+                try
                 {
-                    buffer.WriteInt((int)ClientPackets.SSendProfileAccessUpdate);
-                    buffer.WriteString(username);
-                    buffer.WriteString(localName);
-                    buffer.WriteString(localServer);
-                    buffer.WriteString(connectionName);
-                    buffer.WriteString(connectionWorld);
-                    buffer.WriteInt(status);
-                    await ClientTCP.SendDataAsync(buffer.ToArray());
+                    using (var buffer = new ByteBuffer())
+                    {
+                        buffer.WriteInt((int)ClientPackets.SSendProfileAccessUpdate);
+                        buffer.WriteString(username);
+                        buffer.WriteString(localName);
+                        buffer.WriteString(localServer);
+                        buffer.WriteString(connectionName);
+                        buffer.WriteString(connectionWorld);
+                        buffer.WriteInt(status);
+                        await ClientTCP.SendDataAsync(buffer.ToArray());
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                plugin.logger.Error("Error in Login: " + ex.ToString());
+                catch (Exception ex)
+                {
+                    plugin.logger.Error("Error in Login: " + ex.ToString());
+                }
             }
         }
         public static async void FetchProfile(string characterName, string world)
         {
-            try
+            if (ClientTCP.IsConnected())
             {
-                using (var buffer = new ByteBuffer()){
-                buffer.WriteInt((int)ClientPackets.CFetchProfiles);
-                buffer.WriteString(characterName);
-                buffer.WriteString(world);
-                await ClientTCP.SendDataAsync(buffer.ToArray());
+                try
+                {
+                    using (var buffer = new ByteBuffer())
+                    {
+                        buffer.WriteInt((int)ClientPackets.CFetchProfiles);
+                        buffer.WriteString(characterName);
+                        buffer.WriteString(world);
+                        await ClientTCP.SendDataAsync(buffer.ToArray());
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                plugin.logger.Error("Error in FetchProfile: " + ex.ToString());
+                catch (Exception ex)
+                {
+                    plugin.logger.Error("Error in FetchProfile: " + ex.ToString());
+                }
             }
         }
         public static async void CreateProfile(string playerName, string playerServer)
         {
-            try
+            if (ClientTCP.IsConnected())
             {
-                using (var buffer = new ByteBuffer()){
-                buffer.WriteInt((int)ClientPackets.CCreateProfile);
-                buffer.WriteString(playerName);
-                buffer.WriteString(playerServer);
-                await ClientTCP.SendDataAsync(buffer.ToArray());
+                try
+                {
+                    using (var buffer = new ByteBuffer())
+                    {
+                        buffer.WriteInt((int)ClientPackets.CCreateProfile);
+                        buffer.WriteString(playerName);
+                        buffer.WriteString(playerServer);
+                        await ClientTCP.SendDataAsync(buffer.ToArray());
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                plugin.logger.Error("Error in CreateProfile: " + ex.ToString());
+                catch (Exception ex)
+                {
+                    plugin.logger.Error("Error in CreateProfile: " + ex.ToString());
+                }
             }
         }
         public static async void BookmarkPlayer(string username, string playerName, string playerWorld)
         {
-            try
+            if (ClientTCP.IsConnected())
             {
-                using (var buffer = new ByteBuffer()){
-                buffer.WriteInt((int)ClientPackets.CSendPlayerBookmark);
-                buffer.WriteString(playerName);
-                buffer.WriteString(playerWorld);
-                await ClientTCP.SendDataAsync(buffer.ToArray());
+                try
+                {
+                    using (var buffer = new ByteBuffer())
+                    {
+                        buffer.WriteInt((int)ClientPackets.CSendPlayerBookmark);
+                        buffer.WriteString(playerName);
+                        buffer.WriteString(playerWorld);
+                        await ClientTCP.SendDataAsync(buffer.ToArray());
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                plugin.logger.Error("Error in BookmarkProfile: " + ex.ToString());
+                catch (Exception ex)
+                {
+                    plugin.logger.Error("Error in BookmarkProfile: " + ex.ToString());
+                }
             }
 
         }
         public static async void RemoveBookmarkedPlayer(string username, string playerName, string playerWorld)
         {
-            try
+            if (ClientTCP.IsConnected())
             {
-                using (var buffer = new ByteBuffer()){
-                buffer.WriteInt((int)ClientPackets.CSendRemovePlayerBookmark);
-                buffer.WriteString(playerName);
-                buffer.WriteString(playerWorld);
-                await ClientTCP.SendDataAsync(buffer.ToArray());
+                try
+                {
+                    using (var buffer = new ByteBuffer())
+                    {
+                        buffer.WriteInt((int)ClientPackets.CSendRemovePlayerBookmark);
+                        buffer.WriteString(playerName);
+                        buffer.WriteString(playerWorld);
+                        await ClientTCP.SendDataAsync(buffer.ToArray());
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                plugin.logger.Error("Error in RemoveBookmarkedPlayer: " + ex.ToString());
+                catch (Exception ex)
+                {
+                    plugin.logger.Error("Error in RemoveBookmarkedPlayer: " + ex.ToString());
+                }
             }
         }
         public static async void RequestBookmarks(string username)
         {
-            try
+            if (ClientTCP.IsConnected())
             {
-                using (var buffer = new ByteBuffer()){
-                buffer.WriteInt((int)ClientPackets.CSendBookmarkRequest);
-                buffer.WriteString(username);
-                await ClientTCP.SendDataAsync(buffer.ToArray());
+                try
+                {
+                    using (var buffer = new ByteBuffer())
+                    {
+                        buffer.WriteInt((int)ClientPackets.CSendBookmarkRequest);
+                        buffer.WriteString(username);
+                        await ClientTCP.SendDataAsync(buffer.ToArray());
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                plugin.logger.Error("Error in RequestBookmarks: " + ex.ToString());
+                catch (Exception ex)
+                {
+                    plugin.logger.Error("Error in RequestBookmarks: " + ex.ToString());
+                }
             }
 
         }
@@ -285,106 +332,124 @@ namespace Networking
         public static async void SubmitProfileBio(string playerName, string playerServer, byte[] avatarBytes, string name, string race, string gender, string age,
                                             string height, string weight, string atFirstGlance, int alignment, int personality_1, int personality_2, int personality_3)
         {
-            try
+            if (ClientTCP.IsConnected())
             {
-                using (var buffer = new ByteBuffer()){
-                buffer.WriteInt((int)ClientPackets.CCreateProfileBio);
-                buffer.WriteString(playerName);
-                buffer.WriteString(playerServer);
-                buffer.WriteInt(avatarBytes.Length);
-                buffer.WriteBytes(avatarBytes);
-                buffer.WriteString(name);
-                buffer.WriteString(race);
-                buffer.WriteString(gender);
-                buffer.WriteString(age);
-                buffer.WriteString(height);
-                buffer.WriteString(weight);
-                buffer.WriteString(atFirstGlance);
-                buffer.WriteInt(alignment);
-                buffer.WriteInt(personality_1);
-                buffer.WriteInt(personality_2);
-                buffer.WriteInt(personality_3);
-                await ClientTCP.SendDataAsync(buffer.ToArray());
+                try
+                {
+                    using (var buffer = new ByteBuffer())
+                    {
+                        buffer.WriteInt((int)ClientPackets.CCreateProfileBio);
+                        buffer.WriteString(playerName);
+                        buffer.WriteString(playerServer);
+                        buffer.WriteInt(avatarBytes.Length);
+                        buffer.WriteBytes(avatarBytes);
+                        buffer.WriteString(name);
+                        buffer.WriteString(race);
+                        buffer.WriteString(gender);
+                        buffer.WriteString(age);
+                        buffer.WriteString(height);
+                        buffer.WriteString(weight);
+                        buffer.WriteString(atFirstGlance);
+                        buffer.WriteInt(alignment);
+                        buffer.WriteInt(personality_1);
+                        buffer.WriteInt(personality_2);
+                        buffer.WriteInt(personality_3);
+                        await ClientTCP.SendDataAsync(buffer.ToArray());
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                plugin.logger.Error("Error in SubmitProfileBio: " + ex.ToString());
+                catch (Exception ex)
+                {
+                    plugin.logger.Error("Error in SubmitProfileBio: " + ex.ToString());
+                }
             }
 
         }
         public static async void SaveUserConfiguration(bool showProfilesPublicly)
         {
-            try
+            if (ClientTCP.IsConnected())
             {
-                using (var buffer = new ByteBuffer())
+                try
                 {
-                    buffer.WriteInt((int)ClientPackets.SSendUserConfiguration);
-                    buffer.WriteBool(showProfilesPublicly);
-                    await ClientTCP.SendDataAsync(buffer.ToArray());
+                    using (var buffer = new ByteBuffer())
+                    {
+                        buffer.WriteInt((int)ClientPackets.SSendUserConfiguration);
+                        buffer.WriteBool(showProfilesPublicly);
+                        await ClientTCP.SendDataAsync(buffer.ToArray());
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                plugin.logger.Error("Error in sending user configuration: " + ex.ToString());
+                catch (Exception ex)
+                {
+                    plugin.logger.Error("Error in sending user configuration: " + ex.ToString());
+                }
             }
         }
         public static async void SaveProfileConfiguration(bool showProfilePublicly, string playerName, string playerWorld)
         {
-            try
+            if (ClientTCP.IsConnected())
             {
-                using (var buffer = new ByteBuffer())
+                try
                 {
-                    buffer.WriteInt((int)ClientPackets.SendProfileConfiguration);
-                    buffer.WriteBool(showProfilePublicly);
-                    await ClientTCP.SendDataAsync(buffer.ToArray());
+                    using (var buffer = new ByteBuffer())
+                    {
+                        buffer.WriteInt((int)ClientPackets.SendProfileConfiguration);
+                        buffer.WriteBool(showProfilePublicly);
+                        await ClientTCP.SendDataAsync(buffer.ToArray());
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                plugin.logger.Error("Error in sending user configuration: " + ex.ToString());
+                catch (Exception ex)
+                {
+                    plugin.logger.Error("Error in sending user configuration: " + ex.ToString());
+                }
             }
         }
 
         public static async void RequestTargetProfile(string targetPlayerName, string targetPlayerWorld, string requesterUsername)
         {
-            try
+            if (ClientTCP.IsConnected())
             {
-                using (var buffer = new ByteBuffer()){
-                buffer.WriteInt((int)ClientPackets.SRequestTargetProfile);
-                buffer.WriteString(requesterUsername);
-                buffer.WriteString(targetPlayerName);
-                buffer.WriteString(targetPlayerWorld);
-                await ClientTCP.SendDataAsync(buffer.ToArray());
+                try
+                {
+                    using (var buffer = new ByteBuffer())
+                    {
+                        buffer.WriteInt((int)ClientPackets.SRequestTargetProfile);
+                        buffer.WriteString(requesterUsername);
+                        buffer.WriteString(targetPlayerName);
+                        buffer.WriteString(targetPlayerWorld);
+                        await ClientTCP.SendDataAsync(buffer.ToArray());
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                plugin.logger.Error("Error in SubmitProfileBio: " + ex.ToString());
+                catch (Exception ex)
+                {
+                    plugin.logger.Error("Error in SubmitProfileBio: " + ex.ToString());
+                }
             }
 
         }
         public static async void SendHooks(string charactername, string characterworld, List<Tuple<int, string, string>> hooks)
         {
-            try
+            if (ClientTCP.IsConnected())
             {
-                using (var buffer = new ByteBuffer()){
-                buffer.WriteInt((int)ClientPackets.CSendHooks);
-                buffer.WriteString(charactername);
-                buffer.WriteString(characterworld);
-                buffer.WriteInt(hooks.Count);
-                for (int i = 0; i < hooks.Count; i++)
+                try
                 {
-                    buffer.WriteInt(hooks[i].Item1);
-                    buffer.WriteString(hooks[i].Item2);
-                    buffer.WriteString(hooks[i].Item3);
+                    using (var buffer = new ByteBuffer())
+                    {
+                        buffer.WriteInt((int)ClientPackets.CSendHooks);
+                        buffer.WriteString(charactername);
+                        buffer.WriteString(characterworld);
+                        buffer.WriteInt(hooks.Count);
+                        for (int i = 0; i < hooks.Count; i++)
+                        {
+                            buffer.WriteInt(hooks[i].Item1);
+                            buffer.WriteString(hooks[i].Item2);
+                            buffer.WriteString(hooks[i].Item3);
+                        }
+                        await ClientTCP.SendDataAsync(buffer.ToArray());
+                    }
                 }
-                await ClientTCP.SendDataAsync(buffer.ToArray());
+                catch (Exception ex)
+                {
+                    plugin.logger.Error("Error in SendHooks: " + ex.ToString());
                 }
-            }
-            catch (Exception ex)
-            {
-                plugin.logger.Error("Error in SendHooks: " + ex.ToString());
             }
 
         }
@@ -393,133 +458,159 @@ namespace Networking
 
         public static async void AddProfileNotes(string username, string characterNameVal, string characterWorldVal, string notes)
         {
-            try
+            if (ClientTCP.IsConnected())
             {
+                try
+                {
 
-                using (var buffer = new ByteBuffer()){
-                buffer.WriteInt((int)ClientPackets.CSendProfileNotes);
-                buffer.WriteString(username);
-                buffer.WriteString(characterNameVal);
-                buffer.WriteString(characterWorldVal);
-                buffer.WriteString(notes);
-                await ClientTCP.SendDataAsync(buffer.ToArray());
+                    using (var buffer = new ByteBuffer())
+                    {
+                        buffer.WriteInt((int)ClientPackets.CSendProfileNotes);
+                        buffer.WriteString(username);
+                        buffer.WriteString(characterNameVal);
+                        buffer.WriteString(characterWorldVal);
+                        buffer.WriteString(notes);
+                        await ClientTCP.SendDataAsync(buffer.ToArray());
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                plugin.logger.Error("Error in AddProfileNotes: " + ex.ToString());
+                catch (Exception ex)
+                {
+                    plugin.logger.Error("Error in AddProfileNotes: " + ex.ToString());
+                }
             }
         }
 
         internal static async void SendVerification(string username, string verificationKey)
         {
-            try
+            if (ClientTCP.IsConnected())
             {
-                using (var buffer = new ByteBuffer()){
-                buffer.WriteInt((int)ClientPackets.SSubmitVerificationKey);
-                buffer.WriteString(username);
-                buffer.WriteString(verificationKey);
-                await ClientTCP.SendDataAsync(buffer.ToArray());
+                try
+                {
+                    using (var buffer = new ByteBuffer())
+                    {
+                        buffer.WriteInt((int)ClientPackets.SSubmitVerificationKey);
+                        buffer.WriteString(username);
+                        buffer.WriteString(verificationKey);
+                        await ClientTCP.SendDataAsync(buffer.ToArray());
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                plugin.logger.Error("Error in SendVerification: " + ex.ToString());
+                catch (Exception ex)
+                {
+                    plugin.logger.Error("Error in SendVerification: " + ex.ToString());
+                }
             }
 
         }
 
         internal static async void SendRestorationRequest(string restorationEmail)
         {
-            try
+            if (ClientTCP.IsConnected())
             {
-                using (var buffer = new ByteBuffer()){
-                buffer.WriteInt((int)ClientPackets.SSubmitRestorationRequest);
-                buffer.WriteString(restorationEmail);
-                await ClientTCP.SendDataAsync(buffer.ToArray());
+                try
+                {
+                    using (var buffer = new ByteBuffer())
+                    {
+                        buffer.WriteInt((int)ClientPackets.SSubmitRestorationRequest);
+                        buffer.WriteString(restorationEmail);
+                        await ClientTCP.SendDataAsync(buffer.ToArray());
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                plugin.logger.Error("Error in SendRestorationRequest: " + ex.ToString());
+                catch (Exception ex)
+                {
+                    plugin.logger.Error("Error in SendRestorationRequest: " + ex.ToString());
+                }
             }
         }
 
         internal static async void SendRestoration(string email, string password, string restorationKey)
         {
-            try
+            if (ClientTCP.IsConnected())
             {
-                using (var buffer = new ByteBuffer()){
-                buffer.WriteInt((int)ClientPackets.SSubmitRestorationKey);
-                buffer.WriteString(password);
-                buffer.WriteString(restorationKey);
-                buffer.WriteString(email);
-                await ClientTCP.SendDataAsync(buffer.ToArray());
+                try
+                {
+                    using (var buffer = new ByteBuffer())
+                    {
+                        buffer.WriteInt((int)ClientPackets.SSubmitRestorationKey);
+                        buffer.WriteString(password);
+                        buffer.WriteString(restorationKey);
+                        buffer.WriteString(email);
+                        await ClientTCP.SendDataAsync(buffer.ToArray());
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                plugin.logger.Error("Error in SendRestoration: " + ex.ToString());
+                catch (Exception ex)
+                {
+                    plugin.logger.Error("Error in SendRestoration: " + ex.ToString());
+                }
             }
         }
 
         internal static async void SendOOCInfo(string charactername, string characterworld, string OOC)
         {
-            try
+            if (ClientTCP.IsConnected())
             {
-                using (var buffer = new ByteBuffer()){
-                buffer.WriteInt((int)ClientPackets.SSendOOC);
-                buffer.WriteString(charactername);
-                buffer.WriteString(characterworld);
-                buffer.WriteString(OOC);
-                await ClientTCP.SendDataAsync(buffer.ToArray());
+                try
+                {
+                    using (var buffer = new ByteBuffer())
+                    {
+                        buffer.WriteInt((int)ClientPackets.SSendOOC);
+                        buffer.WriteString(charactername);
+                        buffer.WriteString(characterworld);
+                        buffer.WriteString(OOC);
+                        await ClientTCP.SendDataAsync(buffer.ToArray());
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                plugin.logger.Error("Error in SendOOCInfo: " + ex.ToString());
+                catch (Exception ex)
+                {
+                    plugin.logger.Error("Error in SendOOCInfo: " + ex.ToString());
+                }
             }
         }
 
 
         internal static async void RequestConnections(string username, string receiverName, string receiverWorld)
         {
-            try
+            if (ClientTCP.IsConnected())
             {
-                using (var buffer = new ByteBuffer())
+                try
                 {
-                    buffer.WriteInt((int)ClientPackets.SSendConnectionsRequest);
-                    buffer.WriteString(username);
-                    buffer.WriteString(receiverName);
-                    buffer.WriteString(receiverWorld);
+                    using (var buffer = new ByteBuffer())
+                    {
+                        buffer.WriteInt((int)ClientPackets.SSendConnectionsRequest);
+                        buffer.WriteString(username);
+                        buffer.WriteString(receiverName);
+                        buffer.WriteString(receiverWorld);
 
-                    await ClientTCP.SendDataAsync(buffer.ToArray());
+                        await ClientTCP.SendDataAsync(buffer.ToArray());
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                plugin.logger.Error("Error in RequestConnections: " + ex.ToString());
+                catch (Exception ex)
+                {
+                    plugin.logger.Error("Error in RequestConnections: " + ex.ToString());
+                }
             }
         }
 
 
         internal static async void SetProfileStatus(string username, string characterName, string characterWorld, bool status)
         {
-            try
+            if (ClientTCP.IsConnected())
             {
-                using (var buffer = new ByteBuffer())
+                try
                 {
-                    buffer.WriteInt((int)ClientPackets.SSendProfileStatus);
-                    buffer.WriteString(username);
-                    buffer.WriteString(characterName);
-                    buffer.WriteString(characterWorld);
-                    buffer.WriteBool(status);
-                    await ClientTCP.SendDataAsync(buffer.ToArray());
+                    using (var buffer = new ByteBuffer())
+                    {
+                        buffer.WriteInt((int)ClientPackets.SSendProfileStatus);
+                        buffer.WriteString(username);
+                        buffer.WriteString(characterName);
+                        buffer.WriteString(characterWorld);
+                        buffer.WriteBool(status);
+                        await ClientTCP.SendDataAsync(buffer.ToArray());
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                plugin.logger.Error("Error in SetProfileStatus: " + ex.ToString());
+                catch (Exception ex)
+                {
+                    plugin.logger.Error("Error in SetProfileStatus: " + ex.ToString());
+                }
             }
         }
     }
