@@ -20,19 +20,17 @@ namespace InfiniteRoleplay.Windows
     {
         private Plugin plugin;
         public static string loading;
-        private IChatGui chatGui;
         private DalamudPluginInterface pg;
         public GameFontHandle nameFont;
         public static float currentInd, max;
         public static string characterNameVal, characterWorldVal;
-        public static string[] StoryContent = new string[30];
         public static string[] ChapterContent = new string[30];
         public static string[] ChapterTitle = new string[30];
         public static string[] HookNames = new string[30];
         public static string[] HookContents = new string[30];
         public static string[] HookEditContent = new string[30];
         public static int chapterCount;
-        public static bool viewBio, viewHooks, viewStory, viewOOC, viewGallery, addNotes, loadPreview = false;
+        public static bool viewBio, viewHooks, viewStory, viewOOC, viewGallery, addNotes, loadPreview = false; //used to specify what view to show
         public static bool ExistingBio;
         public static bool ExistingHooks;
         public static int hookEditCount, existingGalleryImageCount;
@@ -50,6 +48,7 @@ namespace InfiniteRoleplay.Windows
         public static List<IDalamudTextureWrap> galleryImagesList = new List<IDalamudTextureWrap>();
 
         public static IDalamudTextureWrap currentAvatarImg, pictureTab;
+        //profile vars
         public static string characterEditName,
                                 characterEditRace,
                                 characterEditGender,
@@ -65,8 +64,6 @@ namespace InfiniteRoleplay.Windows
                                 personality2Tooltip,
                                 personality3Tooltip,
                                 oocInfo = string.Empty;
-        private bool AllLoaded;
-
         public static bool[] ChapterExists = new bool[30];
         internal static string characterName;
         internal static string characterWorld;
@@ -92,10 +89,8 @@ namespace InfiniteRoleplay.Windows
             }
 
             //alignment icons
-            this.chatGui = chatGui;
             for (int i = 0; i < 30; i++)
             {
-                StoryContent[i] = string.Empty;
                 ChapterContent[i] = string.Empty;
                 ChapterTitle[i] = string.Empty;
                 ChapterExists[i] = false;
@@ -111,97 +106,91 @@ namespace InfiniteRoleplay.Windows
 
         public override void Draw()
         {
-            if (plugin.IsLoggedIn())
+            if (plugin.IsOnline())
             {
-            if (DataReceiver.TargetStoryLoadStatus != -1 &&
-               DataReceiver.TargetHooksLoadStatus != -1 &&
-               DataReceiver.TargetBioLoadStatus != -1 &&
-               DataReceiver.TargetGalleryLoadStatus != -1 &&
-               DataReceiver.TargetNotesLoadStatus != -1)
-            {
-                AllLoaded = true;
-            }
-            else
-            {
-                AllLoaded = false;
-            }
-            if (AllLoaded == true)
-            {
-                if (ExistingProfile == true)
+
+                if (AllLoaded() == true)
                 {
-                    if (ExistingBio == true)
+                    //if we receive that there is an existing profile that we can view show the available view buttons
+                    if (ExistingProfile == true)
                     {
-                        if (ImGui.Button("Bio", new Vector2(100, 20))) { ClearUI(); viewBio = true; }
-                        if (ImGui.IsItemHovered()) { ImGui.SetTooltip("View bio section of this profile."); }
-                    }
-                    if (ExistingHooks == true)
-                    {
+                        if (ExistingBio == true)
+                        {
+                            if (ImGui.Button("Bio", new Vector2(100, 20))) { ClearUI(); viewBio = true; }
+                            if (ImGui.IsItemHovered()) { ImGui.SetTooltip("View bio section of this profile."); }
+                        }
+                        if (ExistingHooks == true)
+                        {
+                            ImGui.SameLine();
+                            if (ImGui.Button("Hooks", new Vector2(100, 20))) { ClearUI(); viewHooks = true; }
+                            if (ImGui.IsItemHovered()) { ImGui.SetTooltip("View hooks section of this profile."); }
+                        }
+                        if (ExistingStory == true)
+                        {
+                            ImGui.SameLine();
+                            if (ImGui.Button("Story", new Vector2(100, 20))) { ClearUI(); viewStory = true; }
+                            if (ImGui.IsItemHovered()) { ImGui.SetTooltip("View story section to your profile."); }
+                        }
+                        if (ExistingOOC == true)
+                        {
+                            ImGui.SameLine();
+                            if (ImGui.Button("OOC Info", new Vector2(100, 20))) { ClearUI(); viewOOC = true; }
+                            if (ImGui.IsItemHovered()) { ImGui.SetTooltip("View OOC section of this profile."); }
+                        }
+                        if (ExistingGallery == true)
+                        {
+                            ImGui.SameLine();
+                            if (ImGui.Button("Gallery", new Vector2(100, 20))) { ClearUI(); viewGallery = true; }
+                            if (ImGui.IsItemHovered()) { ImGui.SetTooltip("View gallery section of this profile."); }
+                        }
+
+
+                        //personal controls for viewing user
+                        ImGui.Text("Controls");
+                        if (ImGui.Button("Notes", new Vector2(100, 20))) { ClearUI(); addNotes = true; }
+                        if (ImGui.IsItemHovered()) { ImGui.SetTooltip("Add personal notes about this profile or the user."); }
+
                         ImGui.SameLine();
-                        if (ImGui.Button("Hooks", new Vector2(100, 20))) { ClearUI(); viewHooks = true; }
-                        if (ImGui.IsItemHovered()) { ImGui.SetTooltip("View hooks section of this profile."); }
-                    }
-                    if (ExistingStory == true)
-                    {
-                        ImGui.SameLine();
-                        if (ImGui.Button("Story", new Vector2(100, 20))) { ClearUI(); viewStory = true; }
-                        if (ImGui.IsItemHovered()) { ImGui.SetTooltip("View story section to your profile."); }
-                    }
-                    if (ExistingOOC == true)
-                    {
-                        ImGui.SameLine();
-                        if (ImGui.Button("OOC Info", new Vector2(100, 20))) { ClearUI(); viewOOC = true; }
-                        if (ImGui.IsItemHovered()) { ImGui.SetTooltip("View OOC section of this profile."); }
-                    }
-                    if (ExistingGallery == true)
-                    {
-                        ImGui.SameLine();
-                        if (ImGui.Button("Gallery", new Vector2(100, 20))) { ClearUI(); viewGallery = true; }
-                        if (ImGui.IsItemHovered()) { ImGui.SetTooltip("View gallery section of this profile."); }
-                    }
 
-                    ImGui.Text("Controls");
-                    if (ImGui.Button("Notes", new Vector2(100, 20))) { ClearUI(); addNotes = true; }
-                    if (ImGui.IsItemHovered()) { ImGui.SetTooltip("Add personal notes about this profile or the user."); }
-                    ImGui.SameLine();
-                    if (ImGui.Button("Report!", new Vector2(100, 20)))
-                    {
-                        ReportWindow.reportCharacterName = characterNameVal;
-                        ReportWindow.reportCharacterWorld = characterWorldVal;
-                        plugin.OpenReportWindow();
+                        if (ImGui.Button("Report!", new Vector2(100, 20)))
+                        {
+                            ReportWindow.reportCharacterName = characterNameVal;
+                            ReportWindow.reportCharacterWorld = characterWorldVal;
+                            plugin.OpenReportWindow();
+                        }
+                        if (ImGui.IsItemHovered()) { ImGui.SetTooltip("Report this profile for inappropriate use.\n(Repeat false reports may result in your account being banned.)"); }
+
                     }
-                    if (ImGui.IsItemHovered()) { ImGui.SetTooltip("Report this profile for inappropriate use.\n(Repeat false reports may result in your report ability being revoked.)"); }
-
-                }
-
-
-
 
                     using var profileTable = ImRaii.Child("PROFILE");
                     if (profileTable)
                     {
+                        //if there is absolutely no items to view
                         if (ExistingBio == false && ExistingHooks == false && ExistingStory == false && ExistingOOC == false && ExistingOOC == false && ExistingGallery == false)
                         {
-                                ImGui.TextUnformatted("No Profile Data Available:\nIf this character has a profile, you can request to view it below.");
-                                if (ImGui.Button("Request access"))
-                                {
-                                    DataSender.SendProfileAccessUpdate(plugin.username, plugin.ClientState.LocalPlayer.Name.ToString(), plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString(), characterName, characterWorld, (int)Constants.ConnectionStatus.pending);
+                            //inform the viewer that there is no profile to view
+                            ImGui.TextUnformatted("No Profile Data Available:\nIf this character has a profile, you can request to view it below.");
 
-                                }
+                            //but incase the profile is set to private, give the user a request button to ask for access
+                            if (ImGui.Button("Request access"))
+                            {
+                                //send a new request to the server and then the profile owner if pressed
+                                DataSender.SendProfileAccessUpdate(plugin.username, plugin.ClientState.LocalPlayer.Name.ToString(), plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString(), characterName, characterWorld, (int)Constants.ConnectionStatus.pending);
+                            }
                         }
                         else
                         {
                             if (viewBio == true)
                             {
+                                //set bordered title at top of window and set fonts back to normal
                                 Misc.SetTitle(plugin, true, characterEditName);
-                                ImGui.Image(currentAvatarImg.ImGuiHandle, new Vector2(100, 100));
-
-
+                                ImGui.Image(currentAvatarImg.ImGuiHandle, new Vector2(100, 100)); //display avatar image
                                 ImGui.Spacing();
-                                ImGui.TextUnformatted("NAME:   " + characterEditName);
+                                ImGui.TextUnformatted("NAME:   " + characterEditName); // display character name
                                 ImGui.Spacing();
-                                ImGui.TextUnformatted("RACE:   " + characterEditRace);
+                                ImGui.TextUnformatted("RACE:   " + characterEditRace); // race
                                 ImGui.Spacing();
-                                ImGui.TextUnformatted("GENDER:   " + characterEditGender);
+                                ImGui.TextUnformatted("GENDER:   " + characterEditGender); //and so on
                                 ImGui.Spacing();
                                 ImGui.TextUnformatted("AGE:   " + characterEditAge);
                                 ImGui.Spacing();
@@ -213,7 +202,6 @@ namespace InfiniteRoleplay.Windows
                                 ImGui.Spacing();
                                 if (showAlignment == true)
                                 {
-
                                     ImGui.TextColored(new Vector4(1, 1, 1, 1), "ALIGNMENT:");
 
                                     ImGui.Image(alignmentImg.ImGuiHandle, new Vector2(32, 32));
@@ -259,12 +247,12 @@ namespace InfiniteRoleplay.Windows
 
                             if (viewHooks == true)
                             {
-                                Misc.SetTitle(plugin, true, "Hooks");
+                                Misc.SetTitle(plugin, true, "Hooks"); //set title again
                                 for (int h = 0; h < hookEditCount; h++)
                                 {
-                                    Misc.SetCenter(plugin, HookNames[h].ToString());
-                                    ImGui.TextUnformatted(HookNames[h].ToUpper());
-                                    ImGui.TextUnformatted(HookContents[h]);
+                                    Misc.SetCenter(plugin, HookNames[h].ToString()); // set the position to the center of the window
+                                    ImGui.TextUnformatted(HookNames[h].ToUpper()); //display the title in the center
+                                    ImGui.TextUnformatted(HookContents[h]); //display the content
                                 }
 
                             }
@@ -311,7 +299,7 @@ namespace InfiniteRoleplay.Windows
                                         }
                                     }
                                 }
-                            
+
                             }
 
                             if (addNotes == true)
@@ -323,11 +311,11 @@ namespace InfiniteRoleplay.Windows
                                 ImGui.InputTextMultiline("##info", ref profileNotes, 500, new Vector2(400, 100));
                                 if (ImGui.Button("Add Notes"))
                                 {
-                                    if (plugin.IsLoggedIn())
+                                    if (plugin.IsOnline())
                                     {
                                         DataSender.AddProfileNotes(plugin.Configuration.username, characterNameVal, characterWorldVal, profileNotes);
                                     }
-                                
+
                                 }
 
                             }
@@ -344,8 +332,6 @@ namespace InfiniteRoleplay.Windows
                 {
                     Misc.StartLoader(currentInd, max, loading);
                 }
-
-
             }
         }
 
@@ -389,7 +375,20 @@ namespace InfiniteRoleplay.Windows
             DisposeListResources(galleryImagesList);
             DisposeListResources(galleryThumbsList);
         }
-
+        //method to check if all our data for the window is loaded
+        public bool AllLoaded()
+        {
+            bool loaded = false;
+            if (DataReceiver.TargetStoryLoadStatus != -1 &&
+              DataReceiver.TargetHooksLoadStatus != -1 &&
+              DataReceiver.TargetBioLoadStatus != -1 &&
+              DataReceiver.TargetGalleryLoadStatus != -1 &&
+              DataReceiver.TargetNotesLoadStatus != -1)
+            {
+                loaded = true;
+            }
+            return loaded;
+        }
 
         // Helper method to dispose resources in a list
         private void DisposeListResources(List<IDalamudTextureWrap> resources)

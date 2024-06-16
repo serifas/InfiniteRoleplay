@@ -47,20 +47,23 @@ namespace InfiniteRoleplay.Windows
             using var defStyle = ImRaii.DefaultStyle();
             using var defFont = ImRaii.DefaultFont();
             //okay that's done.
-            ImGui.Text("We sent a restoration key to the email address provided. \nPlease enter the key with a new username and password below.");
+            ImGui.Text("We sent a restoration key to the email address provided. \nPlease enter the key with a new password below.");
             ImGui.Spacing();
             //now for some simple toggles
             ImGui.InputText("Restoration Key", ref restorationKey, 10);
             ImGui.InputText("New Password", ref restorationPass, 30, ImGuiInputTextFlags.Password);
-            ImGui.InputText("New Password Confirmation", ref restorationPassConfirm, 30, ImGuiInputTextFlags.Password);
+            ImGui.InputText("Confirm New Password", ref restorationPassConfirm, 30, ImGuiInputTextFlags.Password);
+
+
             if (ImGui.Button("Submit"))
             {
                 if(restorationKey != string.Empty && restorationPass != string.Empty && restorationPassConfirm != string.Empty)
                 {
                     if (restorationPass == restorationPassConfirm)
                     {
-                        if (pg.IsLoggedIn())
+                        if (pg.IsOnline())
                         {
+                            //send the key with the new password to restore the account to settings the user knows
                             DataSender.SendRestoration(restorationEmail, restorationPass, restorationKey);
                         }
                         

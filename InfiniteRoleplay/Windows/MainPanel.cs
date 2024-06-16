@@ -57,7 +57,7 @@ public class MainPanel : Window, IDisposable
         ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoScrollbar |
         ImGuiWindowFlags.NoScrollWithMouse)
     {
-        this.Size = new Vector2(250, 310);
+        this.Size = new Vector2(250, 340);
         this.SizeCondition = ImGuiCond.Always;
         this.plugin = plugin;
         this.username = plugin.Configuration.username;
@@ -128,7 +128,7 @@ public class MainPanel : Window, IDisposable
 
             if (ImGui.Button("Login"))
             {
-                if (plugin.IsLoggedIn() && ClientTCP.IsConnected() == true)
+                if (plugin.IsOnline() && ClientTCP.IsConnected() == true)
                 {                    
                     SaveLoginPreferences();
                     DataSender.Login(this.username, this.password, plugin.ClientState.LocalPlayer.Name.ToString(), plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString());
@@ -172,7 +172,7 @@ public class MainPanel : Window, IDisposable
             ImGui.InputTextWithHint("##RegisteredEmail", $"Email", ref this.restorationEmail, 100);
             if (ImGui.Button("Submit Request"))
             {
-                if (plugin.IsLoggedIn())
+                if (plugin.IsOnline())
                 {
                     DataSender.SendRestorationRequest(this.restorationEmail);
                 }
@@ -206,7 +206,7 @@ public class MainPanel : Window, IDisposable
                     if (registerPassword == registerVerPassword)
                     {
                         plugin.Configuration.username = registerUser;
-                        if (plugin.IsLoggedIn())
+                        if (plugin.IsOnline())
                         {
                             DataSender.Register(registerUser, registerPassword, email);
                         }
@@ -306,7 +306,7 @@ public class MainPanel : Window, IDisposable
         {
             if (ImGui.ImageButton(this.profileImage.ImGuiHandle, new Vector2(100, 50)))
             {
-                if (plugin.IsLoggedIn())
+                if (plugin.IsOnline())
                 {
                     //FETCH USER AND PASS ASEWLL
                     DataSender.FetchProfile(plugin.ClientState.LocalPlayer.Name.ToString(), plugin.ClientState.LocalPlayer.HomeWorld.GameData.Name.ToString());
@@ -319,7 +319,7 @@ public class MainPanel : Window, IDisposable
             ImGui.SameLine();
             if (ImGui.ImageButton(this.profileBookmarkImage.ImGuiHandle, new Vector2(100, 50)))
             {
-                if (plugin.IsLoggedIn())
+                if (plugin.IsOnline())
                 {
                     DataSender.RequestBookmarks(plugin.Configuration.username);
                 }

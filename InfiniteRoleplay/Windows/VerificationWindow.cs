@@ -12,7 +12,6 @@ namespace InfiniteRoleplay.Windows
 {
     public class VerificationWindow : Window, IDisposable
     {
-        private GameFontHandle _nameFont;
         public static Plugin pg;
         public static string verificationKey = string.Empty;
         public static string verificationStatus = string.Empty;
@@ -38,8 +37,10 @@ namespace InfiniteRoleplay.Windows
             ImGui.InputText("Key", ref verificationKey, 10);
             if (ImGui.Button("Submit"))
             {
-                if(pg.IsLoggedIn())
+                //if player is online in game
+                if(pg.IsOnline())
                 {
+                    //submit our verification key for verification
                     DataSender.SendVerification(pg.Configuration.username.ToString(), verificationKey);
                 }
                 

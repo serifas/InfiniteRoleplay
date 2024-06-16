@@ -38,6 +38,8 @@ namespace InfiniteRoleplay
             VERIFICATION_KEY_VERIFIED = 10,
             //Gallery
             GALLERY_INCORRECT_IMAGE = 11,
+            //other
+            REGISTRATION_INSUFFICIENT_DATA = 12,
 
         }
         public enum BioFieldTypes

@@ -43,7 +43,7 @@ namespace InfiniteRoleplay.Windows
         }
         public override void Draw()
         {
-            if (pg.IsLoggedIn())
+            if (pg.IsOnline())
             {
                 ImGui.TextColored(new Vector4(100, 0, 0, 100), reportStatus);
                 ImGui.Text("Reason for report");
@@ -53,6 +53,7 @@ namespace InfiniteRoleplay.Windows
                 {
                     if (reportInfo.Length > 15)
                     {
+                        //report the currently viewed profile to the moderators
                         DataSender.ReportProfile(pg.Configuration.username, reportCharacterName, reportCharacterWorld, reportInfo);
                     }
                     else

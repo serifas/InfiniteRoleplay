@@ -51,7 +51,7 @@ namespace InfiniteRoleplay.Windows
             using var profileTable = ImRaii.Child("Profiles", childSize, true);
             if(profileTable)
             {
-                if (plugin.IsLoggedIn())
+                if (plugin.IsOnline())
                 {
                     for (int i = 1; i < profiles.Count; i++)
                     {

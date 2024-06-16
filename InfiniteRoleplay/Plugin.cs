@@ -25,7 +25,6 @@ namespace InfiniteRoleplay
         public string username;
         private const string CommandName = "/infinite";
         public bool loggedIn;
-        public bool PluginLoaded = false;
         private readonly IDtrBar dtrBar;
         private DtrBarEntry? statusBarEntry;
         private DtrBarEntry? connectionsBarEntry;
@@ -37,13 +36,19 @@ namespace InfiniteRoleplay
         private IContextMenu ContextMenu { get; init; }
         public ICondition Condition { get; init; }
         public ITextureProvider TextureProvider { get; init; }
+        public IClientState ClientState { get; init; }
+        private ITargetManager TargetManager { get; init; }
+
+
         [LibraryImport("user32")]
         internal static partial short GetKeyState(int nVirtKey);
+        //used for making sure click happy people don't mess up their hard work
         public static bool CtrlPressed() => (GetKeyState(0xA2) & 0x8000) != 0 || (GetKeyState(0xA3) & 0x8000) != 0;
-        private ITargetManager TargetManager { get; init; }
         public Configuration Configuration { get; init; }
 
+
         private readonly WindowSystem WindowSystem = new("Infinite Roleplay");
+        //Windows
         private OptionsWindow OptionsWindow { get; init; }
         private VerificationWindow VerificationWindow { get; init; }
         private RestorationWindow RestorationWindow { get; init; }
@@ -54,14 +59,18 @@ namespace InfiniteRoleplay
         private TargetWindow TargetWindow { get; init; }
         private ImagePreview ImagePreview { get; init; }
         private TOS TermsWindow { get; init; }
-        public Logger logger = new Logger();
         private ConnectionsWindow ConnectionsWindow { get; init; }
 
-        public IClientState ClientState { get; init; }
+        //logger for printing errors and such
+        public Logger logger = new Logger();
+
+
         public float BlinkInterval = 0.5f;
         public bool newConnection;
         public bool ControlsLogin = false;
 
+
+        //initialize our plugin
         public Plugin(
             [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
             [RequiredVersion("1.0")] ICommandManager commandManager,
@@ -74,9 +83,9 @@ namespace InfiniteRoleplay
             [RequiredVersion("1.0")] IDtrBar dtrBar
             )
         {
-            // Original Dalamud-related object creation
             plugin = this;
-            // Wrap the original service with the proxy
+
+            // Wrap the original service
             this.dtrBar = dtrBar;
             PluginInterface = pluginInterface;
             CommandManager = commandManager;
@@ -86,16 +95,23 @@ namespace InfiniteRoleplay
             TextureProvider = textureProvider;
             this.Condition = condition;
 
+            this.Framework = framework;
+
+            //unhandeled exception handeling - probably not really needed anymore.
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             TaskScheduler.UnobservedTaskException += UnobservedTaskExceptionHandler;
 
-            this.Framework = framework;
+            //assing our Configuration var
             Configuration = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
+
+            //need this to interact with the plugin from the datareceiver.
             DataReceiver.plugin = this;
+
             CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
             {
                 HelpMessage = "Type /infinite to open the plugin window."
             });
+            //init our windows
             OptionsWindow = new OptionsWindow(this);
             MainPanel = new MainPanel(this);
             TermsWindow = new TOS(this);
@@ -107,7 +123,10 @@ namespace InfiniteRoleplay
             RestorationWindow = new RestorationWindow(this);
             ReportWindow = new ReportWindow(this);
             ConnectionsWindow = new ConnectionsWindow(this);
+
             Configuration.Initialize(PluginInterface);
+
+            //add the windows to the windowsystem
             WindowSystem.AddWindow(OptionsWindow);
             WindowSystem.AddWindow(MainPanel);
             WindowSystem.AddWindow(TermsWindow);
@@ -119,7 +138,10 @@ namespace InfiniteRoleplay
             WindowSystem.AddWindow(RestorationWindow);
             WindowSystem.AddWindow(ReportWindow);
             WindowSystem.AddWindow(ConnectionsWindow);
+
+            //don't know why this is needed but it is (I legit passed it to the window above.)
             ConnectionsWindow.plugin = this;
+
             // Subscribe to condition change events
             PluginInterface.UiBuilder.Draw += DrawUI;
             PluginInterface.UiBuilder.OpenConfigUi += ToggleConfigUI;
@@ -130,8 +152,10 @@ namespace InfiniteRoleplay
             MainPanel.plugin = this;
             this.Framework.Update += OnUpdate;
 
+            //if online and present in game
             if (ClientState.IsLoggedIn && clientState.LocalPlayer != null)
             {
+                //load our connection
                 LoadConnection();
             }
         }
@@ -139,12 +163,14 @@ namespace InfiniteRoleplay
         public async void LoadConnection()
         {
             Connect();
+            //update the statusBarEntry with out connection status
             UpdateStatus();
+            //self explanitory
             ToggleMainUI();  
         }
         public async void Connect()
         {
-            if (IsLoggedIn())
+            if (IsOnline())
             {
                 LoadStatusBar();
                 
@@ -159,16 +185,21 @@ namespace InfiniteRoleplay
 
         private void Logout()
         {
+            //remove our bar entries
             connectionsBarEntry?.Dispose();
             connectionsBarEntry = null;
             statusBarEntry?.Dispose();
             statusBarEntry = null;
+            //set status text
             MainPanel.status = "Logged Out";
             MainPanel.statusColor = new Vector4(255, 0, 0, 255);
+            //remove the current windows and switch back to login window.
             MainPanel.switchUI();
             MainPanel.login = true;
+
             if (ClientTCP.IsConnected())
             {
+                //if connected disconnect from the server
                 ClientTCP.Disconnect();
             }
 
@@ -193,11 +224,12 @@ namespace InfiniteRoleplay
         }
         public void AddContextMenu(MenuOpenedArgs args)
         {
-            if (IsLoggedIn())
+            if (IsOnline())
             {
                 var targetPlayer = TargetManager.Target as PlayerCharacter;
                 if (args.AddonPtr == (nint)0 && targetPlayer != null && loggedIn == true)
                 {
+                    //if we are right clicking a player and are logged into hte plugin, add our contextMenu items.
                     MenuItem view = new MenuItem();
                     MenuItem bookmark = new MenuItem();
                     view.Name = "View Infinite Profile";
@@ -206,8 +238,10 @@ namespace InfiniteRoleplay
                     bookmark.Name = "Bookmark Infinite Profile";
                     bookmark.PrefixColor = 56;
                     bookmark.Prefix = SeIconChar.BoxedPlus;
+                    //assign on click actions
                     view.OnClicked += ViewProfile;
                     bookmark.OnClicked += BookmarkProfile;
+                    //add the menu item
                     args.AddMenuItem(view);
                     args.AddMenuItem(bookmark);
 
@@ -220,17 +254,23 @@ namespace InfiniteRoleplay
         {
             try
             {
-                if (IsLoggedIn())
+
+                if (IsOnline()) //may not even need this, but whatever
                 {
+                    //get our current target player
                     var targetPlayer = TargetManager.Target as PlayerCharacter;
+                    //fetch the player name and home world name
                     string characterName = targetPlayer.Name.ToString();
                     string characterWorld = targetPlayer.HomeWorld.GameData.Name.ToString();
+                    //set values for windows that need the name and home world aswell
                     ReportWindow.reportCharacterName = characterName;
                     ReportWindow.reportCharacterWorld = characterWorld;
                     TargetWindow.characterNameVal = characterName;
                     TargetWindow.characterWorldVal = characterWorld;
+                    //reload our target window so we don't get the wrong info then open it
                     TargetWindow.ReloadTarget();
                     OpenTargetWindow();
+                    //send a request to the server for the target profile info
                     DataSender.RequestTargetProfile(characterName, characterWorld, Configuration.username);
                 }
 
@@ -242,29 +282,39 @@ namespace InfiniteRoleplay
         }
         private void BookmarkProfile(MenuItemClickedArgs args)
         {
-            if (IsLoggedIn())
+            if (IsOnline()) //once again may not need this
             {
+                //fetch target player once more
                 var targetPlayer = TargetManager.Target as PlayerCharacter;
+                //send a bookmark message to the server
                 DataSender.BookmarkPlayer(Configuration.username.ToString(), targetPlayer.Name.ToString(), targetPlayer.HomeWorld.GameData.Name.ToString());
             }
         }
+
+        //server connection status dtrBarEntry
         public void LoadStatusBar()
         {
             if (statusBarEntry == null)
             {
+                //if the statusBarEntry is null create the entry
                 string randomTitle = Misc.GenerateRandomString();
                 if (dtrBar.Get(randomTitle) is not { } entry) return;
                 statusBarEntry = entry;
-                string icon = "\uE03E";
-                statusBarEntry.Text = icon;
+                string icon = "\uE03E"; //dice icon
+                statusBarEntry.Text = icon; //set text to icon
+                //set base tooltip value
                 statusBarEntry.Tooltip = "Infinite Roleplay";
+                //assign on click to toggle the main ui
                 entry.OnClick = () => ToggleMainUI();
             }
         }
+
+
+        //used to alert people of incoming connection requests
         public void LoadConnectionsBar(float deltaTime)
         {
             timer += deltaTime;
-            float pulse = ((int)(timer / BlinkInterval) % 2 == 0) ? 14 : 0; // Alternate between 0 and 14 every BlinkInterval
+            float pulse = ((int)(timer / BlinkInterval) % 2 == 0) ? 14 : 0; // Alternate between 0 and 14 (red) every BlinkInterval
 
             if (connectionsBarEntry == null)
             {
@@ -277,11 +327,13 @@ namespace InfiniteRoleplay
 
             SeStringBuilder statusString = new SeStringBuilder();
             statusString.AddUiGlow((ushort)pulse); // Apply pulsing glow
-            statusString.AddText("\uE070");
+            statusString.AddText("\uE070"); //Boxed question mark (Mario brick)
             statusString.AddUiGlow(0);
             SeString str = statusString.BuiltString;
             connectionsBarEntry.Text = str;
         }
+
+        //used for when we need to remove the connection request status
         public void UnloadConnectionsBar()
         {
             if(connectionsBarEntry != null)
@@ -290,11 +342,6 @@ namespace InfiniteRoleplay
                 connectionsBarEntry = null;
             }
         }
-        private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
         public void Dispose()
         {
             WindowSystem?.RemoveAllWindows();
@@ -303,8 +350,6 @@ namespace InfiniteRoleplay
             connectionsBarEntry?.Dispose();
             connectionsBarEntry = null;
             CommandManager.RemoveHandler(CommandName);
-
-
             PluginInterface.UiBuilder.Draw -= DrawUI;
             PluginInterface.UiBuilder.OpenConfigUi -= ToggleConfigUI;
             PluginInterface.UiBuilder.OpenMainUi -= ToggleMainUI;
@@ -325,18 +370,21 @@ namespace InfiniteRoleplay
             ReportWindow?.Dispose();
             ConnectionsWindow?.Dispose();
             Misc._nameFont?.Dispose();
-            Imaging.RemoveAllImages(this);
+            Imaging.RemoveAllImages(this); //delete all images downloaded by the plugin namely the gallery
         }
         private void OnUpdate(IFramework framework)
         {
             TimeSpan deltaTimeSpan = framework.UpdateDelta;
             float deltaTime = (float)deltaTimeSpan.TotalSeconds; // Convert deltaTime to seconds
+
+            //if we receive a connection request
             if(newConnection == true)
             {
                 LoadConnectionsBar(deltaTime);
             }
-            if (IsLoggedIn() == true && ClientTCP.IsConnected() == true && ControlsLogin == false)
+            if (IsOnline() == true && ClientTCP.IsConnected() == true && ControlsLogin == false)
             {
+                //auto login when first opening the plugin or logging in
                 MainPanel.AttemptLogin();
                 ControlsLogin = true;
             }
@@ -359,21 +407,19 @@ namespace InfiniteRoleplay
                 }
             }
         }
-        public bool IsLoggedIn()
+        public bool IsOnline()
         {
             bool loggedIn = false;
+            //if player is online in game and player is present
             if (ClientState.IsLoggedIn == true && ClientState.LocalPlayer != null)
             {
                 loggedIn = true;
             }
-            return loggedIn;
+            return loggedIn; //return our logged in status
         }
 
         private void DrawUI() => WindowSystem.Draw();
         public void ToggleConfigUI() => OptionsWindow.Toggle();
-
-
-
         public void ToggleMainUI() => MainPanel.Toggle();
         public void OpenMainPanel() => MainPanel.IsOpen = true;
         public void OpenTermsWindow() => TermsWindow.IsOpen = true;
@@ -396,6 +442,7 @@ namespace InfiniteRoleplay
                 MainPanel.serverStatus = connectionStatus;
                 if (ClientState.IsLoggedIn && ClientState.LocalPlayer != null)
                 {
+                    //set dtr bar entry for connection status to our current server connection status
                     statusBarEntry.Tooltip = new SeStringBuilder().AddText($"Infinite Roleplay: {connectionStatus}").Build();
                 }
 

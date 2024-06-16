@@ -11,7 +11,10 @@ using Dalamud.Game.Gui.Dtr;
 
 namespace Networking
 {
-
+    /// <summary>
+    /// This entire script simply receives data from the server and sets variables in the windows as needed
+    /// Not too much to look at, simply just for receiving our info and using it as needed
+    /// </summary>
     //Packets that can be received from the server (Must match server packet number on server)
     public enum ServerPackets
     {
@@ -485,6 +488,11 @@ namespace Networking
                         VerificationWindow.verificationCol = new Vector4(255, 0, 0, 255);
                         VerificationWindow.verificationStatus = "Incorrect verification key.";
                     }
+                    if (status == (int)Constants.StatusMessages.REGISTRATION_INSUFFICIENT_DATA)
+                    {
+                        VerificationWindow.verificationCol = new Vector4(255, 0, 0, 255);
+                        VerificationWindow.verificationStatus = "Please fill all fields.";
+                    }
                 }
             }
             catch (Exception ex)
@@ -541,7 +549,7 @@ namespace Networking
                         ProfileWindow.imageURLs[i] = string.Empty;
                     }
                     ProfileWindow.ImageExists[0] = true;
-                    ProfileWindow.imageIndex = 2;
+                    ProfileWindow.galleryImageCount = 2;
                     GalleryLoadStatus = 0;
                     ProfileWindow.ExistingGallery = false;
                 }
@@ -568,7 +576,7 @@ namespace Networking
                         bool nsfw = buffer.ReadBool();
                         bool trigger = buffer.ReadBool();
                         Imaging.DownloadProfileImage(true, url, profileID, nsfw, trigger, plugin, i);
-                        ProfileWindow.imageIndex = i + 1;
+                        ProfileWindow.galleryImageCount = i + 1;
                         ProfileWindow.ImageExists[i] = true;
                         ProfileWindow.loading = "Gallery Image: " + i;
                         ProfileWindow.loaderInd = i;

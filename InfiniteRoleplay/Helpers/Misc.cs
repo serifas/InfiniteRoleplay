@@ -42,6 +42,7 @@ namespace InfiniteRoleplay
             }
             return result.ToString();
         }
+        //sets position of content to center
         public static void SetCenter(Plugin plugin, string name)
         {
          
@@ -57,6 +58,7 @@ namespace InfiniteRoleplay
                     ImGui.SetCursorPosX(offset);
                 }
         }
+        //sets a title at the center of the window and resets the font back to default afterwards
         public static void SetTitle(Plugin plugin, bool center, string title)
         {
             _nameFont = plugin.PluginInterface.UiBuilder.GetGameFontHandle(new GameFontStyle(GameFontFamilyAndSize.Jupiter23));
@@ -84,6 +86,7 @@ namespace InfiniteRoleplay
             using var defCol = ImRaii.DefaultColors();
             using var defStyle = ImRaii.DefaultStyle();
         }
+        //loader for ProfileWindow and TargetWindow
         public static void StartLoader(float value, float max, string loading)
         {
             value = Math.Max(0f, Math.Min(100f, value));

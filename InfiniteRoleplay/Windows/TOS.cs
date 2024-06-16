@@ -30,6 +30,7 @@ namespace InfiniteRoleplay.Windows
             pg = plugin;
 
             load = true;
+            //get our online tos and rules
             ToS1 = ReadTOS("https://raw.githubusercontent.com/serifas/InfiniteRoleplay/main/TOS1.txt");
             ToS2 = ReadTOS("https://raw.githubusercontent.com/serifas/InfiniteRoleplay/main/TOS2.txt");
             Rules1 = ReadTOS("https://raw.githubusercontent.com/serifas/InfiniteRoleplay/main/Rules1.txt");
@@ -37,13 +38,12 @@ namespace InfiniteRoleplay.Windows
         }
         public override async void Draw()
         {
-
+            //draw TOS
             Misc.SetTitle(pg, true, "Terms of Service");
-        //okay that's done.
             ImGui.Text(ToS1);
             ImGui.Text(ToS2);
+            //draw rules
             Misc.SetTitle(pg, true, "Rules");
-            //now for some simple toggles
             ImGui.Text(Rules1);
             ImGui.Text(Rules2);
         }
@@ -55,6 +55,7 @@ namespace InfiniteRoleplay.Windows
        
         static string ReadTOS(string url)
         {
+            //simply reads the online file from the url
             using (HttpClient client = new HttpClient())
             {
                 HttpResponseMessage response = client.GetAsync(url).Result;
