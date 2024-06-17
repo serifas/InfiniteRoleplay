@@ -490,8 +490,8 @@ namespace Networking
                     }
                     if (status == (int)Constants.StatusMessages.REGISTRATION_INSUFFICIENT_DATA)
                     {
-                        VerificationWindow.verificationCol = new Vector4(255, 0, 0, 255);
-                        VerificationWindow.verificationStatus = "Please fill all fields.";
+                        MainPanel.statusColor = new Vector4(255, 0, 0, 255);
+                        MainPanel.status = "Please fill all fields.";
                     }
                 }
             }
